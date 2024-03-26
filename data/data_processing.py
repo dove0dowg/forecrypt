@@ -1,7 +1,5 @@
 import pandas as pd
 import json
-from data import get_data as g_d
-from models import arima_model as a_m, ets_model as ets_m, theta_model as th_m
 
 def create_forecast_json(crypto_df, model_fit, steps=30, model_name=''):
     if isinstance(crypto_df, pd.DataFrame):
@@ -31,31 +29,3 @@ def create_forecast_json(crypto_df, model_fit, steps=30, model_name=''):
     json_str = json.dumps(combined_data_dict)
     
     return json_str
-
-api_key = '7db9598cf3ebf01148dda37d500a35844ef435670b3d962a53f6d0a397c98d43'
-hours = 720
-crypto_ids = ['BNB', 'SOL', 'XRP']
-
-crypto_dfs = {}
-for crypto_id in crypto_ids:
-    df = g_d.fetch_historical_data(crypto_id, hours, api_key)
-    if 'date' in df.columns and not df.index._is_all_dates:
-        df['date'] = pd.to_datetime(df['date'])
-        df.set_index('date', inplace=True)
-        df = df.asfreq('h')
-    crypto_dfs[crypto_id] = df
-
-model_funcs = {
-    'arima': a_m.fit_arima_model,
-    'ets': ets_m.fit_ets_model,
-    'theta': th_m.fit_theta_model
-}
-
-forecast_jsons = {}
-for crypto_id, crypto_df in crypto_dfs.items():
-    for model_name, model_func in model_funcs.items():
-        # Fit the model
-        model_fit = model_func(crypto_df)
-        # Create the forecast JSON, including the model name
-        forecast_key = f'{crypto_id}_{model_name}'
-        forecast_jsons[forecast_key] = create_forecast_json(crypto_df['price'], model_fit, 30, model_name=forecast_key)
