@@ -1,8 +1,7 @@
 import pandas as pd
 from fastapi import FastAPI
 
-import data.data_processing as d_dp
-import data.get_data as d_gd
+import data.data_processing as d_dp, data.get_data as d_gd
 from models import arima_model as a_m, ets_model as ets_m, theta_model as th_m
 
 app = FastAPI()
