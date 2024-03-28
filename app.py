@@ -7,8 +7,9 @@ from models import arima_model as a_m, ets_model as ets_m, theta_model as th_m
 app = FastAPI()
 
 @app.get("/forecast/{crypto_id}")
+
 async def get_combined_json_time_series(crypto_id: str):
-    api_key = 'your_api_key'  # replace with your actual API key or use environment variable
+    api_key = 'your_api_key'
     hours = 720
 
     # Fetch historical data for the given crypto_id
@@ -26,9 +27,7 @@ async def get_combined_json_time_series(crypto_id: str):
 
     forecast_jsons = {}
     for model_name, model_func in model_funcs.items():
-        # Fit the model
         model_fit = model_func(df)
-        # Create the forecast JSON, including the model name
         forecast_jsons[f'{crypto_id}_{model_name}'] = d_dp.create_forecast_json(df['price'], model_fit, 30)
     
     return forecast_jsons

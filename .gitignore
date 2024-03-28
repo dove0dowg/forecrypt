@@ -1,5 +1,6 @@
 architecture.txt
 visualization.py
+__pycache__/
 
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,windows,jupyternotebooks
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,windows,jupyternotebooks
@@ -9,6 +10,7 @@ visualization.py
 # website: http://jupyter.org/
 
 .ipynb
+jupyter_preview.ipynb
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 
