@@ -1,8 +1,6 @@
 import requests
 import pandas as pd
-from datetime import datetime, timedelta
 
-# Функция для получения json с api cryptocompare и преобразование в датафрейм Pandas
 # Function to get json from cryptocompare api and rebuild it in pandas dataframe
 def fetch_historical_data(crypto_id, hours, api_key):
     url = "https://min-api.cryptocompare.com/data/v2/histohour"

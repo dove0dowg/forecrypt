@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from fastapi import FastAPI
 
@@ -9,7 +10,7 @@ app = FastAPI()
 @app.get("/forecast/{crypto_id}")
 
 async def get_combined_json_time_series(crypto_id: str):
-    api_key = 'your_api_key'
+    api_key = os.getenv('CRYPTOCOMPARE_API_KEY')
     hours = 720
 
     # Fetch historical data for the given crypto_id
