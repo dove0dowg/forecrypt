@@ -1,34 +1,28 @@
-import os
+from fastapi import FastAPI, HTTPException
+from data.model_parameters import model_params as m_p
+from data.data_processing import create_forecast_json
+from data.get_data import fetch_historical_data
 import pandas as pd
-from fastapi import FastAPI
-
-import data.data_processing as d_dp, data.get_data as d_gd
-from models import arima_model as a_m, ets_model as ets_m, theta_model as th_m
 
 app = FastAPI()
 
-@app.get("/forecast/{crypto_id}")
+@app.get("/forecast/{crypto_id}/{model_name}")
+async def forecast(crypto_id: str, model_name: str):
+    if model_name not in m_p:
+        raise HTTPException(status_code=400, detail="Invalid model name")
 
-async def get_combined_json_time_series(crypto_id: str):
-    api_key = os.getenv('CRYPTOCOMPARE_API_KEY')
-    hours = 720
+    model_param = m_p[model_name]
+    df = fetch_historical_data(crypto_id, model_param['dataset_hours'], api_key="YOUR_API_KEY")
 
-    # Fetch historical data for the given crypto_id
-    df = d_gd.fetch_historical_data(crypto_id, hours, api_key)
     if 'date' in df.columns:
         df['date'] = pd.to_datetime(df['date'])
         df.set_index('date', inplace=True)
         df = df.asfreq('h')
-
-    model_funcs = {
-        'arima': a_m.fit_arima_model,
-        'ets': ets_m.fit_ets_model,
-        'theta': th_m.fit_theta_model
-    }
-
-    forecast_jsons = {}
-    for model_name, model_func in model_funcs.items():
-        model_fit = model_func(df)
-        forecast_jsons[f'{crypto_id}_{model_name}'] = d_dp.create_forecast_json(df['price'], model_fit, 30)
     
-    return forecast_jsons
+    model_fit = model_param['model_fit_func'](df)
+    forecast_json = create_forecast_json(df['price'], model_fit, 31)
+
+    return {
+        'forecast': forecast_json,
+        'historical_data': {index.strftime('%Y-%m-%dT%H:%M:%S'): value for index, value in df['price'].items()}
+    }
