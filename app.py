@@ -6,23 +6,77 @@ import pandas as pd
 
 app = FastAPI()
 
+@app.get("/historical/{crypto_id}/{hours}")
+async def historical_data(crypto_id: str, hours: int):
+    """
+    Получение исторических данных для указанной криптовалюты.
+    """
+    # Указываем количество часов, за которое хотим получить исторические данные
+    hours = hours  # Например, данные за неделю (168 часов)
+    df = fetch_historical_data(crypto_id, hours, api_key="YOUR_API_KEY")
+
+    if 'date' in df.columns:
+        df['date'] = pd.to_datetime(df['date'])
+        df.set_index('date', inplace=True)
+        df = df.asfreq('h')    
+
+    if df.empty:
+        raise HTTPException(status_code=400, detail="Failed to fetch historical data")
+
+    return {
+        'historical_data': {index.strftime('%Y-%m-%dT%H:%M:%S'): value for index, value in df['price'].items()}
+    }
+
 @app.get("/forecast/{crypto_id}/{model_name}")
 async def forecast(crypto_id: str, model_name: str):
+    """
+    Получение прогноза на основе указанной модели для криптовалюты.
+    """
     if model_name not in m_p:
         raise HTTPException(status_code=400, detail="Invalid model name")
 
     model_param = m_p[model_name]
+    
+    # Получаем данные прогноза
     df = fetch_historical_data(crypto_id, model_param['dataset_hours'], api_key="YOUR_API_KEY")
 
     if 'date' in df.columns:
         df['date'] = pd.to_datetime(df['date'])
         df.set_index('date', inplace=True)
         df = df.asfreq('h')
-    
+
     model_fit = model_param['model_fit_func'](df)
     forecast_json = create_forecast_json(df['price'], model_fit, 31)
 
     return {
-        'forecast': forecast_json,
-        'historical_data': {index.strftime('%Y-%m-%dT%H:%M:%S'): value for index, value in df['price'].items()}
+        'forecast': forecast_json
+    }
+
+@app.get("/historical_and_forecast/{crypto_id}/{model_name}")
+async def historical_and_forecast(crypto_id: str, model_name: str):
+    """
+    Получение как исторических данных, так и прогноза на основе модели.
+    """
+    if model_name not in m_p:
+        raise HTTPException(status_code=400, detail="Invalid model name")
+
+    model_param = m_p[model_name]
+    
+    # Получаем исторические данные
+    df = fetch_historical_data(crypto_id, model_param['dataset_hours'], api_key="YOUR_API_KEY")
+
+    if 'date' in df.columns:
+        df['date'] = pd.to_datetime(df['date'])
+        df.set_index('date', inplace=True)
+        df = df.asfreq('h')
+
+    # Получаем прогноз
+    model_fit = model_param['model_fit_func'](df)
+    forecast_json = create_forecast_json(df['price'], model_fit, 31)
+
+    return {
+        'historical_and_forecast': {
+            'historical_data': {index.strftime('%Y-%m-%dT%H:%M:%S'): value for index, value in df['price'].items()},
+            'forecast': forecast_json
+        }
     }
