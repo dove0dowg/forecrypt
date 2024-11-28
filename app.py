@@ -1,17 +1,18 @@
 from fastapi import FastAPI, HTTPException
-from data.model_parameters import model_params as m_p
+from data.config import model_parameters as m_p
 from data.data_processing import create_forecast_json
 from data.get_data import fetch_historical_data
-import models
 import pandas as pd
 import importlib as il
+import json
 
-app = FastAPI()
-
-def load_function(func_path: str):
+# "import models", uses string paths from config.py to model fit functions
+def load_fit_function(func_path: str):
     module_name, func_name = func_path.rsplit('.', 1)
     module = il.import_module(module_name)
     return getattr(module, func_name)
+
+app = FastAPI()
 
 @app.get("/historical/{crypto_id}/{hours}")
 async def historical_data(crypto_id: str, hours: int):
@@ -43,7 +44,7 @@ async def forecast(crypto_id: str, model_name: str):
     model_param = m_p[model_name]
     
     # Загружаем функцию динамически
-    fit_func = load_function(model_param['fit_func_name'])
+    fit_func = load_fit_function(model_param['fit_func_name'])
     
     # Получаем данные прогноза
     df = fetch_historical_data(crypto_id, model_param['dataset_hours'], api_key="YOUR_API_KEY")
@@ -54,7 +55,10 @@ async def forecast(crypto_id: str, model_name: str):
         df = df.asfreq('h')
 
     model_fit = fit_func(df)  # Вызываем загруженную функцию
-    forecast_json = create_forecast_json(df['price'], model_fit, 31)
+    forecast_json_str = create_forecast_json(df['price'], model_fit, 31)
+
+    # Преобразуем JSON-строку обратно в словарь и округляем значения
+    forecast_json = {k: round(v, 8) for k, v in json.loads(forecast_json_str).items()}
 
     return {
         'forecast': forecast_json
@@ -71,7 +75,7 @@ async def historical_and_forecast(crypto_id: str, model_name: str):
     model_param = m_p[model_name]
     
     # Загружаем функцию динамически
-    fit_func = load_function(model_param['fit_func_name'])
+    fit_func = load_fit_function(model_param['fit_func_name'])
     
     # Получаем исторические данные
     df = fetch_historical_data(crypto_id, model_param['dataset_hours'], api_key="YOUR_API_KEY")
@@ -83,7 +87,10 @@ async def historical_and_forecast(crypto_id: str, model_name: str):
 
     # Получаем прогноз
     model_fit = fit_func(df)  # Вызываем загруженную функцию
-    forecast_json = create_forecast_json(df['price'], model_fit, 31)
+    forecast_json_str = create_forecast_json(df['price'], model_fit, 31)
+
+    # Преобразуем JSON-строку обратно в словарь и округляем значения
+    forecast_json = {k: round(v, 8) for k, v in json.loads(forecast_json_str).items()}
 
     return {
         'historical_and_forecast': {

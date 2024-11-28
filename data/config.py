@@ -1,12 +1,14 @@
+CRYPTO_IDS = ['BTC', 'ETH', 'DOGE', 'ADA', 'SOL']
+API_KEY = "YOUR_API_KEY"
 
+# data update interval
+HISTORICAL_UPDATE_TIME = {"hour": 0, "minute": 0}  # every day at 00:00
+FORECAST_UPDATE_TIME = {"minute": 0}  # every hour
 
-#model_params = {
-#    'arima': {'model_flag': "arima", 'dataset_hours': 720, 'balanced_hours': 10, 'trash_hours': 20, 'model_fit_func': a_m.fit_arima_model},
-#    'ets': {'model_flag': "ets", 'dataset_hours': 720, 'balanced_hours': 15, 'trash_hours': 15, 'model_fit_func': ets_m.fit_ets_model},
-#    'theta': {'model_flag': "theta", 'dataset_hours': 720, 'balanced_hours': 20, 'trash_hours': 10, 'model_fit_func': th_m.fit_theta_model}
-#}
+# timezone?
+#TIMEZONE = "UTC"
 
-model_params = {
+model_parameters = {
     'arima': {
         'dataset_hours': 720,
         'balanced_hours': 10,
@@ -26,3 +28,4 @@ model_params = {
         'fit_func_name': 'models.theta_model.fit_theta_model'
     }
 }
+
