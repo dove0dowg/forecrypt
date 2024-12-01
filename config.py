@@ -1,14 +1,17 @@
-CRYPTO_IDS = ['BTC', 'ETH', 'DOGE', 'ADA', 'SOL']
+#  project config
+CRYPTO_LIST = ['BTC', 'ETH'] #, 'DOGE', 'ADA', 'SOL']
+START_DATE = "2024-11-28 00:00:00"   # first day and hour of analysis
 API_KEY = "YOUR_API_KEY"
 
-# data update interval
-HISTORICAL_UPDATE_TIME = {"hour": 0, "minute": 0}  # every day at 00:00
-FORECAST_UPDATE_TIME = {"minute": 0}  # every hour
+DB_CONFIG = {
+    'dbname': 'forecrypt_db',
+    'user': 'postgres',
+    'password': '27EulerAwaits18',
+    'host': 'localhost',
+    'port': 5432
+}
 
-# timezone?
-#TIMEZONE = "UTC"
-
-model_parameters = {
+MODEL_PARAMETERS = {
     'arima': {
         'dataset_hours': 720,
         'balanced_hours': 10,
@@ -29,3 +32,6 @@ model_parameters = {
     }
 }
 
+# data update interval
+HISTORICAL_UPDATE_TIME = {"hour": 0, "minute": 0}  # every day at 00:00
+FORECAST_UPDATE_TIME = {"minute": 0}  # every hour at xx:00
