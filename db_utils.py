@@ -2,7 +2,7 @@ import psycopg2
 import pandas as pd
 from uuid import uuid4
 from config import DB_CONFIG
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from psycopg2.extras import execute_values
 
 def create_tables():
@@ -33,24 +33,42 @@ def create_tables():
             """)
             conn.commit()
 
-def get_missing_hours(crypto_id: str, start_date: str, end_date: str) -> list:
+def get_missing_hours(crypto_id: str, start_date, end_date) -> list:
     """
-    check database for timestamps, missing from the beginning of 
+    Get a list of missing hourly timestamps for a given cryptocurrency within a date range.
     """
+    # Ensure start_date and end_date are timestamps
+    if isinstance(start_date, int):  # Convert UNIX timestamp to datetime
+        start_date = datetime.fromtimestamp(start_date, tz=timezone.utc)
+    elif isinstance(start_date, str):  # Convert string to datetime
+        start_date = datetime.fromisoformat(start_date)
+    
+    if isinstance(end_date, int):  # Convert UNIX timestamp to datetime
+        end_date = datetime.fromtimestamp(end_date, tz=timezone.utc)
+    elif isinstance(end_date, str):  # Convert string to datetime
+        end_date = datetime.fromisoformat(end_date)
+
+    query = """
+        WITH full_range AS (
+            SELECT generate_series(%s::timestamp, %s::timestamp, '1 hour') AS ts
+        )
+        SELECT ts
+        FROM full_range
+        WHERE ts NOT IN (
+            SELECT timestamp
+            FROM historical_data
+            WHERE currency = %s
+        )
+        ORDER BY ts;
+    """
+
     with psycopg2.connect(**DB_CONFIG) as conn:
         with conn.cursor() as cursor:
-            query = """
-                SELECT timestamp FROM historical_data
-                WHERE currency = %s AND timestamp BETWEEN %s AND %s
-                ORDER BY timestamp;
-            """
-            cursor.execute(query, (crypto_id, start_date, end_date))
-            existing_timestamps = set(row[0] for row in cursor.fetchall())
+            cursor.execute(query, (start_date, end_date, crypto_id))
+            # Directly return timestamps
+            missing_hours = [row[0] for row in cursor.fetchall()]
 
-            full_range = pd.date_range(start=start_date, end=end_date, freq='H')
-            missing_hours = [ts for ts in full_range if ts.to_pydatetime() not in existing_timestamps]
-
-            return missing_hours
+    return missing_hours
 
 def check_consistency(crypto_id: str, start_date: str) -> bool:
     """

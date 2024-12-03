@@ -2,6 +2,7 @@ architecture.txt
 Dockerfile
 visualization.py
 __pycache__/
+**/__pycache__/
 
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,windows,jupyternotebooks
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,windows,jupyternotebooks

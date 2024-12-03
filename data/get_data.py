@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 
 def fetch_historical_data(crypto_id, hours, api_key=None):
     """
-    Get json from cryptocompare api and rebuild it in pandas df
+    Fetch historical data for the last `hours` hours and return it as a pandas DataFrame.
     """
     url = "https://min-api.cryptocompare.com/data/v2/histohour"
     headers = {"Authorization": f"Apikey {api_key}"} if api_key else {}
@@ -18,31 +18,27 @@ def fetch_historical_data(crypto_id, hours, api_key=None):
         data = response.json().get('Data', {}).get('Data', [])
         if data:
             df = pd.DataFrame(data)
-            # convert timestamp to datetime
+            # convert timestamp to pandas datetime with UTC
             df['time'] = pd.to_datetime(df['time'], unit='s', utc=True)
             return pd.DataFrame({
-                "date": df['time'],
+                "date": df['time'],  # already datetime64[ns, UTC]
                 "price": df['close']
             })
     print(f"Failed to fetch historical data for {crypto_id}. Status code: {response.status_code}")
     return pd.DataFrame()
 
-
-def fetch_specific_hours(crypto_id, hours_list, api_key=None):
+def fetch_specific_historical_hours(crypto_id, hours_list, api_key=None):
     """
-    Get jsons for specific hours from cryptocompare api and rebuild them into single pandas df
+    Fetch data for specific hours from CryptoCompare API and return it as a pandas DataFrame.
+    The input hours_list must contain `datetime` objects.
     """
     url = "https://min-api.cryptocompare.com/data/v2/histohour"
     headers = {"Authorization": f"Apikey {api_key}"} if api_key else {}
     results = []
 
-    for hour in hours_list:
-        # ensure hour is a string in the correct format
-        if not isinstance(hour, str):
-            hour = hour.strftime("%Y-%m-%d %H:%M:%S")
-
-        # convert timestring into UNIX timestamp
-        hour_unix = int(datetime.strptime(hour, "%Y-%m-%d %H:%M:%S").timestamp())
+    for hour in hours_list:  # hours_list contains `datetime` objects
+        # Convert datetime to UNIX timestamp for API request
+        hour_unix = int(hour.timestamp())
         params = {
             "fsym": crypto_id,
             "tsym": 'USD',
@@ -54,12 +50,13 @@ def fetch_specific_hours(crypto_id, hours_list, api_key=None):
             data = response.json()
             if data.get('Response') == 'Success':
                 price_data = data['Data']['Data'][0]
-                # combine df
+                # Append data in a simplified format
                 results.append({
-                    "date": datetime.fromtimestamp(price_data['time'], tz=timezone.utc),
+                    "date": pd.Timestamp(price_data['time'], unit='s', tz='UTC'),  # direct pandas timestamp
                     "price": price_data['close']
                 })
         else:
-            print(f"Failed to fetch data for {crypto_id} at {hour}. Status code: {response.status_code}")
+            print(f"Failed to fetch data for {crypto_id} at timestamp {hour}. Status code: {response.status_code}")
 
+    # Return all results as a DataFrame
     return pd.DataFrame(results)
