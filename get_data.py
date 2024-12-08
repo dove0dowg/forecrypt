@@ -1,6 +1,6 @@
 import requests
 import pandas as pd
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 def fetch_historical_data(crypto_id, hours, api_key=None):
     """
@@ -38,7 +38,13 @@ def fetch_specific_historical_hours(crypto_id, hours_list, api_key=None):
 
     for hour in hours_list:  # hours_list contains `datetime` objects
         # Convert datetime to UNIX timestamp for API request
+        #print(hour)
+        hour = hour + timedelta(hours=1)
+        #print(hour)
+        hour = hour.replace(tzinfo=timezone.utc)
+        #print(hour)
         hour_unix = int(hour.timestamp())
+        #print(hour_unix)
         params = {
             "fsym": crypto_id,
             "tsym": 'USD',

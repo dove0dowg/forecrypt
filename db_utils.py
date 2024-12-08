@@ -112,14 +112,26 @@ def load_to_db_historical(dataframe, crypto_id, conn):
         VALUES %s
         ON CONFLICT (timestamp, currency)
         DO NOTHING
+        RETURNING id;
     """
 
     try:
         with conn.cursor() as cursor:
+            # Use execute_values to insert the multiple rows
             execute_values(cursor, query, records)
-        conn.commit()
-        print(f"{len(records)} rows successfully loaded into the database for {crypto_id}.")
+
+            # Commit the transaction
+            conn.commit()
+
+            # Check how many rows were inserted
+            cursor.execute("SELECT COUNT(*) FROM historical_data WHERE currency = %s;", (crypto_id,))
+            inserted_rows = cursor.fetchone()[0]
+
+            if inserted_rows > 0:
+                print(f"{inserted_rows} rows successfully loaded into the database for {crypto_id}.")
+            else:
+                print(f"No rows were inserted for {crypto_id}. They might already exist.")
+
     except psycopg2.Error as e:
         conn.rollback()
         print(f"Failed to load data for {crypto_id}. Error: {e}")
-

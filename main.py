@@ -6,7 +6,7 @@ from db_utils import (
     load_to_db_historical,
     check_consistency
 )
-from data.get_data import fetch_specific_historical_hours, fetch_historical_data
+from get_data import fetch_specific_historical_hours, fetch_historical_data
 from config import CRYPTO_LIST, START_DATE, DB_CONFIG
 
 # create database connection
@@ -28,6 +28,7 @@ if __name__ == "__main__":
         print(f"Processing {crypto_id}...")
 
         # Step 1: get missing hours
+        
         missing_hours = get_missing_hours(crypto_id, START_DATE, now)
         print(f"Missing hours for {crypto_id}: {', '.join([hour.strftime('%Y-%m-%d %H:%M:%S') for hour in missing_hours])}")
 
@@ -56,6 +57,10 @@ if __name__ == "__main__":
             df = fetch_specific_historical_hours(crypto_id, missing_hours)  # Save the result to df
 
         # Step 4: Load data into the database
+        print(df)
+        print(df.dtypes)  # убедись, что типы колонок совпадают с типами столбцов в базе
+        print(df.head())  # убедись, что данные загружаются правильно
+        #print(df.isna().sum())
         load_to_db_historical(df, crypto_id, db_conn)
 
         # Step 5: Check data consistency

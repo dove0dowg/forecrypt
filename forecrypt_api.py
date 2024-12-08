@@ -1,7 +1,7 @@
-from fastapi import FastAPI, HTTPException
+from forecrypt_api import FastAPI, HTTPException
 from config import MODEL_PARAMETERS as m_p
-from data.data_processing import create_forecast_json
-from data.get_data import fetch_historical_data
+from forecasting import create_forecast_json
+from get_data import fetch_historical_data
 import pandas as pd
 import importlib as il
 import json
