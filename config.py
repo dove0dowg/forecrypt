@@ -1,6 +1,6 @@
 #  project config
 CRYPTO_LIST = ['BTC', 'ETH'] #, 'DOGE', 'ADA', 'SOL']
-START_DATE = "2024-12-06T00:00:00+00:00"   # first day and hour of analysis in UTC-timezone
+START_DATE = "2024-12-17T00:00:00+00:00"   # first day and hour of analysis in UTC-timezone
 API_KEY = "YOUR_API_KEY"
 
 DB_CONFIG = {

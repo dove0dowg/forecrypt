@@ -37,25 +37,15 @@ def get_missing_hours(crypto_id: str, start_date, end_date) -> list:
     """
     Get a list of missing hourly timestamps for a given cryptocurrency within a date range.
     """
-    # Ensure start_date and end_date are timestamps
-    if isinstance(start_date, int):  # Convert UNIX timestamp to datetime
-        start_date = datetime.fromtimestamp(start_date, tz=timezone.utc)
-    elif isinstance(start_date, str):  # Convert string to datetime
-        start_date = datetime.fromisoformat(start_date)
-    
-    if isinstance(end_date, int):  # Convert UNIX timestamp to datetime
-        end_date = datetime.fromtimestamp(end_date, tz=timezone.utc)
-    elif isinstance(end_date, str):  # Convert string to datetime
-        end_date = datetime.fromisoformat(end_date)
 
     query = """
         WITH full_range AS (
-            SELECT generate_series(%s::timestamp, %s::timestamp, '1 hour') AS ts
+            SELECT generate_series(%s::timestamptz, %s::timestamptz, '1 hour') AS ts
         )
         SELECT ts
         FROM full_range
         WHERE ts NOT IN (
-            SELECT timestamp
+            SELECT timestamp AT TIME ZONE 'UTC'
             FROM historical_data
             WHERE currency = %s
         )
@@ -64,8 +54,8 @@ def get_missing_hours(crypto_id: str, start_date, end_date) -> list:
 
     with psycopg2.connect(**DB_CONFIG) as conn:
         with conn.cursor() as cursor:
+            cursor.execute("SET TIME ZONE 'UTC';")  # Установить UTC
             cursor.execute(query, (start_date, end_date, crypto_id))
-            # Directly return timestamps
             missing_hours = [row[0] for row in cursor.fetchall()]
 
     return missing_hours
@@ -98,10 +88,8 @@ def load_to_db_historical(dataframe, crypto_id, conn):
         print(f"No data to load for {crypto_id}.")
         return
 
-    # ensure that 'price' column has no more than 8 decimal places
-    dataframe['price'] = dataframe['price'].apply(lambda x: round(x, 8))
+    dataframe['price'] = dataframe['price'].round(8)
 
-    # build records for insertion
     records = [
         (str(uuid4()), row['date'], crypto_id, row['price'])
         for _, row in dataframe.iterrows()
@@ -111,27 +99,14 @@ def load_to_db_historical(dataframe, crypto_id, conn):
         INSERT INTO historical_data (id, timestamp, currency, price)
         VALUES %s
         ON CONFLICT (timestamp, currency)
-        DO NOTHING
-        RETURNING id;
+        DO NOTHING;
     """
 
     try:
         with conn.cursor() as cursor:
-            # Use execute_values to insert the multiple rows
             execute_values(cursor, query, records)
-
-            # Commit the transaction
             conn.commit()
-
-            # Check how many rows were inserted
-            cursor.execute("SELECT COUNT(*) FROM historical_data WHERE currency = %s;", (crypto_id,))
-            inserted_rows = cursor.fetchone()[0]
-
-            if inserted_rows > 0:
-                print(f"{inserted_rows} rows successfully loaded into the database for {crypto_id}.")
-            else:
-                print(f"No rows were inserted for {crypto_id}. They might already exist.")
-
-    except psycopg2.Error as e:
+            print(f"Data for {crypto_id} successfully loaded.")
+    except Exception as e:
         conn.rollback()
         print(f"Failed to load data for {crypto_id}. Error: {e}")
