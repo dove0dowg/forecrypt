@@ -8,6 +8,7 @@ from db_utils import (
 )
 from get_data import fetch_specific_historical_hours, fetch_historical_data
 from config import CRYPTO_LIST, START_DATE, DB_CONFIG
+from models import arima_model, ets_model, theta_model
 
 try:
     db_conn = psycopg2.connect(**DB_CONFIG)
@@ -17,8 +18,8 @@ except psycopg2.Error as e:
     exit()
 
 if __name__ == "__main__":
+
     now = datetime.now(timezone.utc)
-    print(now)
     create_tables()
 
     for crypto_id in CRYPTO_LIST:
@@ -36,7 +37,7 @@ if __name__ == "__main__":
         else:
             df = fetch_specific_historical_hours(crypto_id, missing_hours)
 
-        print(df)
+        #print(df)
 
         if not df.empty:
             load_to_db_historical(df, crypto_id, db_conn)
