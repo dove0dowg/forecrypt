@@ -81,6 +81,7 @@ def check_consistency(crypto_id: str, start_date: str) -> bool:
             return True
 
 def load_to_db_historical(dataframe, crypto_id, conn):
+    
     """
     save historical data into the database table `historical_data`
     """
@@ -110,3 +111,42 @@ def load_to_db_historical(dataframe, crypto_id, conn):
     except Exception as e:
         conn.rollback()
         print(f"Failed to load data for {crypto_id}. Error: {e}")
+
+def load_to_db_forecast(dataframe, crypto_id, model_name, conn):
+    """
+    save forecast data into the database table `forecast_data`.
+    
+    :param dataframe: forecast data as pandas DataFrame with columns ['date', 'price'].
+    :param crypto_id: the cryptocurrency identifier (e.g., 'BTC', 'ETH').
+    :param model_name: the name of the model (e.g., 'arima', 'ets').
+    :param conn: active connection to the PostgreSQL database.
+    """
+    if dataframe.empty:
+        print(f"No forecast data to load for {crypto_id} - {model_name}.")
+        return
+
+    dataframe['price'] = dataframe['price'].round(8)
+
+    # add step index to forecast DataFrame
+    dataframe['step'] = range(1, len(dataframe) + 1)
+
+    records = [
+        (str(uuid4()), row['date'], crypto_id, model_name, row['step'], row['price'])
+        for _, row in dataframe.iterrows()
+    ]
+
+    query = """
+        INSERT INTO forecast_data (id, timestamp, currency, model, forecast_step, forecast_value)
+        VALUES %s
+        ON CONFLICT (timestamp, currency, model, forecast_step)
+        DO NOTHING;
+    """
+
+    try:
+        with conn.cursor() as cursor:
+            execute_values(cursor, query, records)
+            conn.commit()
+            print(f"Forecast data for {crypto_id} - {model_name} successfully loaded.")
+    except Exception as e:
+        conn.rollback()
+        print(f"Failed to load forecast data for {crypto_id} - {model_name}. Error: {e}")

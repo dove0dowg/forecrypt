@@ -1,9 +1,8 @@
 import pandas as pd
-import json
 
-def create_forecast_json(crypto_df, model_fit, steps=31): 
+def create_forecast_dataframe(crypto_df, model_fit, steps):
     """
-    Generate a JSON string containing a forecast based on the input DataFrame and model.
+    generate a pandas DataFrame containing a forecast based on the input DataFrame and model.
     """
     # ensure input is a DataFrame and validate structure
     if not isinstance(crypto_df, pd.DataFrame):
@@ -20,26 +19,22 @@ def create_forecast_json(crypto_df, model_fit, steps=31):
     price_series = crypto_df['price']
 
     # generate forecast
-    if hasattr(model_fit, 'get_forecast'):  # ARIMA models
-        forecast_result = model_fit.get_forecast(steps=steps - 1)
+    if hasattr(model_fit, 'get_forecast'):  # for ARIMA models
+        forecast_result = model_fit.get_forecast(steps=steps)
         forecast = forecast_result.predicted_mean
-    else:  # ETS, Theta models
-        forecast = model_fit.forecast(steps=steps - 1)
+    else:  # for ETS, Theta models
+        forecast = model_fit.forecast(steps=steps)
 
     # generate timestamps for forecast
     forecast_dates = pd.date_range(
-        start=price_series.index[-1] + pd.Timedelta(hours=1), 
-        periods=steps - 1, 
+        start=price_series.index[-1] + pd.Timedelta(hours=1),  # start after the last historical point
+        periods=steps,  # generate exactly 'steps' timestamps
         freq='h'
     )
     forecast_series = pd.Series(forecast.values, index=forecast_dates)
 
-    # convert forecast data to dictionary with ISO 8601 timestamps
-    forecast_dict = {
-        index.isoformat(): value for index, value in forecast_series.items()
-    }
+    # convert to DataFrame
+    forecast_df = forecast_series.reset_index()
+    forecast_df.columns = ['date', 'price']  # match historical data
 
-    # convert dictionary to JSON string
-    json_str = json.dumps(forecast_dict)
-
-    return json_str
+    return forecast_df

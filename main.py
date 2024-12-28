@@ -1,15 +1,15 @@
-from datetime import datetime, timezone
+# libs
 import psycopg2
-from db_utils import (
-    create_tables,
-    get_missing_hours,
-    load_to_db_historical,
-    check_consistency
-)
-from get_data import fetch_specific_historical_hours, fetch_historical_data
-from config import CRYPTO_LIST, START_DATE, DB_CONFIG, CRYPTO_LIST, MODEL_PARAMETERS
-from models_processing import check_model, save_model, load_model
+import pandas as pd
 import importlib
+from datetime import datetime, timezone
+# modules
+import db_utils
+import models_processing
+from get_data import fetch_specific_historical_hours, fetch_historical_data
+from config import CRYPTO_LIST, START_DATE, DB_CONFIG, MODEL_PARAMETERS
+from forecasting import create_forecast_dataframe
+
 
 def check_and_save_models_cycle(crypto_list=None, model_names=None):
     """
@@ -21,7 +21,7 @@ def check_and_save_models_cycle(crypto_list=None, model_names=None):
 
     for crypto_id in crypto_list:
         for model_name in model_names:
-            if check_model(crypto_id, model_name):
+            if models_processing.check_model(crypto_id, model_name):
                 # fetch historical data
                 df = fetch_historical_data(
                     crypto_id, 
@@ -38,44 +38,122 @@ def check_and_save_models_cycle(crypto_list=None, model_names=None):
                 model_fit = fit_func(df, **MODEL_PARAMETERS[model_name])
 
                 # save the model
-                save_model(crypto_id, model_name, model_fit)
+                models_processing.save_model(crypto_id, model_name, model_fit)
+
+def combine_historical_and_forecast(historical_df, forecast_df):
+    """
+    combines historical and forecast data into a single dataframe.
+    
+    :param historical_df: dataframe with historical data, must contain 'date' and 'price' columns.
+    :param forecast_df: dataframe with forecast data, must contain 'date' and 'price' columns.
+    :return: combined dataframe with historical and forecast data.
+    """
+    # validate input
+    if not {'date', 'price'}.issubset(historical_df.columns):
+        raise ValueError("historical_df must contain 'date' and 'price' columns.")
+    if not {'date', 'price'}.issubset(forecast_df.columns):
+        raise ValueError("forecast_df must contain 'date' and 'price' columns.")
+
+    # ensure 'date' is datetime
+    historical_df['date'] = pd.to_datetime(historical_df['date'])
+    forecast_df['date'] = pd.to_datetime(forecast_df['date'])
+
+    # concatenate the two dataframes
+    combined_df = pd.concat([historical_df, forecast_df], ignore_index=True)
+
+    # sort by date for consistency
+    combined_df = combined_df.sort_values(by='date').reset_index(drop=True)
+
+    return combined_df
+
+def test_forecasts():
+    """
+    generates forecasts for all cryptocurrencies and models,
+    and compares forecast formats with historical data.
+    """
+    for crypto_id in CRYPTO_LIST:
+        for model_name in MODEL_PARAMETERS:
+            try:
+                # load historical data
+                historical_df = fetch_historical_data(
+                    crypto_id, 
+                    MODEL_PARAMETERS[model_name]["dataset_hours"]
+                )
+
+                # load trained model
+                model_fit = models_processing.load_model(crypto_id, model_name)
+
+                # generate forecast
+                forecast_steps = MODEL_PARAMETERS[model_name].get('forecast_steps', 30)
+                forecast_df = create_forecast_dataframe(historical_df, model_fit, steps=forecast_steps)
+
+                combined_df = combine_historical_and_forecast(historical_df, forecast_df)
+
+                # print results
+                print(f"forecast for {crypto_id} - {model_name}:\n{forecast_df.head()}\n")
+                print(f"historical data sample:\n{historical_df.head()}\n")
+                print(f"forecast format matches historical format: {list(forecast_df.columns) == list(historical_df.columns)}\n")
+                print(combined_df.iloc[710:730])
+                print(combined_df)
+            except Exception as e:
+                print(f"error processing {crypto_id} - {model_name}: {e}")
 
 
-try:
-    db_conn = psycopg2.connect(**DB_CONFIG)
-    db_conn.autocommit = True
-except psycopg2.Error as e:
-    print(f"Failed to connect to the database: {e}")
-    exit()
+
 
 if __name__ == "__main__":
+    # try connecting to the database
+    try:
+        conn = psycopg2.connect(**DB_CONFIG)
+        conn.autocommit = True
+        print("database connection established.")
+    except psycopg2.Error as e:
+        print(f"failed to connect to the database: {e}")
+        exit()
 
-    now = datetime.now(timezone.utc)
-    create_tables()
+    try:
+        # initialize database tables
+        db_utils.create_tables()
 
-    for crypto_id in CRYPTO_LIST:
-        print(f"Processing {crypto_id}...")
+        # log the start time
+        now = datetime.now(timezone.utc)
+        print(f"starting model processing at {now.isoformat()}")
 
-        missing_hours = get_missing_hours(crypto_id, START_DATE, now)
-        print(f"Missing hours for {crypto_id}: {missing_hours}")
+        # process and save models
+        check_and_save_models_cycle()
 
-        if not missing_hours:
-            print(f"All data is up to date for {crypto_id}.")
-            continue
+        # generate forecasts and load into database
+        for crypto_id in CRYPTO_LIST:
+            for model_name in MODEL_PARAMETERS:
+                try:
+                    # load historical data
+                    df_historical = fetch_historical_data(
+                        crypto_id, 
+                        MODEL_PARAMETERS[model_name]["dataset_hours"]
+                    )
 
-        if len(missing_hours) > 1 and all((b - a).seconds <= 3600 for a, b in zip(missing_hours, missing_hours[1:])):
-            df = fetch_historical_data(crypto_id, len(missing_hours))
-        else:
-            df = fetch_specific_historical_hours(crypto_id, missing_hours)
+                    # load the trained model
+                    model_fit = models_processing.load_model(crypto_id, model_name)
 
-        #print(df)
+                    # generate forecast
+                    forecast_steps = MODEL_PARAMETERS[model_name].get('forecast_steps', 30)
+                    df_forecast = create_forecast_dataframe(df_historical, model_fit, steps=forecast_steps)
 
-        if not df.empty:
-            load_to_db_historical(df, crypto_id, db_conn)
-        else:
-            print(f"No data fetched for {crypto_id}.")
+                    # load forecast into database
+                    db_utils.load_to_db_forecast(df_forecast, crypto_id, model_name, conn)
+                    print(f"forecast data for {crypto_id} - {model_name} successfully loaded to database.")
 
-        is_consistent = check_consistency(crypto_id, START_DATE)
-        print(f"Data consistency for {crypto_id}: {'consistent' if is_consistent else 'inconsistent'}")
+                except Exception as e:
+                    print(f"error processing forecast for {crypto_id} - {model_name}: {e}")
 
+        # log completion
+        print(f"model processing and testing completed at {datetime.now(timezone.utc).isoformat()}")
 
+    except Exception as e:
+        print(f"an error occurred during model processing: {e}")
+
+    finally:
+        # close database connection
+        if conn:
+            conn.close()
+            print("database connection closed.")

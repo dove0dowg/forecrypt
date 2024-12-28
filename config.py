@@ -17,6 +17,7 @@ MODEL_PARAMETERS = {
     'arima': {
         'dataset_hours': 720,
         'model_update_interval': 12,
+        'forecast_hours': 30,
         'balanced_forecast_hours': 10,
         'trash_forecast_hours': 20,
         'fit_func_name': 'model_fits.fit_arima_model',
@@ -28,6 +29,7 @@ MODEL_PARAMETERS = {
     'ets': {
         'dataset_hours': 720,
         'model_update_interval': 12,
+        'forecast_hours': 30,
         'balanced_forecast_hours': 15,
         'trash_forecast_hours': 15,
         'fit_func_name': 'model_fits.fit_ets_model',
@@ -40,6 +42,7 @@ MODEL_PARAMETERS = {
     'theta': {
         'dataset_hours': 720,
         'model_update_interval': 12,
+        'forecast_hours': 30,
         'balanced_forecast_hours': 20,
         'trash_forecast_hours': 10,
         'fit_func_name': 'model_fits.fit_theta_model',
