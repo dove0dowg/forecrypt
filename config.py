@@ -11,12 +11,15 @@ DB_CONFIG = {
     'port': 5432
 }
 
+MODELS_DIRECTORY = r"C:\forecrypt_models"
+
 MODEL_PARAMETERS = {
     'arima': {
         'dataset_hours': 720,
+        'model_update_interval': 12,
         'balanced_forecast_hours': 10,
         'trash_forecast_hours': 20,
-        'fit_func_name': 'models.arima_model.fit_arima_model',
+        'fit_func_name': 'model_fits.fit_arima_model',
         'specific_parameters': {
             'order': (24, 3, 8),
             'seasonal_order': (0, 0, 0, 0)
@@ -24,9 +27,10 @@ MODEL_PARAMETERS = {
     },
     'ets': {
         'dataset_hours': 720,
+        'model_update_interval': 12,
         'balanced_forecast_hours': 15,
         'trash_forecast_hours': 15,
-        'fit_func_name': 'models.ets_model.fit_ets_model',
+        'fit_func_name': 'model_fits.fit_ets_model',
         'specific_parameters': {
             'trend': 'add',
             'seasonal': 'mul',
@@ -35,9 +39,10 @@ MODEL_PARAMETERS = {
     },
     'theta': {
         'dataset_hours': 720,
+        'model_update_interval': 12,
         'balanced_forecast_hours': 20,
         'trash_forecast_hours': 10,
-        'fit_func_name': 'models.theta_model.fit_theta_model',
+        'fit_func_name': 'model_fits.fit_theta_model',
         'specific_parameters': {}
     }
 }

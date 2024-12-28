@@ -3,6 +3,7 @@ from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
 from statsmodels.tsa.forecasting.theta import ThetaModel
 
+
 def fit_arima_model(df, **kwargs):
     """
     arima model training function.
