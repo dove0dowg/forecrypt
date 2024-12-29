@@ -2,6 +2,7 @@
 import psycopg2
 import pandas as pd
 import importlib
+import logging
 from datetime import datetime, timezone
 # modules
 import db_utils
@@ -9,7 +10,6 @@ import models_processing
 from get_data import fetch_specific_historical_hours, fetch_historical_data
 from config import CRYPTO_LIST, START_DATE, DB_CONFIG, MODEL_PARAMETERS
 from forecasting import create_forecast_dataframe
-
 
 def check_and_save_models_cycle(crypto_list=None, model_names=None):
     """
@@ -98,62 +98,93 @@ def test_forecasts():
             except Exception as e:
                 print(f"error processing {crypto_id} - {model_name}: {e}")
 
+def get_max_dataset_hours(model_parameters):
+    """
+    find the maximum dataset_hours among all models.
+    """
+    return max(model["dataset_hours"] for model in model_parameters.values())
 
+def get_max_historical_df(crypto_id, max_hours):
+    """
+    get historical data for the maximum required range (max_hours).
+    """
+    return fetch_historical_data(crypto_id, max_hours)
+
+def extract_model_specific_df(dataframe, dataset_hours):
+    """
+    extract the last `dataset_hours` rows from the given DataFrame.
+    """
+    return dataframe.iloc[-dataset_hours:]
+
+# basic configuration
+logging.basicConfig(
+    level=logging.INFO,  # logger level
+    format="%(asctime)s [%(levelname)s] %(message)s",  # format
+    handlers=[
+        logging.StreamHandler(),  # terminal
+        logging.FileHandler("forecrypt.log") # file 
+    ]
+)
+
+logger = logging.getLogger(__name__)
 
 
 if __name__ == "__main__":
-    # try connecting to the database
     try:
-        conn = psycopg2.connect(**DB_CONFIG)
+        conn = psycopg2.connect(**db_utils.DB_CONFIG)
         conn.autocommit = True
-        print("database connection established.")
+        logger.info("database connection established.")
     except psycopg2.Error as e:
-        print(f"failed to connect to the database: {e}")
+        logger.error(f"failed to connect to the database: {e}")
         exit()
 
     try:
         # initialize database tables
         db_utils.create_tables()
+        logger.info("database tables initialized.")
 
         # log the start time
         now = datetime.now(timezone.utc)
-        print(f"starting model processing at {now.isoformat()}")
+        logger.info(f"starting model processing at {now.isoformat()}")
 
-        # process and save models
-        check_and_save_models_cycle()
-
-        # generate forecasts and load into database
+        # process each cryptocurrency
         for crypto_id in CRYPTO_LIST:
-            for model_name in MODEL_PARAMETERS:
+            logger.info(f"processing {crypto_id}...")
+
+            # determine the maximum dataset_hours
+            max_hours = get_max_dataset_hours(MODEL_PARAMETERS)
+            logger.info(f"max dataset_hours for {crypto_id}: {max_hours}")
+
+            # get historical data for the maximum range
+            max_historical_df = get_max_historical_df(crypto_id, max_hours)
+            logger.info(f"fetched max historical data for {crypto_id}, rows: {len(max_historical_df)}")
+
+            # iterate over models
+            for model_name, params in MODEL_PARAMETERS.items():
                 try:
-                    # load historical data
-                    df_historical = fetch_historical_data(
-                        crypto_id, 
-                        MODEL_PARAMETERS[model_name]["dataset_hours"]
-                    )
+                    # extract model-specific data
+                    model_specific_df = extract_model_specific_df(max_historical_df, params["dataset_hours"])
 
-                    # load the trained model
+                    # load model and make forecast
                     model_fit = models_processing.load_model(crypto_id, model_name)
+                    forecast_steps = params.get("forecast_steps", 30)
+                    df_forecast = create_forecast_dataframe(model_specific_df, model_fit, steps=forecast_steps)
 
-                    # generate forecast
-                    forecast_steps = MODEL_PARAMETERS[model_name].get('forecast_steps', 30)
-                    df_forecast = create_forecast_dataframe(df_historical, model_fit, steps=forecast_steps)
-
-                    # load forecast into database
-                    db_utils.load_to_db_forecast(df_forecast, crypto_id, model_name, conn)
-                    print(f"forecast data for {crypto_id} - {model_name} successfully loaded to database.")
+                    # save forecast to the database
+                    created_at = model_specific_df["date"].max()
+                    db_utils.load_to_db_forecast(df_forecast, crypto_id, model_name, conn, created_at)
+                    logger.info(f"forecast for {crypto_id} - {model_name} saved to database.")
 
                 except Exception as e:
-                    print(f"error processing forecast for {crypto_id} - {model_name}: {e}")
+                    logger.error(f"error processing {crypto_id} - {model_name}: {e}")
 
         # log completion
-        print(f"model processing and testing completed at {datetime.now(timezone.utc).isoformat()}")
+        logger.info(f"model processing completed at {datetime.now(timezone.utc).isoformat()}")
 
     except Exception as e:
-        print(f"an error occurred during model processing: {e}")
+        logger.critical(f"an error occurred: {e}")
 
     finally:
-        # close database connection
         if conn:
             conn.close()
-            print("database connection closed.")
+            logger.info("database connection closed.")

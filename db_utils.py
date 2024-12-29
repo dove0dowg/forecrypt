@@ -26,6 +26,7 @@ def create_tables():
                     timestamp TIMESTAMP NOT NULL,
                     currency VARCHAR(50) NOT NULL,
                     model VARCHAR(100) NOT NULL,
+                    created_at TIMESTAMP NOT NULL,
                     forecast_step INTEGER NOT NULL,
                     forecast_value DECIMAL(18, 8) NOT NULL,
                     UNIQUE (timestamp, currency, model, forecast_step)
@@ -112,7 +113,7 @@ def load_to_db_historical(dataframe, crypto_id, conn):
         conn.rollback()
         print(f"Failed to load data for {crypto_id}. Error: {e}")
 
-def load_to_db_forecast(dataframe, crypto_id, model_name, conn):
+def load_to_db_forecast(dataframe, crypto_id, model_name, conn, created_at):
     """
     save forecast data into the database table `forecast_data`.
     
@@ -120,23 +121,22 @@ def load_to_db_forecast(dataframe, crypto_id, model_name, conn):
     :param crypto_id: the cryptocurrency identifier (e.g., 'BTC', 'ETH').
     :param model_name: the name of the model (e.g., 'arima', 'ets').
     :param conn: active connection to the PostgreSQL database.
+    :param created_at: timestamp representing the starting point of the forecast.
     """
     if dataframe.empty:
         print(f"No forecast data to load for {crypto_id} - {model_name}.")
         return
 
     dataframe['price'] = dataframe['price'].round(8)
-
-    # add step index to forecast DataFrame
     dataframe['step'] = range(1, len(dataframe) + 1)
 
     records = [
-        (str(uuid4()), row['date'], crypto_id, model_name, row['step'], row['price'])
+        (str(uuid4()), row['date'], crypto_id, model_name, row['step'], row['price'], created_at)
         for _, row in dataframe.iterrows()
     ]
 
     query = """
-        INSERT INTO forecast_data (id, timestamp, currency, model, forecast_step, forecast_value)
+        INSERT INTO forecast_data (id, timestamp, currency, model, forecast_step, forecast_value, created_at)
         VALUES %s
         ON CONFLICT (timestamp, currency, model, forecast_step)
         DO NOTHING;

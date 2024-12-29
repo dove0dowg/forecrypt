@@ -1,0 +1,34 @@
+2024-12-29 12:23:42,874 [INFO] database connection established.
+2024-12-29 12:23:43,030 [INFO] database tables initialized.
+2024-12-29 12:23:43,030 [INFO] starting model processing at 2024-12-29T05:23:43.030050+00:00
+2024-12-29 12:23:43,031 [INFO] processing BTC...
+2024-12-29 12:23:43,031 [INFO] max dataset_hours for BTC: 720
+2024-12-29 12:23:44,959 [INFO] fetched max historical data for BTC, rows: 720
+2024-12-29 12:23:46,832 [INFO] forecast for BTC - arima saved to database.
+2024-12-29 12:23:46,889 [INFO] forecast for BTC - ets saved to database.
+2024-12-29 12:23:46,952 [INFO] forecast for BTC - theta saved to database.
+2024-12-29 12:23:46,953 [INFO] processing ETH...
+2024-12-29 12:23:46,953 [INFO] max dataset_hours for ETH: 720
+2024-12-29 12:23:48,280 [INFO] fetched max historical data for ETH, rows: 720
+2024-12-29 12:23:48,539 [INFO] forecast for ETH - arima saved to database.
+2024-12-29 12:23:48,565 [INFO] forecast for ETH - ets saved to database.
+2024-12-29 12:23:48,577 [INFO] forecast for ETH - theta saved to database.
+2024-12-29 12:23:48,578 [INFO] model processing completed at 2024-12-29T05:23:48.578084+00:00
+2024-12-29 12:23:48,579 [INFO] database connection closed.
+2024-12-29 17:12:58,139 [INFO] database connection established.
+2024-12-29 17:12:58,170 [INFO] database tables initialized.
+2024-12-29 17:12:58,172 [INFO] starting model processing at 2024-12-29T10:12:58.172032+00:00
+2024-12-29 17:12:58,172 [INFO] processing BTC...
+2024-12-29 17:12:58,172 [INFO] max dataset_hours for BTC: 720
+2024-12-29 17:12:59,546 [INFO] fetched max historical data for BTC, rows: 720
+2024-12-29 17:13:01,604 [INFO] forecast for BTC - arima saved to database.
+2024-12-29 17:13:01,657 [INFO] forecast for BTC - ets saved to database.
+2024-12-29 17:13:01,713 [INFO] forecast for BTC - theta saved to database.
+2024-12-29 17:13:01,714 [INFO] processing ETH...
+2024-12-29 17:13:01,714 [INFO] max dataset_hours for ETH: 720
+2024-12-29 17:13:03,664 [INFO] fetched max historical data for ETH, rows: 720
+2024-12-29 17:13:03,920 [INFO] forecast for ETH - arima saved to database.
+2024-12-29 17:13:03,946 [INFO] forecast for ETH - ets saved to database.
+2024-12-29 17:13:03,958 [INFO] forecast for ETH - theta saved to database.
+2024-12-29 17:13:03,958 [INFO] model processing completed at 2024-12-29T10:13:03.958369+00:00
+2024-12-29 17:13:03,959 [INFO] database connection closed.
