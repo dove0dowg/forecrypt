@@ -3,6 +3,11 @@ import pandas as pd
 def create_forecast_dataframe(crypto_df, model_fit, steps):
     """
     generate a pandas DataFrame containing a forecast based on the input DataFrame and model.
+
+    :param crypto_df: Historical cryptocurrency data as a pandas DataFrame with columns ['date', 'price'].
+    :param model_fit: A trained forecasting model.
+    :param steps: Number of forecast steps (hours) to generate.
+    :return: A pandas DataFrame with columns ['date', 'price'] containing the forecast data.
     """
     # ensure input is a DataFrame and validate structure
     if not isinstance(crypto_df, pd.DataFrame):

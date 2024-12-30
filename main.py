@@ -18,7 +18,9 @@ from forecasting import create_forecast_dataframe
 def check_and_save_models_cycle(crypto_list=None, model_names=None):
     """
     processes and saves models for the specified cryptocurrencies and models.
-    if no arguments are provided, uses all CRYPTO_LIST and MODEL_PARAMETERS.
+    if no arguments are provided, processes all cryptocurrencies in CRYPTO_LIST and models in MODEL_PARAMETERS.
+    
+    automatically retrains models based on the configured update interval and saves forecasts.
     """
     crypto_list = crypto_list or CRYPTO_LIST
     model_names = model_names or MODEL_PARAMETERS
