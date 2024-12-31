@@ -44,11 +44,7 @@ def fetch_specific_historical_hours(crypto_id, hours_list, api_key=None):
     results = []
 
     for hour in hours_list:
-        print(f'час:{hour}')
-        #hour = hour.astimezone(timezone.utc)
-        #print(f'час:{hour}')
         hour_unix = int(hour.timestamp())
-        print(f'час_unix:{hour_unix}')
         params = {
             "fsym": crypto_id,
             "tsym": 'USD',
@@ -60,7 +56,6 @@ def fetch_specific_historical_hours(crypto_id, hours_list, api_key=None):
         
         if response.status_code == 200:
             data = response.json()
-            print(data)
             if data.get('Response') == 'Success':
                 price_data = data['Data']['Data'][1]
                 results.append({

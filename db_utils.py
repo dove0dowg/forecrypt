@@ -11,6 +11,7 @@ def create_tables():
     """
     with psycopg2.connect(**DB_CONFIG) as conn:
         with conn.cursor() as cursor:
+            # Создание таблицы historical_data
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS historical_data (
                     id UUID PRIMARY KEY,
@@ -20,6 +21,11 @@ def create_tables():
                     UNIQUE (timestamp, currency)
                 );
             """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_historical_data_timestamp_currency ON historical_data (timestamp, currency);
+            """)
+
+            # Создание таблицы forecast_data
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS forecast_data (
                     id UUID PRIMARY KEY,
@@ -32,6 +38,13 @@ def create_tables():
                     UNIQUE (timestamp, currency, model, forecast_step)
                 );
             """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_forecast_data_timestamp ON forecast_data (timestamp);
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_forecast_data_timestamp_currency_model ON forecast_data (timestamp, currency, model);
+            """)
+
             conn.commit()
 
 def get_missing_hours(crypto_id: str, start_date, end_date) -> list:
@@ -55,7 +68,7 @@ def get_missing_hours(crypto_id: str, start_date, end_date) -> list:
 
     with psycopg2.connect(**DB_CONFIG) as conn:
         with conn.cursor() as cursor:
-            cursor.execute("SET TIME ZONE 'UTC';")  # Установить UTC
+            cursor.execute("SET TIME ZONE 'UTC';")  # UTC
             cursor.execute(query, (start_date, end_date, crypto_id))
             missing_hours = [row[0] for row in cursor.fetchall()]
 

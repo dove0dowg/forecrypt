@@ -1,6 +1,6 @@
 #  project config
 CRYPTO_LIST = ['BTC', 'ETH'] #, 'DOGE', 'ADA', 'SOL']
-START_DATE = "2024-12-25T00:00:00" #+00:00"   # first day and hour of analysis in UTC-timezone
+START_DATE = "2024-12-26T00:00:00" #+00:00"   # first day and hour of analysis in UTC-timezone
 API_KEY = "YOUR_API_KEY"
 
 DB_CONFIG = {
@@ -16,9 +16,9 @@ MODELS_DIRECTORY = r"C:\forecrypt_models"
 MODEL_PARAMETERS = {
     'arima': {
         'dataset_hours': 720,
-        'model_update_interval': 240,
-        'forecast_frequency': 1,
-        'forecast_hours': 30,
+        'model_update_interval': 720,
+        'forecast_frequency': 12,
+        'forecast_hours': 120,
         'balanced_forecast_hours': 10,
         'trash_forecast_hours': 20,
         'fit_func_name': 'model_fits.fit_arima_model',
@@ -30,8 +30,8 @@ MODEL_PARAMETERS = {
     'ets': {
         'dataset_hours': 720,
         'model_update_interval': 48,
-        'forecast_frequency': 5,
-        'forecast_hours': 30,
+        'forecast_frequency': 12,
+        'forecast_hours': 120,
         'balanced_forecast_hours': 15,
         'trash_forecast_hours': 15,
         'fit_func_name': 'model_fits.fit_ets_model',
@@ -44,8 +44,8 @@ MODEL_PARAMETERS = {
     'theta': {
         'dataset_hours': 720,
         'model_update_interval': 1,
-        'forecast_frequency': 6,
-        'forecast_hours': 30,
+        'forecast_frequency': 12,
+        'forecast_hours': 120,
         'balanced_forecast_hours': 20,
         'trash_forecast_hours': 10,
         'fit_func_name': 'model_fits.fit_theta_model',

@@ -90,8 +90,8 @@ def test_forecasts():
                 model_fit = models_processing.load_model(crypto_id, model_name)
 
                 # generate forecast
-                forecast_steps = MODEL_PARAMETERS[model_name].get('forecast_steps', 30)
-                forecast_df = create_forecast_dataframe(historical_df, model_fit, steps=forecast_steps)
+                forecast_hours = MODEL_PARAMETERS[model_name].get('forecast_hours', 30)
+                forecast_df = create_forecast_dataframe(historical_df, model_fit, steps=forecast_hours)
 
                 combined_df = combine_historical_and_forecast(historical_df, forecast_df)
 
@@ -121,10 +121,6 @@ def extract_model_specific_df(dataframe, dataset_hours):
     extract the last `dataset_hours` rows from the given DataFrame.
     """
     return dataframe.iloc[-dataset_hours:]
-
-def get_max_dataset_hours(model_parameters):
-    """find the maximum dataset_hours among all models."""
-    return max(model["dataset_hours"] for model in model_parameters.values())
 
 def get_additional_start_date(start_date: datetime, max_hours: int) -> datetime:
     """
@@ -167,7 +163,7 @@ if __name__ == "__main__":
         logger.info("database tables initialized.")
 
         # main time interval (naive datetimes)
-        now_naive = datetime.now()  # no tzinfo
+        now_naive = datetime.now(timezone.utc).replace(tzinfo=None)
         # parse START_DATE as naive datetime
         # если в START_DATE внутри конфиге нет "+00:00", то это сделает наивную дату
         start_naive = pd.to_datetime(START_DATE)
@@ -192,6 +188,7 @@ if __name__ == "__main__":
             # fetch historical data (extended range)
             total_hours = int((now_naive - extended_start_dt).total_seconds() // 3600) + 1
             df_extended = fetch_historical_data(crypto_id, total_hours)
+            db_utils.load_to_db_historical(df_extended, crypto_id, conn)
 
             if df_extended.empty:
                 logger.error(f"no historical data fetched for {crypto_id}")
@@ -221,10 +218,10 @@ if __name__ == "__main__":
             # go hour by hour
             while current_dt <= now_naive:
                 for model_name, params in MODEL_PARAMETERS.items():
-                    update_interval = params.get('model_update_interval', 24)
-                    forecast_freq = params.get('forecast_frequency', 12)
+                    update_interval = params.get('model_update_interval')
+                    forecast_freq = params.get('forecast_frequency')
                     ds_hours = params['dataset_hours']
-                    forecast_steps = params.get('forecast_steps', 30)
+                    forecast_hours = params.get('forecast_hours')
 
                     earliest_needed_dt = current_dt - timedelta(hours=ds_hours)
 
@@ -279,7 +276,7 @@ if __name__ == "__main__":
                             do_forecast = True
 
                     if do_forecast:
-                        df_forecast = create_forecast_dataframe(sub_df, model_fit, steps=forecast_steps)
+                        df_forecast = create_forecast_dataframe(sub_df, model_fit, steps=forecast_hours)
                         db_utils.load_to_db_forecast(df_forecast, crypto_id, model_name, conn, created_at=current_dt)
                         logger.info(f"[{crypto_id} - {model_name}] forecast saved at {current_dt}")
                         model_last_forecast[model_name] = current_dt
