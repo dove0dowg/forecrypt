@@ -1,6 +1,7 @@
 #  project config
 CRYPTO_LIST = ['BTC', 'ETH'] #, 'DOGE', 'ADA', 'SOL']
-START_DATE = "2024-12-26T00:00:00" #+00:00"   # first day and hour of analysis in UTC-timezone
+START_DATE = "2024-12-26T00:00:00" # first day and hour of historical data in naive
+FINISH_DATE = "NOW" # last day and hour of historical data in naive, "yyyy-mm-ddThh:mm:ss" format
 API_KEY = "YOUR_API_KEY"
 
 DB_CONFIG = {

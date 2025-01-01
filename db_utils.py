@@ -4,48 +4,68 @@ from uuid import uuid4
 from config import DB_CONFIG
 from datetime import datetime, timezone, timedelta
 from psycopg2.extras import execute_values
+import logging
 
-def create_tables():
+logger = logging.getLogger("forecrypt")
+
+def init_database_connection(**kwargs):
     """
-    create tables historical_data и forecast_data, if there are none in database
+    Initialize a database connection.
+
+    :param kwargs: Database connection parameters (overrides defaults in DB_CONFIG).
+    :return: A psycopg2 connection object.
     """
-    with psycopg2.connect(**DB_CONFIG) as conn:
-        with conn.cursor() as cursor:
-            # Создание таблицы historical_data
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS historical_data (
-                    id UUID PRIMARY KEY,
-                    timestamp TIMESTAMP NOT NULL,
-                    currency VARCHAR(50) NOT NULL,
-                    price DECIMAL(18, 8) NOT NULL,
-                    UNIQUE (timestamp, currency)
-                );
-            """)
-            cursor.execute("""
-                CREATE INDEX IF NOT EXISTS idx_historical_data_timestamp_currency ON historical_data (timestamp, currency);
-            """)
+    try:
+        # Если не переданы параметры, используем DB_CONFIG
+        conn_params = kwargs if kwargs else DB_CONFIG
+        conn = psycopg2.connect(**conn_params)
+        conn.autocommit = True
+        logger.info("database connection established.")
+        return conn
+    except psycopg2.Error as e:
+        logger.error(f"failed to connect to the database: {e}")
+        exit()
 
-            # Создание таблицы forecast_data
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS forecast_data (
-                    id UUID PRIMARY KEY,
-                    timestamp TIMESTAMP NOT NULL,
-                    currency VARCHAR(50) NOT NULL,
-                    model VARCHAR(100) NOT NULL,
-                    created_at TIMESTAMP NOT NULL,
-                    forecast_step INTEGER NOT NULL,
-                    forecast_value DECIMAL(18, 8) NOT NULL,
-                    UNIQUE (timestamp, currency, model, forecast_step)
-                );
-            """)
-            cursor.execute("""
-                CREATE INDEX IF NOT EXISTS idx_forecast_data_timestamp ON forecast_data (timestamp);
-            """)
-            cursor.execute("""
-                CREATE INDEX IF NOT EXISTS idx_forecast_data_timestamp_currency_model ON forecast_data (timestamp, currency, model);
-            """)
-
-            conn.commit()
+def create_tables(conn):
+    """
+    Create tables historical_data и forecast_data, if there are none in database
+    """
+    with conn.cursor() as cursor:
+        # Создание таблицы historical_data
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS historical_data (
+                id UUID PRIMARY KEY,
+                timestamp TIMESTAMP NOT NULL,
+                currency VARCHAR(50) NOT NULL,
+                price DECIMAL(18, 8) NOT NULL,
+                UNIQUE (timestamp, currency)
+            );
+        """)
+        cursor.execute("""
+            CREATE INDEX IF NOT EXISTS idx_historical_data_timestamp_currency ON historical_data (timestamp, currency);
+        """)
+        # Создание таблицы forecast_data
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS forecast_data (
+                id UUID PRIMARY KEY,
+                timestamp TIMESTAMP NOT NULL,
+                currency VARCHAR(50) NOT NULL,
+                model VARCHAR(100) NOT NULL,
+                created_at TIMESTAMP NOT NULL,
+                forecast_step INTEGER NOT NULL,
+                forecast_value DECIMAL(18, 8) NOT NULL,
+                UNIQUE (timestamp, currency, model, forecast_step)
+            );
+        """)
+        cursor.execute("""
+            CREATE INDEX IF NOT EXISTS idx_forecast_data_timestamp ON forecast_data (timestamp);
+        """)
+        cursor.execute("""
+            CREATE INDEX IF NOT EXISTS idx_forecast_data_timestamp_currency_model ON forecast_data (timestamp, currency, model);
+        """)
+        logger.info("database tables initialized.")
+        
+        conn.commit()
 
 def get_missing_hours(crypto_id: str, start_date, end_date) -> list:
     """
@@ -100,7 +120,7 @@ def load_to_db_historical(dataframe, crypto_id, conn):
     save historical data into the database table `historical_data`
     """
     if dataframe.empty:
-        print(f"No data to load for {crypto_id}.")
+        logger.critical(f"No data to load for {crypto_id}.")
         return
 
     dataframe['price'] = dataframe['price'].round(8)
@@ -121,10 +141,10 @@ def load_to_db_historical(dataframe, crypto_id, conn):
         with conn.cursor() as cursor:
             execute_values(cursor, query, records)
             conn.commit()
-            print(f"Data for {crypto_id} successfully loaded.")
+            logger.info(f"Data for {crypto_id} successfully loaded.")
     except Exception as e:
         conn.rollback()
-        print(f"Failed to load data for {crypto_id}. Error: {e}")
+        logger.critical(f"Failed to load data for {crypto_id}. Error: {e}")
 
 def load_to_db_forecast(dataframe, crypto_id, model_name, conn, created_at):
     """
@@ -137,7 +157,7 @@ def load_to_db_forecast(dataframe, crypto_id, model_name, conn, created_at):
     :param created_at: timestamp representing the starting point of the forecast.
     """
     if dataframe.empty:
-        print(f"No forecast data to load for {crypto_id} - {model_name}.")
+        logger.critical(f"No forecast data to load for {crypto_id} - {model_name}.")
         return
 
     dataframe['price'] = dataframe['price'].round(8)
@@ -159,7 +179,7 @@ def load_to_db_forecast(dataframe, crypto_id, model_name, conn, created_at):
         with conn.cursor() as cursor:
             execute_values(cursor, query, records)
             conn.commit()
-            print(f"Forecast data for {crypto_id} - {model_name} successfully loaded.")
+            logger.debug(f"Forecast data for {crypto_id} - {model_name} successfully loaded.")
     except Exception as e:
         conn.rollback()
-        print(f"Failed to load forecast data for {crypto_id} - {model_name}. Error: {e}")
+        logger.critical(f"Failed to load forecast data for {crypto_id} - {model_name}. Error: {e}")

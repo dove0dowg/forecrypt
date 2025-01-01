@@ -7,7 +7,7 @@ from datetime import datetime, timezone, timedelta
 # modules
 import db_utils
 import models_processing
-from get_data import fetch_specific_historical_hours, fetch_historical_data
+import get_data
 from config import CRYPTO_LIST, START_DATE, DB_CONFIG, MODEL_PARAMETERS
 from forecasting import create_forecast_dataframe
 
@@ -29,7 +29,7 @@ def check_and_save_models_cycle(crypto_list=None, model_names=None):
         for model_name in model_names:
             if models_processing.check_model(crypto_id, model_name):
                 # fetch historical data
-                df = fetch_historical_data(
+                df = get_data.fetch_historical_data(
                     crypto_id, 
                     MODEL_PARAMETERS[model_name]["dataset_hours"]
                 )
@@ -72,38 +72,6 @@ def combine_historical_and_forecast(historical_df, forecast_df):
 
     return combined_df
 
-def test_forecasts():
-    """
-    generates forecasts for all cryptocurrencies and models,
-    and compares forecast formats with historical data.
-    """
-    for crypto_id in CRYPTO_LIST:
-        for model_name in MODEL_PARAMETERS:
-            try:
-                # load historical data
-                historical_df = fetch_historical_data(
-                    crypto_id, 
-                    MODEL_PARAMETERS[model_name]["dataset_hours"]
-                )
-
-                # load trained model
-                model_fit = models_processing.load_model(crypto_id, model_name)
-
-                # generate forecast
-                forecast_hours = MODEL_PARAMETERS[model_name].get('forecast_hours', 30)
-                forecast_df = create_forecast_dataframe(historical_df, model_fit, steps=forecast_hours)
-
-                combined_df = combine_historical_and_forecast(historical_df, forecast_df)
-
-                # print results
-                print(f"forecast for {crypto_id} - {model_name}:\n{forecast_df.head()}\n")
-                print(f"historical data sample:\n{historical_df.head()}\n")
-                print(f"forecast format matches historical format: {list(forecast_df.columns) == list(historical_df.columns)}\n")
-                print(combined_df.iloc[710:730])
-                print(combined_df)
-            except Exception as e:
-                print(f"error processing {crypto_id} - {model_name}: {e}")
-
 def get_max_dataset_hours(model_parameters):
     """
     find the maximum dataset_hours among all models.
@@ -114,7 +82,7 @@ def get_max_historical_df(crypto_id, max_hours):
     """
     get historical data for the maximum required range (max_hours).
     """
-    return fetch_historical_data(crypto_id, max_hours)
+    return get_data.fetch_historical_data(crypto_id, max_hours)
 
 def extract_model_specific_df(dataframe, dataset_hours):
     """
@@ -128,6 +96,68 @@ def get_additional_start_date(start_date: datetime, max_hours: int) -> datetime:
     so that at START_DATE we already have 'max_hours' worth of data.
     """
     return start_date - timedelta(hours=max_hours)
+
+
+def calculate_total_fetch_interval(start_date: str, finish_date: str = None, **model_parameters):
+    """
+    Calculate the time intervals and total hours needed to fetch historical data.
+
+    :param start_date: Start date string from configuration.
+    :param finish_date: Optional finish date string from configuration. Defaults to the current time if not provided.
+    :param model_parameters: Named model parameters (e.g., arima, ets).
+    :return: Tuple (start_naive, finish_naive, total_hours, extended_start_dt).
+    """
+    start_naive = pd.to_datetime(start_date)
+
+    # Ensure start_naive is naive
+    if start_naive.tz is not None:
+        start_naive = start_naive.tz_localize(None)
+
+    # Determine finish_naive
+    if finish_date is None or finish_date.lower() == "now":
+        finish_naive = datetime.now(timezone.utc).replace(tzinfo=None)
+        logger.info("FINISH_DATE is set to NOW (current time).")
+    else:
+        finish_naive = pd.to_datetime(finish_date)
+        if finish_naive.tz is not None:
+            finish_naive = finish_naive.tz_localize(None)
+        logger.info(f"FINISH_DATE is set to {finish_naive}.")
+
+    # Calculate maximum hours required
+    max_hours = max(params["dataset_hours"] for params in model_parameters.values())
+    extended_start_dt = start_naive - timedelta(hours=max_hours)
+
+    # Calculate total hours to fetch
+    total_hours = int((finish_naive - extended_start_dt).total_seconds() // 3600) + 1
+
+    # Logging
+    logger.info(f"START_DATE: {start_naive}, FINISH_DATE: {finish_naive}")
+    logger.debug(f"max dataset_hours: {max_hours}")
+    logger.debug(f"extended start date: {extended_start_dt}")
+    logger.debug(f"total hours to fetch: {total_hours}")
+
+    return start_naive, finish_naive, total_hours, extended_start_dt
+
+
+def fetch_extended_df(crypto_id: str, total_hours: int):
+    """
+    Fetch extended historical data for a cryptocurrency through get_data.fetch_historical_data function.
+
+    :param crypto_id: Cryptocurrency identifier (e.g., 'BTC').
+    :param total_hours: Total number of hours to fetch.
+    :return: DataFrame with historical data or None if data is empty.
+    """
+    df_extended = get_data.fetch_historical_data(crypto_id, total_hours)
+
+    if df_extended.empty:
+        logger.error(f"No historical data fetched for {crypto_id}")
+        return None
+
+    logger.debug(
+        f"{crypto_id}: extended df from {df_extended['date'].min()} "
+        f"to {df_extended['date'].max()} (rows={len(df_extended)})"
+    )
+    return df_extended
 
 # ---------------------------------------------------------
 # 2. configure logging
@@ -148,63 +178,24 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------
 
 if __name__ == "__main__":
+
     # connect to DB
-    try:
-        conn = psycopg2.connect(**db_utils.DB_CONFIG)
-        conn.autocommit = True
-        logger.info("database connection established.")
-    except psycopg2.Error as e:
-        logger.error(f"failed to connect to the database: {e}")
-        exit()
+    conn = db_utils.init_database_connection(**DB_CONFIG)
 
     try:
         # initialize database tables
-        db_utils.create_tables()
-        logger.info("database tables initialized.")
-
-        # main time interval (naive datetimes)
-        now_naive = datetime.now(timezone.utc).replace(tzinfo=None)
-        # parse START_DATE as naive datetime
-        # если в START_DATE внутри конфиге нет "+00:00", то это сделает наивную дату
-        start_naive = pd.to_datetime(START_DATE)
-        # если всё же там есть таймзона, уберём её:
-        if start_naive.tz is not None:
-            start_naive = start_naive.tz_localize(None)
-
-        logger.info(f"START_DATE: {start_naive}, now: {now_naive}")
-
-        # find max hours (to have enough history for any model)
-        max_hours = get_max_dataset_hours(MODEL_PARAMETERS)
-        logger.debug(f"max dataset_hours: {max_hours}")
-
-        # compute the earliest date we need to fetch
-        extended_start_dt = start_naive - timedelta(hours=max_hours)
-        logger.debug(f"extended start date: {extended_start_dt}")
+        db_utils.create_tables(conn)
+        start_naive, finish_naive, total_hours, extended_start_dt = calculate_total_fetch_interval(START_DATE, **MODEL_PARAMETERS)
 
         # process each cryptocurrency
         for crypto_id in CRYPTO_LIST:
+
             logger.info(f"processing crypto: {crypto_id}")
 
-            # fetch historical data (extended range)
-            total_hours = int((now_naive - extended_start_dt).total_seconds() // 3600) + 1
-            df_extended = fetch_historical_data(crypto_id, total_hours)
+            # fetch historical data (extended range from first hour of training dataset to FINISH_DATE)
+            df_extended = fetch_extended_df(crypto_id, total_hours)
             db_utils.load_to_db_historical(df_extended, crypto_id, conn)
-
-            if df_extended.empty:
-                logger.error(f"no historical data fetched for {crypto_id}")
-                continue
-
-            # ensure df_extended['date'] is naive datetime64[ns]
-            df_extended['date'] = pd.to_datetime(df_extended['date'])
-            # если там вдруг указана таймзона, убираем
-            if pd.api.types.is_datetime64tz_dtype(df_extended['date'].dtype):
-                df_extended['date'] = df_extended['date'].dt.tz_localize(None)
-
-            logger.debug(
-                f"{crypto_id}: extended df from {df_extended['date'].min()} "
-                f"to {df_extended['date'].max()} (rows={len(df_extended)})"
-            )
-
+            
             # define the timeline: hour by hour from start_naive to now_naive
             current_dt = start_naive
 
@@ -216,7 +207,7 @@ if __name__ == "__main__":
                 model_last_forecast[model_name] = None
 
             # go hour by hour
-            while current_dt <= now_naive:
+            while current_dt <= finish_naive:
                 for model_name, params in MODEL_PARAMETERS.items():
                     update_interval = params.get('model_update_interval')
                     forecast_freq = params.get('forecast_frequency')

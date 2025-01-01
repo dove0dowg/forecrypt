@@ -6215,3 +6215,538 @@
 2024-12-31 13:39:36,529 [INFO] [ETH - theta] forecast saved at 2024-12-31 00:00:00
 2024-12-31 13:39:37,197 [INFO] model processing completed at 2024-12-31 13:39:37.197567
 2024-12-31 13:39:37,198 [INFO] database connection closed.
+2024-12-31 17:55:32,087 [INFO] database connection established.
+2024-12-31 17:55:32,122 [INFO] database tables initialized.
+2024-12-31 17:55:32,131 [INFO] START_DATE: 2024-12-26 00:00:00, now: 2024-12-31 10:55:32.123389
+2024-12-31 17:55:32,132 [INFO] processing crypto: BTC
+2024-12-31 17:55:52,518 [INFO] [BTC - arima] forecast saved at 2024-12-26 00:00:00
+2024-12-31 17:55:52,815 [INFO] [BTC - ets] forecast saved at 2024-12-26 00:00:00
+2024-12-31 17:55:52,878 [INFO] [BTC - theta] forecast saved at 2024-12-26 00:00:00
+2024-12-31 17:55:54,648 [INFO] [BTC - arima] forecast saved at 2024-12-26 12:00:00
+2024-12-31 17:55:54,683 [INFO] [BTC - ets] forecast saved at 2024-12-26 12:00:00
+2024-12-31 17:55:54,739 [INFO] [BTC - theta] forecast saved at 2024-12-26 12:00:00
+2024-12-31 17:55:56,498 [INFO] [BTC - arima] forecast saved at 2024-12-27 00:00:00
+2024-12-31 17:55:56,550 [INFO] [BTC - ets] forecast saved at 2024-12-27 00:00:00
+2024-12-31 17:55:56,623 [INFO] [BTC - theta] forecast saved at 2024-12-27 00:00:00
+2024-12-31 17:55:58,206 [INFO] [BTC - arima] forecast saved at 2024-12-27 12:00:00
+2024-12-31 17:55:58,242 [INFO] [BTC - ets] forecast saved at 2024-12-27 12:00:00
+2024-12-31 17:55:58,291 [INFO] [BTC - theta] forecast saved at 2024-12-27 12:00:00
+2024-12-31 17:55:59,660 [INFO] [BTC - arima] forecast saved at 2024-12-28 00:00:00
+2024-12-31 17:55:59,852 [INFO] [BTC - ets] forecast saved at 2024-12-28 00:00:00
+2024-12-31 17:55:59,908 [INFO] [BTC - theta] forecast saved at 2024-12-28 00:00:00
+2024-12-31 17:56:01,287 [INFO] [BTC - arima] forecast saved at 2024-12-28 12:00:00
+2024-12-31 17:56:01,330 [INFO] [BTC - ets] forecast saved at 2024-12-28 12:00:00
+2024-12-31 17:56:01,375 [INFO] [BTC - theta] forecast saved at 2024-12-28 12:00:00
+2024-12-31 17:56:02,710 [INFO] [BTC - arima] forecast saved at 2024-12-29 00:00:00
+2024-12-31 17:56:02,746 [INFO] [BTC - ets] forecast saved at 2024-12-29 00:00:00
+2024-12-31 17:56:02,791 [INFO] [BTC - theta] forecast saved at 2024-12-29 00:00:00
+2024-12-31 17:56:04,129 [INFO] [BTC - arima] forecast saved at 2024-12-29 12:00:00
+2024-12-31 17:56:04,165 [INFO] [BTC - ets] forecast saved at 2024-12-29 12:00:00
+2024-12-31 17:56:04,210 [INFO] [BTC - theta] forecast saved at 2024-12-29 12:00:00
+2024-12-31 17:56:05,565 [INFO] [BTC - arima] forecast saved at 2024-12-30 00:00:00
+2024-12-31 17:56:05,761 [INFO] [BTC - ets] forecast saved at 2024-12-30 00:00:00
+2024-12-31 17:56:05,804 [INFO] [BTC - theta] forecast saved at 2024-12-30 00:00:00
+2024-12-31 17:56:07,180 [INFO] [BTC - arima] forecast saved at 2024-12-30 12:00:00
+2024-12-31 17:56:07,222 [INFO] [BTC - ets] forecast saved at 2024-12-30 12:00:00
+2024-12-31 17:56:07,278 [INFO] [BTC - theta] forecast saved at 2024-12-30 12:00:00
+2024-12-31 17:56:08,705 [INFO] [BTC - arima] forecast saved at 2024-12-31 00:00:00
+2024-12-31 17:56:08,741 [INFO] [BTC - ets] forecast saved at 2024-12-31 00:00:00
+2024-12-31 17:56:08,792 [INFO] [BTC - theta] forecast saved at 2024-12-31 00:00:00
+2024-12-31 17:56:09,915 [INFO] processing crypto: ETH
+2024-12-31 17:56:30,657 [INFO] [ETH - arima] forecast saved at 2024-12-26 00:00:00
+2024-12-31 17:56:30,918 [INFO] [ETH - ets] forecast saved at 2024-12-26 00:00:00
+2024-12-31 17:56:30,964 [INFO] [ETH - theta] forecast saved at 2024-12-26 00:00:00
+2024-12-31 17:56:32,320 [INFO] [ETH - arima] forecast saved at 2024-12-26 12:00:00
+2024-12-31 17:56:32,356 [INFO] [ETH - ets] forecast saved at 2024-12-26 12:00:00
+2024-12-31 17:56:32,401 [INFO] [ETH - theta] forecast saved at 2024-12-26 12:00:00
+2024-12-31 17:56:33,783 [INFO] [ETH - arima] forecast saved at 2024-12-27 00:00:00
+2024-12-31 17:56:33,818 [INFO] [ETH - ets] forecast saved at 2024-12-27 00:00:00
+2024-12-31 17:56:33,864 [INFO] [ETH - theta] forecast saved at 2024-12-27 00:00:00
+2024-12-31 17:56:35,303 [INFO] [ETH - arima] forecast saved at 2024-12-27 12:00:00
+2024-12-31 17:56:35,338 [INFO] [ETH - ets] forecast saved at 2024-12-27 12:00:00
+2024-12-31 17:56:35,386 [INFO] [ETH - theta] forecast saved at 2024-12-27 12:00:00
+2024-12-31 17:56:36,826 [INFO] [ETH - arima] forecast saved at 2024-12-28 00:00:00
+2024-12-31 17:56:37,057 [INFO] [ETH - ets] forecast saved at 2024-12-28 00:00:00
+2024-12-31 17:56:37,109 [INFO] [ETH - theta] forecast saved at 2024-12-28 00:00:00
+2024-12-31 17:56:38,523 [INFO] [ETH - arima] forecast saved at 2024-12-28 12:00:00
+2024-12-31 17:56:38,563 [INFO] [ETH - ets] forecast saved at 2024-12-28 12:00:00
+2024-12-31 17:56:38,615 [INFO] [ETH - theta] forecast saved at 2024-12-28 12:00:00
+2024-12-31 17:56:39,980 [INFO] [ETH - arima] forecast saved at 2024-12-29 00:00:00
+2024-12-31 17:56:40,019 [INFO] [ETH - ets] forecast saved at 2024-12-29 00:00:00
+2024-12-31 17:56:40,070 [INFO] [ETH - theta] forecast saved at 2024-12-29 00:00:00
+2024-12-31 17:56:41,421 [INFO] [ETH - arima] forecast saved at 2024-12-29 12:00:00
+2024-12-31 17:56:41,457 [INFO] [ETH - ets] forecast saved at 2024-12-29 12:00:00
+2024-12-31 17:56:41,509 [INFO] [ETH - theta] forecast saved at 2024-12-29 12:00:00
+2024-12-31 17:56:42,982 [INFO] [ETH - arima] forecast saved at 2024-12-30 00:00:00
+2024-12-31 17:56:43,214 [INFO] [ETH - ets] forecast saved at 2024-12-30 00:00:00
+2024-12-31 17:56:43,268 [INFO] [ETH - theta] forecast saved at 2024-12-30 00:00:00
+2024-12-31 17:56:44,863 [INFO] [ETH - arima] forecast saved at 2024-12-30 12:00:00
+2024-12-31 17:56:44,905 [INFO] [ETH - ets] forecast saved at 2024-12-30 12:00:00
+2024-12-31 17:56:44,951 [INFO] [ETH - theta] forecast saved at 2024-12-30 12:00:00
+2024-12-31 17:56:46,523 [INFO] [ETH - arima] forecast saved at 2024-12-31 00:00:00
+2024-12-31 17:56:46,582 [INFO] [ETH - ets] forecast saved at 2024-12-31 00:00:00
+2024-12-31 17:56:46,672 [INFO] [ETH - theta] forecast saved at 2024-12-31 00:00:00
+2024-12-31 17:56:47,899 [INFO] model processing completed at 2024-12-31 17:56:47.899424
+2024-12-31 17:56:47,900 [INFO] database connection closed.
+2025-01-01 15:05:17,498 [INFO] database connection established.
+2025-01-01 15:05:17,564 [INFO] database tables initialized.
+2025-01-01 15:05:17,573 [INFO] START_DATE: 2024-12-26 00:00:00, now: 2025-01-01 08:05:17.564147
+2025-01-01 15:05:17,575 [INFO] processing crypto: BTC
+2025-01-01 15:05:30,519 [INFO] database connection closed.
+2025-01-01 15:05:54,920 [INFO] database connection established.
+2025-01-01 15:05:55,055 [INFO] database tables initialized.
+2025-01-01 15:05:55,057 [INFO] START_DATE: 2024-12-26 00:00:00, now: 2025-01-01 08:05:55.055499
+2025-01-01 15:05:55,058 [INFO] processing crypto: BTC
+2025-01-01 15:05:59,026 [INFO] database connection closed.
+2025-01-01 15:11:58,896 [INFO] database connection established.
+2025-01-01 15:11:58,923 [INFO] database tables initialized.
+2025-01-01 15:11:58,926 [INFO] START_DATE: 2024-12-26 00:00:00, now: 2025-01-01 08:11:58.924835
+2025-01-01 15:11:58,927 [INFO] processing crypto: BTC
+2025-01-01 15:12:06,821 [INFO] database connection closed.
+2025-01-01 15:14:45,434 [INFO] database connection established.
+2025-01-01 15:14:45,462 [INFO] database tables initialized.
+2025-01-01 15:14:45,466 [INFO] START_DATE: 2024-12-26 00:00:00, now: 2025-01-01 08:14:45.463564
+2025-01-01 15:14:45,467 [INFO] processing crypto: BTC
+2025-01-01 15:14:49,904 [INFO] database connection closed.
+2025-01-01 15:16:55,920 [INFO] database connection established.
+2025-01-01 15:16:55,923 [INFO] database tables initialized.
+2025-01-01 15:16:55,927 [INFO] START_DATE: 2024-12-26 00:00:00, now: 2025-01-01 08:16:55.924914
+2025-01-01 15:16:55,927 [INFO] processing crypto: BTC
+2025-01-01 15:17:01,061 [INFO] database connection closed.
+2025-01-01 15:33:33,197 [INFO] database connection established.
+2025-01-01 15:33:33,200 [INFO] database tables initialized.
+2025-01-01 15:33:33,203 [CRITICAL] an error occurred: string indices must be integers, not 'str'
+2025-01-01 15:33:33,204 [INFO] database connection closed.
+2025-01-01 15:34:44,230 [INFO] database connection established.
+2025-01-01 15:34:44,234 [INFO] database tables initialized.
+2025-01-01 15:34:44,237 [INFO] START_DATE: 2024-12-26 00:00:00, now: 2025-01-01 08:34:44.234682
+2025-01-01 15:34:44,238 [INFO] processing crypto: BTC
+2025-01-01 15:35:03,936 [INFO] [BTC - arima] forecast saved at 2024-12-26 00:00:00
+2025-01-01 15:35:04,148 [INFO] [BTC - ets] forecast saved at 2024-12-26 00:00:00
+2025-01-01 15:35:04,218 [INFO] [BTC - theta] forecast saved at 2024-12-26 00:00:00
+2025-01-01 15:35:05,569 [INFO] [BTC - arima] forecast saved at 2024-12-26 12:00:00
+2025-01-01 15:35:05,608 [INFO] [BTC - ets] forecast saved at 2024-12-26 12:00:00
+2025-01-01 15:35:05,658 [INFO] [BTC - theta] forecast saved at 2024-12-26 12:00:00
+2025-01-01 15:35:07,080 [INFO] [BTC - arima] forecast saved at 2024-12-27 00:00:00
+2025-01-01 15:35:07,155 [INFO] [BTC - ets] forecast saved at 2024-12-27 00:00:00
+2025-01-01 15:35:07,229 [INFO] [BTC - theta] forecast saved at 2024-12-27 00:00:00
+2025-01-01 15:35:08,938 [INFO] [BTC - arima] forecast saved at 2024-12-27 12:00:00
+2025-01-01 15:35:08,977 [INFO] [BTC - ets] forecast saved at 2024-12-27 12:00:00
+2025-01-01 15:35:09,026 [INFO] [BTC - theta] forecast saved at 2024-12-27 12:00:00
+2025-01-01 15:35:10,606 [INFO] [BTC - arima] forecast saved at 2024-12-28 00:00:00
+2025-01-01 15:35:10,831 [INFO] [BTC - ets] forecast saved at 2024-12-28 00:00:00
+2025-01-01 15:35:10,922 [INFO] [BTC - theta] forecast saved at 2024-12-28 00:00:00
+2025-01-01 15:35:12,509 [INFO] [BTC - arima] forecast saved at 2024-12-28 12:00:00
+2025-01-01 15:35:12,556 [INFO] [BTC - ets] forecast saved at 2024-12-28 12:00:00
+2025-01-01 15:35:12,614 [INFO] [BTC - theta] forecast saved at 2024-12-28 12:00:00
+2025-01-01 15:35:13,988 [INFO] [BTC - arima] forecast saved at 2024-12-29 00:00:00
+2025-01-01 15:35:14,031 [INFO] [BTC - ets] forecast saved at 2024-12-29 00:00:00
+2025-01-01 15:35:14,084 [INFO] [BTC - theta] forecast saved at 2024-12-29 00:00:00
+2025-01-01 15:35:15,648 [INFO] [BTC - arima] forecast saved at 2024-12-29 12:00:00
+2025-01-01 15:35:15,696 [INFO] [BTC - ets] forecast saved at 2024-12-29 12:00:00
+2025-01-01 15:35:15,763 [INFO] [BTC - theta] forecast saved at 2024-12-29 12:00:00
+2025-01-01 15:35:17,109 [INFO] [BTC - arima] forecast saved at 2024-12-30 00:00:00
+2025-01-01 15:35:17,303 [INFO] [BTC - ets] forecast saved at 2024-12-30 00:00:00
+2025-01-01 15:35:17,361 [INFO] [BTC - theta] forecast saved at 2024-12-30 00:00:00
+2025-01-01 15:35:18,892 [INFO] [BTC - arima] forecast saved at 2024-12-30 12:00:00
+2025-01-01 15:35:18,936 [INFO] [BTC - ets] forecast saved at 2024-12-30 12:00:00
+2025-01-01 15:35:18,993 [INFO] [BTC - theta] forecast saved at 2024-12-30 12:00:00
+2025-01-01 15:35:20,331 [INFO] [BTC - arima] forecast saved at 2024-12-31 00:00:00
+2025-01-01 15:35:20,371 [INFO] [BTC - ets] forecast saved at 2024-12-31 00:00:00
+2025-01-01 15:35:20,436 [INFO] [BTC - theta] forecast saved at 2024-12-31 00:00:00
+2025-01-01 15:35:21,812 [INFO] [BTC - arima] forecast saved at 2024-12-31 12:00:00
+2025-01-01 15:35:21,886 [INFO] [BTC - ets] forecast saved at 2024-12-31 12:00:00
+2025-01-01 15:35:21,974 [INFO] [BTC - theta] forecast saved at 2024-12-31 12:00:00
+2025-01-01 15:35:23,382 [INFO] [BTC - arima] forecast saved at 2025-01-01 00:00:00
+2025-01-01 15:35:23,576 [INFO] [BTC - ets] forecast saved at 2025-01-01 00:00:00
+2025-01-01 15:35:23,633 [INFO] [BTC - theta] forecast saved at 2025-01-01 00:00:00
+2025-01-01 15:35:24,522 [INFO] processing crypto: ETH
+2025-01-01 15:35:45,051 [INFO] [ETH - arima] forecast saved at 2024-12-26 00:00:00
+2025-01-01 15:35:45,322 [INFO] [ETH - ets] forecast saved at 2024-12-26 00:00:00
+2025-01-01 15:35:45,378 [INFO] [ETH - theta] forecast saved at 2024-12-26 00:00:00
+2025-01-01 15:35:46,738 [INFO] [ETH - arima] forecast saved at 2024-12-26 12:00:00
+2025-01-01 15:35:46,779 [INFO] [ETH - ets] forecast saved at 2024-12-26 12:00:00
+2025-01-01 15:35:46,846 [INFO] [ETH - theta] forecast saved at 2024-12-26 12:00:00
+2025-01-01 15:35:48,345 [INFO] [ETH - arima] forecast saved at 2024-12-27 00:00:00
+2025-01-01 15:35:48,389 [INFO] [ETH - ets] forecast saved at 2024-12-27 00:00:00
+2025-01-01 15:35:48,451 [INFO] [ETH - theta] forecast saved at 2024-12-27 00:00:00
+2025-01-01 15:35:49,775 [INFO] [ETH - arima] forecast saved at 2024-12-27 12:00:00
+2025-01-01 15:35:49,814 [INFO] [ETH - ets] forecast saved at 2024-12-27 12:00:00
+2025-01-01 15:35:49,868 [INFO] [ETH - theta] forecast saved at 2024-12-27 12:00:00
+2025-01-01 15:35:51,228 [INFO] [ETH - arima] forecast saved at 2024-12-28 00:00:00
+2025-01-01 15:35:51,500 [INFO] [ETH - ets] forecast saved at 2024-12-28 00:00:00
+2025-01-01 15:35:51,558 [INFO] [ETH - theta] forecast saved at 2024-12-28 00:00:00
+2025-01-01 15:35:52,926 [INFO] [ETH - arima] forecast saved at 2024-12-28 12:00:00
+2025-01-01 15:35:52,976 [INFO] [ETH - ets] forecast saved at 2024-12-28 12:00:00
+2025-01-01 15:35:53,038 [INFO] [ETH - theta] forecast saved at 2024-12-28 12:00:00
+2025-01-01 15:35:54,550 [INFO] [ETH - arima] forecast saved at 2024-12-29 00:00:00
+2025-01-01 15:35:54,590 [INFO] [ETH - ets] forecast saved at 2024-12-29 00:00:00
+2025-01-01 15:35:54,649 [INFO] [ETH - theta] forecast saved at 2024-12-29 00:00:00
+2025-01-01 15:35:56,113 [INFO] [ETH - arima] forecast saved at 2024-12-29 12:00:00
+2025-01-01 15:35:56,157 [INFO] [ETH - ets] forecast saved at 2024-12-29 12:00:00
+2025-01-01 15:35:56,218 [INFO] [ETH - theta] forecast saved at 2024-12-29 12:00:00
+2025-01-01 15:35:57,639 [INFO] [ETH - arima] forecast saved at 2024-12-30 00:00:00
+2025-01-01 15:35:57,888 [INFO] [ETH - ets] forecast saved at 2024-12-30 00:00:00
+2025-01-01 15:35:57,952 [INFO] [ETH - theta] forecast saved at 2024-12-30 00:00:00
+2025-01-01 15:35:59,457 [INFO] [ETH - arima] forecast saved at 2024-12-30 12:00:00
+2025-01-01 15:35:59,498 [INFO] [ETH - ets] forecast saved at 2024-12-30 12:00:00
+2025-01-01 15:35:59,549 [INFO] [ETH - theta] forecast saved at 2024-12-30 12:00:00
+2025-01-01 15:36:00,965 [INFO] [ETH - arima] forecast saved at 2024-12-31 00:00:00
+2025-01-01 15:36:01,007 [INFO] [ETH - ets] forecast saved at 2024-12-31 00:00:00
+2025-01-01 15:36:01,064 [INFO] [ETH - theta] forecast saved at 2024-12-31 00:00:00
+2025-01-01 15:36:02,556 [INFO] [ETH - arima] forecast saved at 2024-12-31 12:00:00
+2025-01-01 15:36:02,598 [INFO] [ETH - ets] forecast saved at 2024-12-31 12:00:00
+2025-01-01 15:36:02,659 [INFO] [ETH - theta] forecast saved at 2024-12-31 12:00:00
+2025-01-01 15:36:04,093 [INFO] [ETH - arima] forecast saved at 2025-01-01 00:00:00
+2025-01-01 15:36:04,332 [INFO] [ETH - ets] forecast saved at 2025-01-01 00:00:00
+2025-01-01 15:36:04,397 [INFO] [ETH - theta] forecast saved at 2025-01-01 00:00:00
+2025-01-01 15:36:05,362 [INFO] model processing completed at 2025-01-01 15:36:05.362067
+2025-01-01 15:36:05,363 [INFO] database connection closed.
+2025-01-01 15:38:10,953 [INFO] database connection established.
+2025-01-01 15:38:10,956 [INFO] database tables initialized.
+2025-01-01 15:38:10,958 [INFO] START_DATE: 2024-12-26 00:00:00, now: 2025-01-01 08:38:10.956834
+2025-01-01 15:38:10,959 [INFO] processing crypto: BTC
+2025-01-01 15:38:29,445 [INFO] [BTC - arima] forecast saved at 2024-12-26 00:00:00
+2025-01-01 15:38:29,631 [INFO] [BTC - ets] forecast saved at 2024-12-26 00:00:00
+2025-01-01 15:38:29,676 [INFO] [BTC - theta] forecast saved at 2024-12-26 00:00:00
+2025-01-01 15:38:31,077 [INFO] [BTC - arima] forecast saved at 2024-12-26 12:00:00
+2025-01-01 15:38:31,114 [INFO] [BTC - ets] forecast saved at 2024-12-26 12:00:00
+2025-01-01 15:38:31,161 [INFO] [BTC - theta] forecast saved at 2024-12-26 12:00:00
+2025-01-01 15:38:32,571 [INFO] [BTC - arima] forecast saved at 2024-12-27 00:00:00
+2025-01-01 15:38:32,607 [INFO] [BTC - ets] forecast saved at 2024-12-27 00:00:00
+2025-01-01 15:38:32,654 [INFO] [BTC - theta] forecast saved at 2024-12-27 00:00:00
+2025-01-01 15:38:33,980 [INFO] [BTC - arima] forecast saved at 2024-12-27 12:00:00
+2025-01-01 15:38:34,016 [INFO] [BTC - ets] forecast saved at 2024-12-27 12:00:00
+2025-01-01 15:38:34,066 [INFO] [BTC - theta] forecast saved at 2024-12-27 12:00:00
+2025-01-01 15:38:35,464 [INFO] [BTC - arima] forecast saved at 2024-12-28 00:00:00
+2025-01-01 15:38:35,722 [INFO] [BTC - ets] forecast saved at 2024-12-28 00:00:00
+2025-01-01 15:38:35,787 [INFO] [BTC - theta] forecast saved at 2024-12-28 00:00:00
+2025-01-01 15:38:37,134 [INFO] [BTC - arima] forecast saved at 2024-12-28 12:00:00
+2025-01-01 15:38:37,174 [INFO] [BTC - ets] forecast saved at 2024-12-28 12:00:00
+2025-01-01 15:38:37,226 [INFO] [BTC - theta] forecast saved at 2024-12-28 12:00:00
+2025-01-01 15:38:38,588 [INFO] [BTC - arima] forecast saved at 2024-12-29 00:00:00
+2025-01-01 15:38:38,631 [INFO] [BTC - ets] forecast saved at 2024-12-29 00:00:00
+2025-01-01 15:38:38,682 [INFO] [BTC - theta] forecast saved at 2024-12-29 00:00:00
+2025-01-01 15:38:40,083 [INFO] [BTC - arima] forecast saved at 2024-12-29 12:00:00
+2025-01-01 15:38:40,122 [INFO] [BTC - ets] forecast saved at 2024-12-29 12:00:00
+2025-01-01 15:38:40,172 [INFO] [BTC - theta] forecast saved at 2024-12-29 12:00:00
+2025-01-01 15:38:41,516 [INFO] [BTC - arima] forecast saved at 2024-12-30 00:00:00
+2025-01-01 15:38:41,704 [INFO] [BTC - ets] forecast saved at 2024-12-30 00:00:00
+2025-01-01 15:38:41,752 [INFO] [BTC - theta] forecast saved at 2024-12-30 00:00:00
+2025-01-01 15:38:43,083 [INFO] [BTC - arima] forecast saved at 2024-12-30 12:00:00
+2025-01-01 15:38:43,124 [INFO] [BTC - ets] forecast saved at 2024-12-30 12:00:00
+2025-01-01 15:38:43,174 [INFO] [BTC - theta] forecast saved at 2024-12-30 12:00:00
+2025-01-01 15:38:44,503 [INFO] [BTC - arima] forecast saved at 2024-12-31 00:00:00
+2025-01-01 15:38:44,544 [INFO] [BTC - ets] forecast saved at 2024-12-31 00:00:00
+2025-01-01 15:38:44,604 [INFO] [BTC - theta] forecast saved at 2024-12-31 00:00:00
+2025-01-01 15:38:45,957 [INFO] [BTC - arima] forecast saved at 2024-12-31 12:00:00
+2025-01-01 15:38:45,995 [INFO] [BTC - ets] forecast saved at 2024-12-31 12:00:00
+2025-01-01 15:38:46,050 [INFO] [BTC - theta] forecast saved at 2024-12-31 12:00:00
+2025-01-01 15:38:47,419 [INFO] [BTC - arima] forecast saved at 2025-01-01 00:00:00
+2025-01-01 15:38:47,606 [INFO] [BTC - ets] forecast saved at 2025-01-01 00:00:00
+2025-01-01 15:38:47,659 [INFO] [BTC - theta] forecast saved at 2025-01-01 00:00:00
+2025-01-01 15:38:48,577 [INFO] processing crypto: ETH
+2025-01-01 15:39:09,355 [INFO] [ETH - arima] forecast saved at 2024-12-26 00:00:00
+2025-01-01 15:39:09,615 [INFO] [ETH - ets] forecast saved at 2024-12-26 00:00:00
+2025-01-01 15:39:09,664 [INFO] [ETH - theta] forecast saved at 2024-12-26 00:00:00
+2025-01-01 15:39:10,987 [INFO] [ETH - arima] forecast saved at 2024-12-26 12:00:00
+2025-01-01 15:39:11,021 [INFO] [ETH - ets] forecast saved at 2024-12-26 12:00:00
+2025-01-01 15:39:11,069 [INFO] [ETH - theta] forecast saved at 2024-12-26 12:00:00
+2025-01-01 15:39:12,381 [INFO] [ETH - arima] forecast saved at 2024-12-27 00:00:00
+2025-01-01 15:39:12,419 [INFO] [ETH - ets] forecast saved at 2024-12-27 00:00:00
+2025-01-01 15:39:12,468 [INFO] [ETH - theta] forecast saved at 2024-12-27 00:00:00
+2025-01-01 15:39:13,802 [INFO] [ETH - arima] forecast saved at 2024-12-27 12:00:00
+2025-01-01 15:39:13,839 [INFO] [ETH - ets] forecast saved at 2024-12-27 12:00:00
+2025-01-01 15:39:13,897 [INFO] [ETH - theta] forecast saved at 2024-12-27 12:00:00
+2025-01-01 15:39:15,246 [INFO] [ETH - arima] forecast saved at 2024-12-28 00:00:00
+2025-01-01 15:39:15,479 [INFO] [ETH - ets] forecast saved at 2024-12-28 00:00:00
+2025-01-01 15:39:15,534 [INFO] [ETH - theta] forecast saved at 2024-12-28 00:00:00
+2025-01-01 15:39:16,885 [INFO] [ETH - arima] forecast saved at 2024-12-28 12:00:00
+2025-01-01 15:39:16,924 [INFO] [ETH - ets] forecast saved at 2024-12-28 12:00:00
+2025-01-01 15:39:16,975 [INFO] [ETH - theta] forecast saved at 2024-12-28 12:00:00
+2025-01-01 15:39:18,305 [INFO] [ETH - arima] forecast saved at 2024-12-29 00:00:00
+2025-01-01 15:39:18,343 [INFO] [ETH - ets] forecast saved at 2024-12-29 00:00:00
+2025-01-01 15:39:18,395 [INFO] [ETH - theta] forecast saved at 2024-12-29 00:00:00
+2025-01-01 15:39:19,812 [INFO] [ETH - arima] forecast saved at 2024-12-29 12:00:00
+2025-01-01 15:39:19,852 [INFO] [ETH - ets] forecast saved at 2024-12-29 12:00:00
+2025-01-01 15:39:19,914 [INFO] [ETH - theta] forecast saved at 2024-12-29 12:00:00
+2025-01-01 15:39:21,219 [INFO] [ETH - arima] forecast saved at 2024-12-30 00:00:00
+2025-01-01 15:39:21,441 [INFO] [ETH - ets] forecast saved at 2024-12-30 00:00:00
+2025-01-01 15:39:21,489 [INFO] [ETH - theta] forecast saved at 2024-12-30 00:00:00
+2025-01-01 15:39:22,826 [INFO] [ETH - arima] forecast saved at 2024-12-30 12:00:00
+2025-01-01 15:39:22,880 [INFO] [ETH - ets] forecast saved at 2024-12-30 12:00:00
+2025-01-01 15:39:22,955 [INFO] [ETH - theta] forecast saved at 2024-12-30 12:00:00
+2025-01-01 15:39:24,338 [INFO] [ETH - arima] forecast saved at 2024-12-31 00:00:00
+2025-01-01 15:39:24,375 [INFO] [ETH - ets] forecast saved at 2024-12-31 00:00:00
+2025-01-01 15:39:24,426 [INFO] [ETH - theta] forecast saved at 2024-12-31 00:00:00
+2025-01-01 15:39:25,830 [INFO] [ETH - arima] forecast saved at 2024-12-31 12:00:00
+2025-01-01 15:39:25,874 [INFO] [ETH - ets] forecast saved at 2024-12-31 12:00:00
+2025-01-01 15:39:25,946 [INFO] [ETH - theta] forecast saved at 2024-12-31 12:00:00
+2025-01-01 15:39:27,380 [INFO] [ETH - arima] forecast saved at 2025-01-01 00:00:00
+2025-01-01 15:39:27,670 [INFO] [ETH - ets] forecast saved at 2025-01-01 00:00:00
+2025-01-01 15:39:27,720 [INFO] [ETH - theta] forecast saved at 2025-01-01 00:00:00
+2025-01-01 15:39:28,640 [INFO] model processing completed at 2025-01-01 15:39:28.640136
+2025-01-01 15:39:28,640 [INFO] database connection closed.
+2025-01-01 15:47:33,928 [INFO] database connection established.
+2025-01-01 15:47:33,931 [INFO] database tables initialized.
+2025-01-01 15:47:33,933 [INFO] START_DATE: 2024-12-26 00:00:00, now: 2025-01-01 08:47:33.931431
+2025-01-01 15:47:33,934 [INFO] processing crypto: BTC
+2025-01-01 15:47:39,844 [INFO] database connection closed.
+2025-01-01 15:48:41,153 [INFO] database connection established.
+2025-01-01 15:48:41,180 [INFO] database tables initialized.
+2025-01-01 15:48:41,183 [INFO] START_DATE: 2024-12-26 00:00:00, now: 2025-01-01 08:48:41.180414
+2025-01-01 15:48:41,183 [INFO] processing crypto: BTC
+2025-01-01 15:48:59,245 [INFO] [BTC - arima] forecast saved at 2024-12-26 00:00:00
+2025-01-01 15:48:59,427 [INFO] [BTC - ets] forecast saved at 2024-12-26 00:00:00
+2025-01-01 15:48:59,475 [INFO] [BTC - theta] forecast saved at 2024-12-26 00:00:00
+2025-01-01 15:49:00,781 [INFO] [BTC - arima] forecast saved at 2024-12-26 12:00:00
+2025-01-01 15:49:00,822 [INFO] [BTC - ets] forecast saved at 2024-12-26 12:00:00
+2025-01-01 15:49:00,871 [INFO] [BTC - theta] forecast saved at 2024-12-26 12:00:00
+2025-01-01 15:49:02,227 [INFO] [BTC - arima] forecast saved at 2024-12-27 00:00:00
+2025-01-01 15:49:02,265 [INFO] [BTC - ets] forecast saved at 2024-12-27 00:00:00
+2025-01-01 15:49:02,314 [INFO] [BTC - theta] forecast saved at 2024-12-27 00:00:00
+2025-01-01 15:49:03,580 [INFO] [BTC - arima] forecast saved at 2024-12-27 12:00:00
+2025-01-01 15:49:03,617 [INFO] [BTC - ets] forecast saved at 2024-12-27 12:00:00
+2025-01-01 15:49:03,660 [INFO] [BTC - theta] forecast saved at 2024-12-27 12:00:00
+2025-01-01 15:49:05,011 [INFO] [BTC - arima] forecast saved at 2024-12-28 00:00:00
+2025-01-01 15:49:05,198 [INFO] [BTC - ets] forecast saved at 2024-12-28 00:00:00
+2025-01-01 15:49:05,253 [INFO] [BTC - theta] forecast saved at 2024-12-28 00:00:00
+2025-01-01 15:49:06,532 [INFO] [BTC - arima] forecast saved at 2024-12-28 12:00:00
+2025-01-01 15:49:06,573 [INFO] [BTC - ets] forecast saved at 2024-12-28 12:00:00
+2025-01-01 15:49:06,624 [INFO] [BTC - theta] forecast saved at 2024-12-28 12:00:00
+2025-01-01 15:49:07,946 [INFO] [BTC - arima] forecast saved at 2024-12-29 00:00:00
+2025-01-01 15:49:07,985 [INFO] [BTC - ets] forecast saved at 2024-12-29 00:00:00
+2025-01-01 15:49:08,035 [INFO] [BTC - theta] forecast saved at 2024-12-29 00:00:00
+2025-01-01 15:49:09,312 [INFO] [BTC - arima] forecast saved at 2024-12-29 12:00:00
+2025-01-01 15:49:09,350 [INFO] [BTC - ets] forecast saved at 2024-12-29 12:00:00
+2025-01-01 15:49:09,399 [INFO] [BTC - theta] forecast saved at 2024-12-29 12:00:00
+2025-01-01 15:49:10,695 [INFO] [BTC - arima] forecast saved at 2024-12-30 00:00:00
+2025-01-01 15:49:10,885 [INFO] [BTC - ets] forecast saved at 2024-12-30 00:00:00
+2025-01-01 15:49:10,932 [INFO] [BTC - theta] forecast saved at 2024-12-30 00:00:00
+2025-01-01 15:49:12,205 [INFO] [BTC - arima] forecast saved at 2024-12-30 12:00:00
+2025-01-01 15:49:12,245 [INFO] [BTC - ets] forecast saved at 2024-12-30 12:00:00
+2025-01-01 15:49:12,292 [INFO] [BTC - theta] forecast saved at 2024-12-30 12:00:00
+2025-01-01 15:49:13,618 [INFO] [BTC - arima] forecast saved at 2024-12-31 00:00:00
+2025-01-01 15:49:13,661 [INFO] [BTC - ets] forecast saved at 2024-12-31 00:00:00
+2025-01-01 15:49:13,713 [INFO] [BTC - theta] forecast saved at 2024-12-31 00:00:00
+2025-01-01 15:49:15,047 [INFO] [BTC - arima] forecast saved at 2024-12-31 12:00:00
+2025-01-01 15:49:15,087 [INFO] [BTC - ets] forecast saved at 2024-12-31 12:00:00
+2025-01-01 15:49:15,137 [INFO] [BTC - theta] forecast saved at 2024-12-31 12:00:00
+2025-01-01 15:49:16,431 [INFO] [BTC - arima] forecast saved at 2025-01-01 00:00:00
+2025-01-01 15:49:16,619 [INFO] [BTC - ets] forecast saved at 2025-01-01 00:00:00
+2025-01-01 15:49:16,669 [INFO] [BTC - theta] forecast saved at 2025-01-01 00:00:00
+2025-01-01 15:49:17,568 [INFO] processing crypto: ETH
+2025-01-01 15:49:45,788 [INFO] [ETH - arima] forecast saved at 2024-12-26 00:00:00
+2025-01-01 15:49:46,089 [INFO] [ETH - ets] forecast saved at 2024-12-26 00:00:00
+2025-01-01 15:49:46,138 [INFO] [ETH - theta] forecast saved at 2024-12-26 00:00:00
+2025-01-01 15:49:47,564 [INFO] [ETH - arima] forecast saved at 2024-12-26 12:00:00
+2025-01-01 15:49:47,601 [INFO] [ETH - ets] forecast saved at 2024-12-26 12:00:00
+2025-01-01 15:49:47,650 [INFO] [ETH - theta] forecast saved at 2024-12-26 12:00:00
+2025-01-01 15:49:48,981 [INFO] [ETH - arima] forecast saved at 2024-12-27 00:00:00
+2025-01-01 15:49:49,026 [INFO] [ETH - ets] forecast saved at 2024-12-27 00:00:00
+2025-01-01 15:49:49,086 [INFO] [ETH - theta] forecast saved at 2024-12-27 00:00:00
+2025-01-01 15:49:50,425 [INFO] [ETH - arima] forecast saved at 2024-12-27 12:00:00
+2025-01-01 15:49:50,465 [INFO] [ETH - ets] forecast saved at 2024-12-27 12:00:00
+2025-01-01 15:49:50,516 [INFO] [ETH - theta] forecast saved at 2024-12-27 12:00:00
+2025-01-01 15:49:51,877 [INFO] [ETH - arima] forecast saved at 2024-12-28 00:00:00
+2025-01-01 15:49:52,108 [INFO] [ETH - ets] forecast saved at 2024-12-28 00:00:00
+2025-01-01 15:49:52,160 [INFO] [ETH - theta] forecast saved at 2024-12-28 00:00:00
+2025-01-01 15:49:53,493 [INFO] [ETH - arima] forecast saved at 2024-12-28 12:00:00
+2025-01-01 15:49:53,555 [INFO] [ETH - ets] forecast saved at 2024-12-28 12:00:00
+2025-01-01 15:49:53,604 [INFO] [ETH - theta] forecast saved at 2024-12-28 12:00:00
+2025-01-01 15:49:54,968 [INFO] [ETH - arima] forecast saved at 2024-12-29 00:00:00
+2025-01-01 15:49:55,008 [INFO] [ETH - ets] forecast saved at 2024-12-29 00:00:00
+2025-01-01 15:49:55,061 [INFO] [ETH - theta] forecast saved at 2024-12-29 00:00:00
+2025-01-01 15:49:56,397 [INFO] [ETH - arima] forecast saved at 2024-12-29 12:00:00
+2025-01-01 15:49:56,452 [INFO] [ETH - ets] forecast saved at 2024-12-29 12:00:00
+2025-01-01 15:49:56,523 [INFO] [ETH - theta] forecast saved at 2024-12-29 12:00:00
+2025-01-01 15:49:57,848 [INFO] [ETH - arima] forecast saved at 2024-12-30 00:00:00
+2025-01-01 15:49:58,072 [INFO] [ETH - ets] forecast saved at 2024-12-30 00:00:00
+2025-01-01 15:49:58,122 [INFO] [ETH - theta] forecast saved at 2024-12-30 00:00:00
+2025-01-01 15:49:59,404 [INFO] [ETH - arima] forecast saved at 2024-12-30 12:00:00
+2025-01-01 15:49:59,444 [INFO] [ETH - ets] forecast saved at 2024-12-30 12:00:00
+2025-01-01 15:49:59,495 [INFO] [ETH - theta] forecast saved at 2024-12-30 12:00:00
+2025-01-01 15:50:00,867 [INFO] [ETH - arima] forecast saved at 2024-12-31 00:00:00
+2025-01-01 15:50:00,906 [INFO] [ETH - ets] forecast saved at 2024-12-31 00:00:00
+2025-01-01 15:50:00,958 [INFO] [ETH - theta] forecast saved at 2024-12-31 00:00:00
+2025-01-01 15:50:02,302 [INFO] [ETH - arima] forecast saved at 2024-12-31 12:00:00
+2025-01-01 15:50:02,340 [INFO] [ETH - ets] forecast saved at 2024-12-31 12:00:00
+2025-01-01 15:50:02,393 [INFO] [ETH - theta] forecast saved at 2024-12-31 12:00:00
+2025-01-01 15:50:03,713 [INFO] [ETH - arima] forecast saved at 2025-01-01 00:00:00
+2025-01-01 15:50:03,945 [INFO] [ETH - ets] forecast saved at 2025-01-01 00:00:00
+2025-01-01 15:50:03,998 [INFO] [ETH - theta] forecast saved at 2025-01-01 00:00:00
+2025-01-01 15:50:04,905 [INFO] model processing completed at 2025-01-01 15:50:04.905575
+2025-01-01 15:50:04,905 [INFO] database connection closed.
+2025-01-01 15:59:44,315 [INFO] database connection established.
+2025-01-01 15:59:44,317 [INFO] database tables initialized.
+2025-01-01 15:59:44,320 [INFO] START_DATE: 2024-12-26 00:00:00, now: 2025-01-01 08:59:44.318601
+2025-01-01 15:59:44,321 [INFO] processing crypto: BTC
+2025-01-01 16:00:02,537 [INFO] [BTC - arima] forecast saved at 2024-12-26 00:00:00
+2025-01-01 16:00:02,716 [INFO] [BTC - ets] forecast saved at 2024-12-26 00:00:00
+2025-01-01 16:00:02,762 [INFO] [BTC - theta] forecast saved at 2024-12-26 00:00:00
+2025-01-01 16:00:04,054 [INFO] [BTC - arima] forecast saved at 2024-12-26 12:00:00
+2025-01-01 16:00:04,093 [INFO] [BTC - ets] forecast saved at 2024-12-26 12:00:00
+2025-01-01 16:00:04,138 [INFO] [BTC - theta] forecast saved at 2024-12-26 12:00:00
+2025-01-01 16:00:05,410 [INFO] [BTC - arima] forecast saved at 2024-12-27 00:00:00
+2025-01-01 16:00:05,446 [INFO] [BTC - ets] forecast saved at 2024-12-27 00:00:00
+2025-01-01 16:00:05,490 [INFO] [BTC - theta] forecast saved at 2024-12-27 00:00:00
+2025-01-01 16:00:06,766 [INFO] [BTC - arima] forecast saved at 2024-12-27 12:00:00
+2025-01-01 16:00:06,804 [INFO] [BTC - ets] forecast saved at 2024-12-27 12:00:00
+2025-01-01 16:00:06,853 [INFO] [BTC - theta] forecast saved at 2024-12-27 12:00:00
+2025-01-01 16:00:08,164 [INFO] [BTC - arima] forecast saved at 2024-12-28 00:00:00
+2025-01-01 16:00:08,343 [INFO] [BTC - ets] forecast saved at 2024-12-28 00:00:00
+2025-01-01 16:00:08,390 [INFO] [BTC - theta] forecast saved at 2024-12-28 00:00:00
+2025-01-01 16:00:09,663 [INFO] [BTC - arima] forecast saved at 2024-12-28 12:00:00
+2025-01-01 16:00:09,699 [INFO] [BTC - ets] forecast saved at 2024-12-28 12:00:00
+2025-01-01 16:00:09,746 [INFO] [BTC - theta] forecast saved at 2024-12-28 12:00:00
+2025-01-01 16:00:11,107 [INFO] [BTC - arima] forecast saved at 2024-12-29 00:00:00
+2025-01-01 16:00:11,143 [INFO] [BTC - ets] forecast saved at 2024-12-29 00:00:00
+2025-01-01 16:00:11,192 [INFO] [BTC - theta] forecast saved at 2024-12-29 00:00:00
+2025-01-01 16:00:12,464 [INFO] [BTC - arima] forecast saved at 2024-12-29 12:00:00
+2025-01-01 16:00:12,504 [INFO] [BTC - ets] forecast saved at 2024-12-29 12:00:00
+2025-01-01 16:00:12,552 [INFO] [BTC - theta] forecast saved at 2024-12-29 12:00:00
+2025-01-01 16:00:13,845 [INFO] [BTC - arima] forecast saved at 2024-12-30 00:00:00
+2025-01-01 16:00:14,027 [INFO] [BTC - ets] forecast saved at 2024-12-30 00:00:00
+2025-01-01 16:00:14,075 [INFO] [BTC - theta] forecast saved at 2024-12-30 00:00:00
+2025-01-01 16:00:15,334 [INFO] [BTC - arima] forecast saved at 2024-12-30 12:00:00
+2025-01-01 16:00:15,374 [INFO] [BTC - ets] forecast saved at 2024-12-30 12:00:00
+2025-01-01 16:00:15,420 [INFO] [BTC - theta] forecast saved at 2024-12-30 12:00:00
+2025-01-01 16:00:16,713 [INFO] [BTC - arima] forecast saved at 2024-12-31 00:00:00
+2025-01-01 16:00:16,752 [INFO] [BTC - ets] forecast saved at 2024-12-31 00:00:00
+2025-01-01 16:00:16,813 [INFO] [BTC - theta] forecast saved at 2024-12-31 00:00:00
+2025-01-01 16:00:18,127 [INFO] [BTC - arima] forecast saved at 2024-12-31 12:00:00
+2025-01-01 16:00:18,165 [INFO] [BTC - ets] forecast saved at 2024-12-31 12:00:00
+2025-01-01 16:00:18,213 [INFO] [BTC - theta] forecast saved at 2024-12-31 12:00:00
+2025-01-01 16:00:19,588 [INFO] [BTC - arima] forecast saved at 2025-01-01 00:00:00
+2025-01-01 16:00:19,771 [INFO] [BTC - ets] forecast saved at 2025-01-01 00:00:00
+2025-01-01 16:00:19,828 [INFO] [BTC - theta] forecast saved at 2025-01-01 00:00:00
+2025-01-01 16:00:20,912 [INFO] processing crypto: ETH
+2025-01-01 16:00:46,809 [INFO] [ETH - arima] forecast saved at 2024-12-26 00:00:00
+2025-01-01 16:00:47,018 [INFO] [ETH - ets] forecast saved at 2024-12-26 00:00:00
+2025-01-01 16:00:47,065 [INFO] [ETH - theta] forecast saved at 2024-12-26 00:00:00
+2025-01-01 16:00:48,341 [INFO] [ETH - arima] forecast saved at 2024-12-26 12:00:00
+2025-01-01 16:00:48,379 [INFO] [ETH - ets] forecast saved at 2024-12-26 12:00:00
+2025-01-01 16:00:48,425 [INFO] [ETH - theta] forecast saved at 2024-12-26 12:00:00
+2025-01-01 16:00:49,736 [INFO] [ETH - arima] forecast saved at 2024-12-27 00:00:00
+2025-01-01 16:00:49,771 [INFO] [ETH - ets] forecast saved at 2024-12-27 00:00:00
+2025-01-01 16:00:49,828 [INFO] [ETH - theta] forecast saved at 2024-12-27 00:00:00
+2025-01-01 16:00:51,154 [INFO] [ETH - arima] forecast saved at 2024-12-27 12:00:00
+2025-01-01 16:00:51,187 [INFO] [ETH - ets] forecast saved at 2024-12-27 12:00:00
+2025-01-01 16:00:51,236 [INFO] [ETH - theta] forecast saved at 2024-12-27 12:00:00
+2025-01-01 16:00:52,526 [INFO] [ETH - arima] forecast saved at 2024-12-28 00:00:00
+2025-01-01 16:00:52,752 [INFO] [ETH - ets] forecast saved at 2024-12-28 00:00:00
+2025-01-01 16:00:52,806 [INFO] [ETH - theta] forecast saved at 2024-12-28 00:00:00
+2025-01-01 16:00:54,131 [INFO] [ETH - arima] forecast saved at 2024-12-28 12:00:00
+2025-01-01 16:00:54,169 [INFO] [ETH - ets] forecast saved at 2024-12-28 12:00:00
+2025-01-01 16:00:54,216 [INFO] [ETH - theta] forecast saved at 2024-12-28 12:00:00
+2025-01-01 16:00:55,524 [INFO] [ETH - arima] forecast saved at 2024-12-29 00:00:00
+2025-01-01 16:00:55,559 [INFO] [ETH - ets] forecast saved at 2024-12-29 00:00:00
+2025-01-01 16:00:55,613 [INFO] [ETH - theta] forecast saved at 2024-12-29 00:00:00
+2025-01-01 16:00:56,942 [INFO] [ETH - arima] forecast saved at 2024-12-29 12:00:00
+2025-01-01 16:00:56,980 [INFO] [ETH - ets] forecast saved at 2024-12-29 12:00:00
+2025-01-01 16:00:57,030 [INFO] [ETH - theta] forecast saved at 2024-12-29 12:00:00
+2025-01-01 16:00:58,569 [INFO] [ETH - arima] forecast saved at 2024-12-30 00:00:00
+2025-01-01 16:00:58,790 [INFO] [ETH - ets] forecast saved at 2024-12-30 00:00:00
+2025-01-01 16:00:58,842 [INFO] [ETH - theta] forecast saved at 2024-12-30 00:00:00
+2025-01-01 16:01:00,244 [INFO] [ETH - arima] forecast saved at 2024-12-30 12:00:00
+2025-01-01 16:01:00,282 [INFO] [ETH - ets] forecast saved at 2024-12-30 12:00:00
+2025-01-01 16:01:00,338 [INFO] [ETH - theta] forecast saved at 2024-12-30 12:00:00
+2025-01-01 16:01:01,810 [INFO] [ETH - arima] forecast saved at 2024-12-31 00:00:00
+2025-01-01 16:01:01,854 [INFO] [ETH - ets] forecast saved at 2024-12-31 00:00:00
+2025-01-01 16:01:01,907 [INFO] [ETH - theta] forecast saved at 2024-12-31 00:00:00
+2025-01-01 16:01:03,269 [INFO] [ETH - arima] forecast saved at 2024-12-31 12:00:00
+2025-01-01 16:01:03,307 [INFO] [ETH - ets] forecast saved at 2024-12-31 12:00:00
+2025-01-01 16:01:03,361 [INFO] [ETH - theta] forecast saved at 2024-12-31 12:00:00
+2025-01-01 16:01:04,743 [INFO] [ETH - arima] forecast saved at 2025-01-01 00:00:00
+2025-01-01 16:01:04,987 [INFO] [ETH - ets] forecast saved at 2025-01-01 00:00:00
+2025-01-01 16:01:05,042 [INFO] [ETH - theta] forecast saved at 2025-01-01 00:00:00
+2025-01-01 16:01:05,985 [INFO] model processing completed at 2025-01-01 16:01:05.985672
+2025-01-01 16:01:05,986 [INFO] database connection closed.
+2025-01-01 17:11:03,932 [INFO] database connection established.
+2025-01-01 17:11:03,934 [INFO] database tables initialized.
+2025-01-01 17:11:03,937 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-01 17:11:03,938 [INFO] START_DATE: 2024-12-26 00:00:00, FINISH_DATE: 2025-01-01 10:11:03.937605
+2025-01-01 17:11:03,938 [INFO] processing crypto: BTC
+2025-01-01 17:11:05,229 [INFO] Data for BTC successfully loaded.
+2025-01-01 17:11:22,104 [INFO] [BTC - arima] forecast saved at 2024-12-26 00:00:00
+2025-01-01 17:11:22,279 [INFO] [BTC - ets] forecast saved at 2024-12-26 00:00:00
+2025-01-01 17:11:22,325 [INFO] [BTC - theta] forecast saved at 2024-12-26 00:00:00
+2025-01-01 17:11:23,742 [INFO] [BTC - arima] forecast saved at 2024-12-26 12:00:00
+2025-01-01 17:11:23,788 [INFO] [BTC - ets] forecast saved at 2024-12-26 12:00:00
+2025-01-01 17:11:23,844 [INFO] [BTC - theta] forecast saved at 2024-12-26 12:00:00
+2025-01-01 17:11:25,270 [INFO] [BTC - arima] forecast saved at 2024-12-27 00:00:00
+2025-01-01 17:11:25,310 [INFO] [BTC - ets] forecast saved at 2024-12-27 00:00:00
+2025-01-01 17:11:25,362 [INFO] [BTC - theta] forecast saved at 2024-12-27 00:00:00
+2025-01-01 17:11:27,009 [INFO] [BTC - arima] forecast saved at 2024-12-27 12:00:00
+2025-01-01 17:11:27,052 [INFO] [BTC - ets] forecast saved at 2024-12-27 12:00:00
+2025-01-01 17:11:27,101 [INFO] [BTC - theta] forecast saved at 2024-12-27 12:00:00
+2025-01-01 17:11:28,597 [INFO] [BTC - arima] forecast saved at 2024-12-28 00:00:00
+2025-01-01 17:11:28,787 [INFO] [BTC - ets] forecast saved at 2024-12-28 00:00:00
+2025-01-01 17:11:28,837 [INFO] [BTC - theta] forecast saved at 2024-12-28 00:00:00
+2025-01-01 17:11:30,376 [INFO] [BTC - arima] forecast saved at 2024-12-28 12:00:00
+2025-01-01 17:11:30,428 [INFO] [BTC - ets] forecast saved at 2024-12-28 12:00:00
+2025-01-01 17:11:30,475 [INFO] [BTC - theta] forecast saved at 2024-12-28 12:00:00
+2025-01-01 17:11:31,828 [INFO] [BTC - arima] forecast saved at 2024-12-29 00:00:00
+2025-01-01 17:11:31,865 [INFO] [BTC - ets] forecast saved at 2024-12-29 00:00:00
+2025-01-01 17:11:31,914 [INFO] [BTC - theta] forecast saved at 2024-12-29 00:00:00
+2025-01-01 17:11:33,242 [INFO] [BTC - arima] forecast saved at 2024-12-29 12:00:00
+2025-01-01 17:11:33,278 [INFO] [BTC - ets] forecast saved at 2024-12-29 12:00:00
+2025-01-01 17:11:33,322 [INFO] [BTC - theta] forecast saved at 2024-12-29 12:00:00
+2025-01-01 17:11:34,633 [INFO] [BTC - arima] forecast saved at 2024-12-30 00:00:00
+2025-01-01 17:11:34,808 [INFO] [BTC - ets] forecast saved at 2024-12-30 00:00:00
+2025-01-01 17:11:34,853 [INFO] [BTC - theta] forecast saved at 2024-12-30 00:00:00
+2025-01-01 17:11:36,145 [INFO] [BTC - arima] forecast saved at 2024-12-30 12:00:00
+2025-01-01 17:11:36,182 [INFO] [BTC - ets] forecast saved at 2024-12-30 12:00:00
+2025-01-01 17:11:36,228 [INFO] [BTC - theta] forecast saved at 2024-12-30 12:00:00
+2025-01-01 17:11:37,638 [INFO] [BTC - arima] forecast saved at 2024-12-31 00:00:00
+2025-01-01 17:11:37,674 [INFO] [BTC - ets] forecast saved at 2024-12-31 00:00:00
+2025-01-01 17:11:37,723 [INFO] [BTC - theta] forecast saved at 2024-12-31 00:00:00
+2025-01-01 17:11:39,193 [INFO] [BTC - arima] forecast saved at 2024-12-31 12:00:00
+2025-01-01 17:11:39,229 [INFO] [BTC - ets] forecast saved at 2024-12-31 12:00:00
+2025-01-01 17:11:39,275 [INFO] [BTC - theta] forecast saved at 2024-12-31 12:00:00
+2025-01-01 17:11:40,688 [INFO] [BTC - arima] forecast saved at 2025-01-01 00:00:00
+2025-01-01 17:11:40,905 [INFO] [BTC - ets] forecast saved at 2025-01-01 00:00:00
+2025-01-01 17:11:40,960 [INFO] [BTC - theta] forecast saved at 2025-01-01 00:00:00
+2025-01-01 17:11:42,239 [INFO] processing crypto: ETH
+2025-01-01 17:11:43,517 [INFO] Data for ETH successfully loaded.
+2025-01-01 17:12:00,564 [INFO] [ETH - arima] forecast saved at 2024-12-26 00:00:00
+2025-01-01 17:12:00,813 [INFO] [ETH - ets] forecast saved at 2024-12-26 00:00:00
+2025-01-01 17:12:00,856 [INFO] [ETH - theta] forecast saved at 2024-12-26 00:00:00
+2025-01-01 17:12:02,190 [INFO] [ETH - arima] forecast saved at 2024-12-26 12:00:00
+2025-01-01 17:12:02,223 [INFO] [ETH - ets] forecast saved at 2024-12-26 12:00:00
+2025-01-01 17:12:02,269 [INFO] [ETH - theta] forecast saved at 2024-12-26 12:00:00
+2025-01-01 17:12:03,657 [INFO] [ETH - arima] forecast saved at 2024-12-27 00:00:00
+2025-01-01 17:12:03,691 [INFO] [ETH - ets] forecast saved at 2024-12-27 00:00:00
+2025-01-01 17:12:03,736 [INFO] [ETH - theta] forecast saved at 2024-12-27 00:00:00
+2025-01-01 17:12:05,062 [INFO] [ETH - arima] forecast saved at 2024-12-27 12:00:00
+2025-01-01 17:12:05,097 [INFO] [ETH - ets] forecast saved at 2024-12-27 12:00:00
+2025-01-01 17:12:05,143 [INFO] [ETH - theta] forecast saved at 2024-12-27 12:00:00
+2025-01-01 17:12:06,514 [INFO] [ETH - arima] forecast saved at 2024-12-28 00:00:00
+2025-01-01 17:12:06,744 [INFO] [ETH - ets] forecast saved at 2024-12-28 00:00:00
+2025-01-01 17:12:06,798 [INFO] [ETH - theta] forecast saved at 2024-12-28 00:00:00
+2025-01-01 17:12:08,135 [INFO] [ETH - arima] forecast saved at 2024-12-28 12:00:00
+2025-01-01 17:12:08,171 [INFO] [ETH - ets] forecast saved at 2024-12-28 12:00:00
+2025-01-01 17:12:08,218 [INFO] [ETH - theta] forecast saved at 2024-12-28 12:00:00
+2025-01-01 17:12:09,608 [INFO] [ETH - arima] forecast saved at 2024-12-29 00:00:00
+2025-01-01 17:12:09,643 [INFO] [ETH - ets] forecast saved at 2024-12-29 00:00:00
+2025-01-01 17:12:09,695 [INFO] [ETH - theta] forecast saved at 2024-12-29 00:00:00
+2025-01-01 17:12:11,094 [INFO] [ETH - arima] forecast saved at 2024-12-29 12:00:00
+2025-01-01 17:12:11,130 [INFO] [ETH - ets] forecast saved at 2024-12-29 12:00:00
+2025-01-01 17:12:11,178 [INFO] [ETH - theta] forecast saved at 2024-12-29 12:00:00
+2025-01-01 17:12:12,701 [INFO] [ETH - arima] forecast saved at 2024-12-30 00:00:00
+2025-01-01 17:12:12,976 [INFO] [ETH - ets] forecast saved at 2024-12-30 00:00:00
+2025-01-01 17:12:13,048 [INFO] [ETH - theta] forecast saved at 2024-12-30 00:00:00
+2025-01-01 17:12:14,780 [INFO] [ETH - arima] forecast saved at 2024-12-30 12:00:00
+2025-01-01 17:12:14,831 [INFO] [ETH - ets] forecast saved at 2024-12-30 12:00:00
+2025-01-01 17:12:14,896 [INFO] [ETH - theta] forecast saved at 2024-12-30 12:00:00
+2025-01-01 17:12:16,509 [INFO] [ETH - arima] forecast saved at 2024-12-31 00:00:00
+2025-01-01 17:12:16,546 [INFO] [ETH - ets] forecast saved at 2024-12-31 00:00:00
+2025-01-01 17:12:16,598 [INFO] [ETH - theta] forecast saved at 2024-12-31 00:00:00
+2025-01-01 17:12:18,976 [INFO] [ETH - arima] forecast saved at 2024-12-31 12:00:00
+2025-01-01 17:12:19,026 [INFO] [ETH - ets] forecast saved at 2024-12-31 12:00:00
+2025-01-01 17:12:19,108 [INFO] [ETH - theta] forecast saved at 2024-12-31 12:00:00
+2025-01-01 17:12:21,370 [INFO] [ETH - arima] forecast saved at 2025-01-01 00:00:00
+2025-01-01 17:12:21,692 [INFO] [ETH - ets] forecast saved at 2025-01-01 00:00:00
+2025-01-01 17:12:21,755 [INFO] [ETH - theta] forecast saved at 2025-01-01 00:00:00
+2025-01-01 17:12:23,388 [INFO] model processing completed at 2025-01-01 17:12:23.388865
+2025-01-01 17:12:23,389 [INFO] database connection closed.
