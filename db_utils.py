@@ -1,20 +1,34 @@
 import psycopg2
 import pandas as pd
+import logging
+import os
 from uuid import uuid4
 from config import DB_CONFIG
 from datetime import datetime, timezone, timedelta
 from psycopg2.extras import execute_values
-import logging
+from dotenv import load_dotenv
 
 logger = logging.getLogger("forecrypt")
 
 def init_database_connection(**kwargs):
     """
-    Initialize a database connection.
+    Initialize a database connection. Replaces DB_CONFIG from config.py by .env values. 
+    DB_CONFIG from config.py is usable, but .env preferred for security reasons.
 
     :param kwargs: Database connection parameters (overrides defaults in DB_CONFIG).
     :return: A psycopg2 connection object.
     """
+
+    load_dotenv()
+
+    DB_CONFIG.update({
+        'dbname': os.getenv('FORECRYPT_DB_NAME', DB_CONFIG['dbname']),
+        'user': os.getenv('FORECRYPT_DB_USER', DB_CONFIG['user']),
+        'password': os.getenv('FORECRYPT_DB_PASS', DB_CONFIG['password']),
+        'host': os.getenv('FORECRYPT_DB_HOST', DB_CONFIG['host']),
+        'port': int(os.getenv('FORECRYPT_DB_PORT', DB_CONFIG['port']))
+    })
+
     try:
         # Если не переданы параметры, используем DB_CONFIG
         conn_params = kwargs if kwargs else DB_CONFIG

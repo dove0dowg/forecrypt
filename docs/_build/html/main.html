@@ -62,8 +62,8 @@ if no arguments are provided, processes all cryptocurrencies in CRYPTO_LIST and 
 
 <dl class="py function">
 <dt class="sig sig-object py" id="main.extract_model_specific_df">
-<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">extract_model_specific_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_hours</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.extract_model_specific_df" title="Link to this definition">¶</a></dt>
-<dd><p>extract the last <cite>dataset_hours</cite> rows from the given DataFrame.</p>
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">extract_model_specific_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">training_dataset_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.extract_model_specific_df" title="Link to this definition">¶</a></dt>
+<dd><p>extract the last <cite>training_dataset_size</cite> rows from the given DataFrame.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -74,9 +74,9 @@ so that at START_DATE we already have ‘max_hours’ worth of data.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="main.get_max_dataset_hours">
-<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">get_max_dataset_hours</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_parameters</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.get_max_dataset_hours" title="Link to this definition">¶</a></dt>
-<dd><p>find the maximum dataset_hours among all models.</p>
+<dt class="sig sig-object py" id="main.get_max_training_dataset_size">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">get_max_training_dataset_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_parameters</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.get_max_training_dataset_size" title="Link to this definition">¶</a></dt>
+<dd><p>find the maximum training_dataset_size among all models.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -129,7 +129,7 @@ and compares forecast formats with historical data.</p>
 <li class="toctree-l2"><a class="reference internal" href="#main.combine_historical_and_forecast"><code class="docutils literal notranslate"><span class="pre">combine_historical_and_forecast()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#main.extract_model_specific_df"><code class="docutils literal notranslate"><span class="pre">extract_model_specific_df()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#main.get_additional_start_date"><code class="docutils literal notranslate"><span class="pre">get_additional_start_date()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#main.get_max_dataset_hours"><code class="docutils literal notranslate"><span class="pre">get_max_dataset_hours()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#main.get_max_training_dataset_size"><code class="docutils literal notranslate"><span class="pre">get_max_training_dataset_size()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#main.get_max_historical_df"><code class="docutils literal notranslate"><span class="pre">get_max_historical_df()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#main.test_forecasts"><code class="docutils literal notranslate"><span class="pre">test_forecasts()</span></code></a></li>
 </ul>

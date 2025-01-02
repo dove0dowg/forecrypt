@@ -42,7 +42,7 @@ async def forecast(crypto_id: str, model_name: str):
     fit_func = load_fit_function(model_param['fit_func_name'])
     
     # historical df call and pandas transform into timeseries format
-    df = fetch_historical_data(crypto_id, model_param['dataset_hours'], api_key="YOUR_API_KEY")
+    df = fetch_historical_data(crypto_id, model_param['training_dataset_size'], api_key="YOUR_API_KEY")
     if 'date' in df.columns:
         df['date'] = pd.to_datetime(df['date'])
         df.set_index('date', inplace=True)
@@ -69,7 +69,7 @@ async def historical_and_forecast(crypto_id: str, model_name: str):
     fit_func = load_fit_function(model_param['fit_func_name'])
     
     # historical df
-    df = fetch_historical_data(crypto_id, model_param['dataset_hours'], api_key="YOUR_API_KEY")
+    df = fetch_historical_data(crypto_id, model_param['training_dataset_size'], api_key="YOUR_API_KEY")
     if 'date' in df.columns:
         df['date'] = pd.to_datetime(df['date'])
         df.set_index('date', inplace=True)
