@@ -160,47 +160,35 @@ def fetch_extended_df(crypto_id: str, total_hours: int):
     :param total_hours: Total number of hours to fetch.
     :return: DataFrame with historical data or None if data is empty.
     """
-    df_extended = get_data.fetch_historical_data(crypto_id, total_hours)
+    extended_df = get_data.fetch_historical_data(crypto_id, total_hours)
 
-    if df_extended.empty:
+    if extended_df.empty:
         logger.error(f"No historical data fetched for {crypto_id}")
         return None
 
     logger.debug(
-        f"{crypto_id}: extended df from {df_extended['date'].min()} "
-        f"to {df_extended['date'].max()} (rows={len(df_extended)})"
+        f"{crypto_id}: extended df from {extended_df['date'].min()} "
+        f"to {extended_df['date'].max()} (rows={len(extended_df)})"
     )
-    return df_extended
+    return extended_df
 
-def process_model_for_hour(*, model_name, params, sub_df, current_dt, crypto_id, conn, model_last_retrain, model_last_forecast):
+def retrain_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id, model_last_retrain):
     """
-    Process a single model for a specific cryptocurrency and time interval.
-    This function handles retraining or loading an existing model, checking whether a forecast is needed,
-    and generating and saving the forecast.
+    Handle model retraining for a specific hour.
+
     Args:
-        model_name (str): Name of the model to process.
-        params (dict): Configuration parameters for the model, including update interval and forecast frequency.
-        sub_df (DataFrame): Filtered historical data for the specific time window.
-        current_dt (datetime): The current datetime being processed.
-        crypto_id (str): Identifier for the cryptocurrency (e.g., 'BTC', 'ETH').
-        conn (Connection): Database connection for saving forecasts.
-        model_last_retrain (dict): Tracks the last retrain time for each model.
-        model_last_forecast (dict): Tracks the last forecast time for each model.
+        model_name (str): Name of the model.
+        params (dict): Configuration parameters for the model.
+        sub_df (DataFrame): Historical data for training.
+        current_dt (datetime): Current datetime being processed.
+        crypto_id (str): Cryptocurrency ID.
+        model_last_retrain (dict): Tracks last retrain times for models.
+
     Returns:
-        None
-    Logic:
-        - Filters the input data to ensure sufficient historical coverage.
-        - Checks whether retraining is needed based on the model's update interval.
-        - Either retrains the model or loads an existing one.
-        - Checks if a forecast is needed based on the model's forecast frequency.
-        - Generates a forecast and saves it to the database if required.
+        model_fit (object): The trained or loaded model, or None if failed.
     """
-    
     update_interval = params.get('model_update_interval')
-    forecast_freq = params.get('forecast_frequency')
-    forecast_hours = params.get('forecast_hours')
-    
-    # Check retrain
+
     do_retrain = False
     if model_last_retrain[model_name] is None:
         logger.debug(f"[{crypto_id} - {model_name}] No previous retrain. Initiating first training.")
@@ -211,29 +199,46 @@ def process_model_for_hour(*, model_name, params, sub_df, current_dt, crypto_id,
         if hours_since_retrain >= update_interval:
             logger.debug(f"[{crypto_id} - {model_name}] Update interval exceeded. Marking for retraining.")
             do_retrain = True
-        else:
-            logger.debug(f"[{crypto_id} - {model_name}] Update interval not exceeded. Skipping retrain.")
-    
+
     if do_retrain:
         try:
-            logger.debug(f"[{crypto_id} - {model_name}] Retraining model at {current_dt}.")
             model_fit = models_processing.fit_model_any(sub_df, model_name)
             models_processing.save_model(crypto_id, model_name, model_fit)
             model_last_retrain[model_name] = current_dt
             logger.debug(f"[{crypto_id} - {model_name}] Model retrained and saved.")
+            return model_fit
         except Exception as e:
             logger.error(f"[{crypto_id} - {model_name}] Error during retraining: {e}")
-            return
-    else:
-        try:
-            logger.debug(f"[{crypto_id} - {model_name}] Loading existing model.")
-            model_fit = models_processing.load_model(crypto_id, model_name)
-            logger.debug(f"[{crypto_id} - {model_name}] Model loaded successfully.")
-        except Exception as e:
-            logger.error(f"[{crypto_id} - {model_name}] Error loading model: {e}")
-            return
-    
-    # Check forecast
+            return None
+
+    try:
+        model_fit = models_processing.load_model(crypto_id, model_name)
+        logger.debug(f"[{crypto_id} - {model_name}] Model loaded successfully.")
+        return model_fit
+    except Exception as e:
+        logger.error(f"[{crypto_id} - {model_name}] Error loading model: {e}")
+        return None
+
+def forecast_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id, conn, model_fit, model_last_forecast):
+    """
+    Handle forecasting for a specific hour.
+
+    Args:
+        model_name (str): Name of the model.
+        params (dict): Configuration parameters for the model.
+        sub_df (DataFrame): Data for forecasting.
+        current_dt (datetime): Current datetime being processed.
+        crypto_id (str): Cryptocurrency ID.
+        conn (Connection): Database connection for saving forecasts.
+        model_fit (object): The trained model.
+        model_last_forecast (dict): Tracks last forecast times for models.
+
+    Returns:
+        None
+    """
+    forecast_freq = params.get('forecast_frequency')
+    forecast_hours = params.get('forecast_hours')
+
     do_forecast = False
     if model_last_forecast[model_name] is None:
         do_forecast = True
@@ -241,11 +246,76 @@ def process_model_for_hour(*, model_name, params, sub_df, current_dt, crypto_id,
         hours_since_forecast = (current_dt - model_last_forecast[model_name]).total_seconds() / 3600
         if hours_since_forecast >= forecast_freq:
             do_forecast = True
+
     if do_forecast:
-        df_forecast = create_forecast_dataframe(sub_df, model_fit, steps=forecast_hours)
-        db_utils.load_to_db_forecast(df_forecast, crypto_id, model_name, conn, created_at=current_dt)
-        logger.info(f"[{crypto_id} - {model_name}] forecast saved at {current_dt}")
-        model_last_forecast[model_name] = current_dt
+        try:
+            df_forecast = create_forecast_dataframe(sub_df, model_fit, steps=forecast_hours)
+            db_utils.load_to_db_forecast(df_forecast, crypto_id, model_name, conn, created_at=current_dt)
+            logger.debug(f"[{crypto_id} - {model_name}] Forecast saved for {current_dt}.")
+            model_last_forecast[model_name] = current_dt
+        except Exception as e:
+            logger.error(f"[{crypto_id} - {model_name}] Error during forecasting: {e}")
+
+def get_train_df(extended_df, current_dt, training_dataset_size, crypto_id, model_name):
+    """
+    Extracts the training dataset for a specific time window.
+
+    Args:
+        extended_df (DataFrame): Full historical dataset.
+        current_dt (datetime): Current datetime being processed.
+        training_dataset_size (int): Number of hours required for training.
+        crypto_id (str): Cryptocurrency ID.
+        model_name (str): Name of the model.
+
+    Returns:
+        DataFrame: Training dataset for the model, or None if data is insufficient.
+    """
+    train_df = extended_df[
+        (extended_df["date"] >= current_dt - timedelta(hours=training_dataset_size)) &
+        (extended_df["date"] <= current_dt)
+    ]
+
+    if len(train_df) < training_dataset_size:
+        logger.debug(f"Not enough training data for {crypto_id} - {model_name} at {current_dt}, skipping.")
+        return None
+
+    return train_df
+
+def get_forecast_input_df(extended_df, current_dt, forecast_dataset_size, crypto_id, model_name):
+    """
+    Extracts the forecast input dataset for a specific time window.
+
+    Args:
+        extended_df (DataFrame): Full historical dataset.
+        current_dt (datetime): Current datetime being processed.
+        forecast_dataset_size (int): Number of hours required for forecasting.
+        crypto_id (str): Cryptocurrency ID.
+        model_name (str): Name of the model.
+
+    Returns:
+        DataFrame: Forecast input dataset for the model, or None if data is insufficient.
+    """
+    forecast_input_df = extended_df[
+        (extended_df["date"] >= current_dt - timedelta(hours=forecast_dataset_size)) &
+        (extended_df["date"] <= current_dt)
+    ]
+
+    if len(forecast_input_df) < forecast_dataset_size:
+        logger.debug(f"Not enough forecast input data for {crypto_id} - {model_name} at {current_dt}, skipping.")
+        return None
+
+    return forecast_input_df
+
+def initialize_model_tracking():
+    """
+    Initialize tracking dictionaries for retraining and forecasting.
+    
+    Returns:
+        Tuple[dict, dict]: Dictionaries for model_last_retrain and model_last_forecast.
+    """
+    model_last_retrain = {model: None for model in MODEL_PARAMETERS.keys()}
+    model_last_forecast = {model: None for model in MODEL_PARAMETERS.keys()}
+    return model_last_retrain, model_last_forecast
 
 # ---------------------------------------------------------
 # 3. main logic
@@ -269,49 +339,63 @@ if __name__ == "__main__":
         for crypto_id in CRYPTO_LIST:
             logger.info(f"Processing cryptocurrency: {crypto_id}")
 
-            # Fetch historical data
-            df_extended = fetch_extended_df(crypto_id, total_hours)
+            # Fetch extended historical dataset (max hours for training dataset + historical dataset from START_DATE to FINISH_DATE)
+            extended_df = fetch_extended_df(crypto_id, total_hours)
 
             # Load historical data into the database
-            db_utils.load_to_db_historical(df_extended, crypto_id, conn)
+            db_utils.load_to_db_historical(extended_df, crypto_id, conn)
 
-            # Initialize tracking for retrain and forecast
-            model_last_retrain = {model: None for model in MODEL_PARAMETERS.keys()}
-            model_last_forecast = {model: None for model in MODEL_PARAMETERS.keys()}
+            # Initialize tracking for retrain and forecast. 
+            model_last_retrain, model_last_forecast = initialize_model_tracking()
 
             # Process hourly data
             current_dt = start_naive
             while current_dt <= finish_naive:
+
                 # Cycle for each model
                 for model_name, params in MODEL_PARAMETERS.items():
+
+                    # Get training dataset
                     training_dataset_size = params["training_dataset_size"]
-                    earliest_needed_dt = current_dt - timedelta(hours=training_dataset_size)
+                    train_df = get_train_df(extended_df, current_dt, training_dataset_size, crypto_id, model_name)
+                    if train_df is None:
+                        continue  # train_df is empty if time check returns no need for retraining. Continue to next hour
+                    
+                    # Get forecast input dataset
+                    forecast_dataset_size = params["forecast_dataset_size"]
+                    forecast_input_df = get_forecast_input_df(extended_df, current_dt, forecast_dataset_size, crypto_id, model_name)
+                    if forecast_input_df is None:
+                        continue  # forecast_input_df is empty if time check returns no need for forecast. Continue to next hour
 
-                    # Filter data for the model's required time window
-                    sub_df = df_extended[
-                        (df_extended["date"] >= earliest_needed_dt) &
-                        (df_extended["date"] <= current_dt)
-                    ]
-
-                    if len(sub_df) < training_dataset_size:
-                        logger.debug(f"Not enough data for {crypto_id} - {model_name} at {current_dt}, skipping.")
-                        continue
-
-                    # Process model for the current hour
-                    models_processing.process_model_for_hour(
+                    # Handle retraining
+                    model_fit = retrain_in_hour_cycle(
                         model_name=model_name,
                         params=params,
-                        sub_df=sub_df,
+                        sub_df=train_df,
+                        current_dt=current_dt,
+                        crypto_id=crypto_id,
+                        model_last_retrain=model_last_retrain,
+                    )
+
+                    if model_fit is None:
+                        continue
+
+                    # Handle forecasting
+                    forecast_in_hour_cycle(
+                        model_name=model_name,
+                        params=params,
+                        sub_df=forecast_input_df,
                         current_dt=current_dt,
                         crypto_id=crypto_id,
                         conn=conn,
-                        model_last_retrain=model_last_retrain,
+                        model_fit=model_fit,
                         model_last_forecast=model_last_forecast,
                     )
-
+                    
+                # continue to next hour
                 current_dt += timedelta(hours=1)
 
-        logger.info(f"Model processing completed successfully at {datetime.now()}")
+        #logger.info(f"Model processing completed successfully at {datetime.now()}")
 
     except Exception as e:
         logger.critical(f"An error occurred: {e}", exc_info=True)

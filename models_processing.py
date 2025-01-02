@@ -183,5 +183,5 @@ def process_model_for_hour(*, model_name, params, sub_df, current_dt, crypto_id,
     if do_forecast:
         df_forecast = create_forecast_dataframe(sub_df, model_fit, steps=forecast_hours)
         load_to_db_forecast(df_forecast, crypto_id, model_name, conn, created_at=current_dt)
-        logger.info(f"[{crypto_id} - {model_name}] forecast saved at {current_dt}")
+        logger.debug(f"[{crypto_id} - {model_name}] forecast saved for {current_dt}")
         model_last_forecast[model_name] = current_dt
