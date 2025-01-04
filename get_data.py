@@ -9,8 +9,8 @@ def fetch_historical_data(crypto_id, hours, api_key=None):
     :param crypto_id: The cryptocurrency identifier (e.g., 'BTC', 'ETH').
     :param hours: The number of hours of historical data to fetch.
     :param api_key: API key for authentication (optional).
-    :return: A pandas DataFrame with columns ['date', 'price'] containing the fetched data.
-    """    
+    :return: A pandas DataFrame with columns ['date', 'price'] and a DatetimeIndex.
+    """
     url = "https://min-api.cryptocompare.com/data/v2/histohour"
     headers = {"Authorization": f"Apikey {api_key}"} if api_key else {}
     params = {
@@ -24,11 +24,14 @@ def fetch_historical_data(crypto_id, hours, api_key=None):
         data = response.json().get('Data', {}).get('Data', [])
         if data:
             df = pd.DataFrame(data)
-            df['date'] = pd.to_datetime(df['time'], unit='s')#, utc=True)
-            return pd.DataFrame({"date": df['date'], "price": df['close']})
-    
+            df['date'] = pd.to_datetime(df['time'], unit='s')
+            df.set_index('date', inplace=True)  # Add DatetimeIndex
+            df = df.asfreq('h') # set DatetimeIndex to hourly
+            return pd.DataFrame({"date": df.index, "price": df['close']})
+
     print(f"Failed to fetch data for {crypto_id}. Status code: {response.status_code}")
     return pd.DataFrame()
+
 
 def fetch_specific_historical_hours(crypto_id, hours_list, api_key=None):
     """

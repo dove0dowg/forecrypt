@@ -1,7 +1,6 @@
 # ---------------------------------------------------------
 # libs
 # ---------------------------------------------------------
-import psycopg2
 import pandas as pd
 import importlib
 import logging
@@ -60,57 +59,6 @@ def check_and_save_models_cycle(crypto_list=None, model_names=None):
 
                 # save the model
                 models_processing.save_model(crypto_id, model_name, model_fit)
-
-def combine_historical_and_forecast(historical_df, forecast_df):
-    """
-    combines historical and forecast data into a single dataframe.
-    
-    :param historical_df: dataframe with historical data, must contain 'date' and 'price' columns.
-    :param forecast_df: dataframe with forecast data, must contain 'date' and 'price' columns.
-    :return: combined dataframe with historical and forecast data.
-    """
-    # validate input
-    if not {'date', 'price'}.issubset(historical_df.columns):
-        raise ValueError("historical_df must contain 'date' and 'price' columns.")
-    if not {'date', 'price'}.issubset(forecast_df.columns):
-        raise ValueError("forecast_df must contain 'date' and 'price' columns.")
-
-    # ensure 'date' is datetime
-    historical_df['date'] = pd.to_datetime(historical_df['date'])
-    forecast_df['date'] = pd.to_datetime(forecast_df['date'])
-
-    # concatenate the two dataframes
-    combined_df = pd.concat([historical_df, forecast_df], ignore_index=True)
-
-    # sort by date for consistency
-    combined_df = combined_df.sort_values(by='date').reset_index(drop=True)
-
-    return combined_df
-
-def get_max_training_dataset_size(model_parameters):
-    """
-    find the maximum training_dataset_size among all models.
-    """
-    return max(model["training_dataset_size"] for model in model_parameters.values())
-
-def get_max_historical_df(crypto_id, max_hours):
-    """
-    get historical data for the maximum required range (max_hours).
-    """
-    return get_data.fetch_historical_data(crypto_id, max_hours)
-
-def extract_model_specific_df(dataframe, training_dataset_size):
-    """
-    extract the last `training_dataset_size` rows from the given DataFrame.
-    """
-    return dataframe.iloc[-training_dataset_size:]
-
-def get_additional_start_date(start_date: datetime, max_hours: int) -> datetime:
-    """
-    compute the earliest date we need to fetch,
-    so that at START_DATE we already have 'max_hours' worth of data.
-    """
-    return start_date - timedelta(hours=max_hours)
 
 def calculate_total_fetch_interval(start_date: str, finish_date: str = None, **model_parameters):
     """
@@ -172,89 +120,89 @@ def fetch_extended_df(crypto_id: str, total_hours: int):
     )
     return extended_df
 
-def retrain_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id, model_last_retrain):
-    """
-    Handle model retraining for a specific hour.
-
-    Args:
-        model_name (str): Name of the model.
-        params (dict): Configuration parameters for the model.
-        sub_df (DataFrame): Historical data for training.
-        current_dt (datetime): Current datetime being processed.
-        crypto_id (str): Cryptocurrency ID.
-        model_last_retrain (dict): Tracks last retrain times for models.
-
-    Returns:
-        model_fit (object): The trained or loaded model, or None if failed.
-    """
-    update_interval = params.get('model_update_interval')
-
-    do_retrain = False
-    if model_last_retrain[model_name] is None:
-        logger.debug(f"[{crypto_id} - {model_name}] No previous retrain. Initiating first training.")
-        do_retrain = True
-    else:
-        hours_since_retrain = (current_dt - model_last_retrain[model_name]).total_seconds() / 3600
-        logger.debug(f"[{crypto_id} - {model_name}] Hours since last retrain: {hours_since_retrain}, update interval: {update_interval}.")
-        if hours_since_retrain >= update_interval:
-            logger.debug(f"[{crypto_id} - {model_name}] Update interval exceeded. Marking for retraining.")
-            do_retrain = True
-
-    if do_retrain:
-        try:
-            model_fit = models_processing.fit_model_any(sub_df, model_name)
-            models_processing.save_model(crypto_id, model_name, model_fit)
-            model_last_retrain[model_name] = current_dt
-            logger.debug(f"[{crypto_id} - {model_name}] Model retrained and saved.")
-            return model_fit
-        except Exception as e:
-            logger.error(f"[{crypto_id} - {model_name}] Error during retraining: {e}")
-            return None
-
-    try:
-        model_fit = models_processing.load_model(crypto_id, model_name)
-        logger.debug(f"[{crypto_id} - {model_name}] Model loaded successfully.")
-        return model_fit
-    except Exception as e:
-        logger.error(f"[{crypto_id} - {model_name}] Error loading model: {e}")
-        return None
-
-def forecast_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id, conn, model_fit, model_last_forecast):
-    """
-    Handle forecasting for a specific hour.
-
-    Args:
-        model_name (str): Name of the model.
-        params (dict): Configuration parameters for the model.
-        sub_df (DataFrame): Data for forecasting.
-        current_dt (datetime): Current datetime being processed.
-        crypto_id (str): Cryptocurrency ID.
-        conn (Connection): Database connection for saving forecasts.
-        model_fit (object): The trained model.
-        model_last_forecast (dict): Tracks last forecast times for models.
-
-    Returns:
-        None
-    """
-    forecast_freq = params.get('forecast_frequency')
-    forecast_hours = params.get('forecast_hours')
-
-    do_forecast = False
-    if model_last_forecast[model_name] is None:
-        do_forecast = True
-    else:
-        hours_since_forecast = (current_dt - model_last_forecast[model_name]).total_seconds() / 3600
-        if hours_since_forecast >= forecast_freq:
-            do_forecast = True
-
-    if do_forecast:
-        try:
-            df_forecast = create_forecast_dataframe(sub_df, model_fit, steps=forecast_hours)
-            db_utils.load_to_db_forecast(df_forecast, crypto_id, model_name, conn, created_at=current_dt)
-            logger.debug(f"[{crypto_id} - {model_name}] Forecast saved for {current_dt}.")
-            model_last_forecast[model_name] = current_dt
-        except Exception as e:
-            logger.error(f"[{crypto_id} - {model_name}] Error during forecasting: {e}")
+#def retrain_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id, model_last_retrain):
+#    """
+#    Handle model retraining for a specific hour.
+#
+#    Args:
+#        model_name (str): Name of the model.
+#        params (dict): Configuration parameters for the model.
+#        sub_df (DataFrame): Historical data for training.
+#        current_dt (datetime): Current datetime being processed.
+#        crypto_id (str): Cryptocurrency ID.
+#        model_last_retrain (dict): Tracks last retrain times for models.
+#
+#    Returns:
+#        model_fit (object): The trained or loaded model, or None if failed.
+#    """
+#    update_interval = params.get('model_update_interval')
+#
+#    do_retrain = False
+#    if model_last_retrain[model_name] is None:
+#        logger.debug(f"[{crypto_id} - {model_name}] No previous retrain. Initiating first training.")
+#        do_retrain = True
+#    else:
+#        hours_since_retrain = (current_dt - model_last_retrain[model_name]).total_seconds() / 3600
+#        logger.debug(f"[{crypto_id} - {model_name}] Hours since last retrain: {hours_since_retrain}, update interval: {update_interval}.")
+#        if hours_since_retrain >= update_interval:
+#            logger.debug(f"[{crypto_id} - {model_name}] Update interval exceeded. Marking for retraining.")
+#            do_retrain = True
+#
+#    if do_retrain:
+#        try:
+#            model_fit = models_processing.fit_model_any(sub_df, model_name)
+#            models_processing.save_model(crypto_id, model_name, model_fit)
+#            model_last_retrain[model_name] = current_dt
+#            logger.debug(f"[{crypto_id} - {model_name}] Model retrained and saved.")
+#            return model_fit
+#        except Exception as e:
+#            logger.error(f"[{crypto_id} - {model_name}] Error during retraining: {e}")
+#            return None
+#
+#    try:
+#        model_fit = models_processing.load_model(crypto_id, model_name)
+#        logger.debug(f"[{crypto_id} - {model_name}] Model loaded successfully.")
+#        return model_fit
+#    except Exception as e:
+#        logger.error(f"[{crypto_id} - {model_name}] Error loading model: {e}")
+#        return None
+#
+#def forecast_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id, conn, model_fit, model_last_forecast):
+#    """
+#    Handle forecasting for a specific hour.
+#
+#    Args:
+#        model_name (str): Name of the model.
+#        params (dict): Configuration parameters for the model.
+#        sub_df (DataFrame): Data for forecasting.
+#        current_dt (datetime): Current datetime being processed.
+#        crypto_id (str): Cryptocurrency ID.
+#        conn (Connection): Database connection for saving forecasts.
+#        model_fit (object): The trained model.
+#        model_last_forecast (dict): Tracks last forecast times for models.
+#
+#    Returns:
+#        None
+#    """
+#    forecast_freq = params.get('forecast_frequency')
+#    forecast_hours = params.get('forecast_hours')
+#
+#    do_forecast = False
+#    if model_last_forecast[model_name] is None:
+#        do_forecast = True
+#    else:
+#        hours_since_forecast = (current_dt - model_last_forecast[model_name]).total_seconds() / 3600
+#        if hours_since_forecast >= forecast_freq:
+#            do_forecast = True
+#
+#    if do_forecast:
+#        try:
+#            df_forecast = create_forecast_dataframe(sub_df, model_fit, steps=forecast_hours)
+#            db_utils.load_to_db_forecast(df_forecast, crypto_id, model_name, conn, created_at=current_dt)
+#            logger.debug(f"[{crypto_id} - {model_name}] Forecast saved for {current_dt}.")
+#            model_last_forecast[model_name] = current_dt
+#        except Exception as e:
+#            logger.error(f"[{crypto_id} - {model_name}] Error during forecasting: {e}")
 
 def get_train_df(extended_df, current_dt, training_dataset_size, crypto_id, model_name):
     """
@@ -368,7 +316,7 @@ if __name__ == "__main__":
                         continue  # forecast_input_df is empty if time check returns no need for forecast. Continue to next hour
 
                     # Handle retraining
-                    model_fit = retrain_in_hour_cycle(
+                    model_fit = models_processing.retrain_in_hour_cycle(
                         model_name=model_name,
                         params=params,
                         sub_df=train_df,
@@ -381,7 +329,7 @@ if __name__ == "__main__":
                         continue
 
                     # Handle forecasting
-                    forecast_in_hour_cycle(
+                    models_processing.forecast_in_hour_cycle(
                         model_name=model_name,
                         params=params,
                         sub_df=forecast_input_df,
@@ -395,7 +343,7 @@ if __name__ == "__main__":
                 # continue to next hour
                 current_dt += timedelta(hours=1)
 
-        #logger.info(f"Model processing completed successfully at {datetime.now()}")
+        logger.debug(f"Model processing completed successfully at {datetime.now()}")
 
     except Exception as e:
         logger.critical(f"An error occurred: {e}", exc_info=True)

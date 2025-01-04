@@ -7644,3 +7644,223 @@
 2025-01-02 21:20:47,321 [INFO] Processing cryptocurrency: ETH
 2025-01-02 21:20:48,729 [INFO] Data for ETH successfully loaded.
 2025-01-02 21:21:29,173 [INFO] Database connection closed.
+2025-01-02 22:20:55,362 [INFO] database connection established.
+2025-01-02 22:20:55,364 [INFO] database tables initialized.
+2025-01-02 22:20:55,367 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-02 22:20:55,368 [INFO] START_DATE: 2024-12-26 00:00:00, FINISH_DATE: 2025-01-02 15:20:55.367007
+2025-01-02 22:20:55,368 [INFO] Processing cryptocurrency: BTC
+2025-01-02 22:20:56,572 [CRITICAL] An error occurred: 'date'
+Traceback (most recent call last):
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\indexes\base.py", line 3805, in get_loc
+    return self._engine.get_loc(casted_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "index.pyx", line 167, in pandas._libs.index.IndexEngine.get_loc
+  File "index.pyx", line 196, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas\\_libs\\hashtable_class_helper.pxi", line 7081, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas\\_libs\\hashtable_class_helper.pxi", line 7089, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'date'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\user\Desktop\kode\forecrypt\main.py", line 343, in <module>
+    extended_df = fetch_extended_df(crypto_id, total_hours)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\user\Desktop\kode\forecrypt\main.py", line 170, in fetch_extended_df
+    f"{crypto_id}: extended df from {extended_df['date'].min()} "
+                                     ~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\frame.py", line 4102, in __getitem__
+    indexer = self.columns.get_loc(key)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\indexes\base.py", line 3812, in get_loc
+    raise KeyError(key) from err
+KeyError: 'date'
+2025-01-02 22:20:56,584 [INFO] Database connection closed.
+2025-01-02 22:21:34,942 [INFO] database connection established.
+2025-01-02 22:21:34,944 [INFO] database tables initialized.
+2025-01-02 22:21:34,947 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-02 22:21:34,947 [INFO] START_DATE: 2024-12-26 00:00:00, FINISH_DATE: 2025-01-02 15:21:34.947681
+2025-01-02 22:21:34,948 [INFO] Processing cryptocurrency: BTC
+2025-01-02 22:21:37,238 [CRITICAL] An error occurred: 'date'
+Traceback (most recent call last):
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\indexes\base.py", line 3805, in get_loc
+    return self._engine.get_loc(casted_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "index.pyx", line 167, in pandas._libs.index.IndexEngine.get_loc
+  File "index.pyx", line 196, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas\\_libs\\hashtable_class_helper.pxi", line 7081, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas\\_libs\\hashtable_class_helper.pxi", line 7089, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'date'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\user\Desktop\kode\forecrypt\main.py", line 343, in <module>
+    extended_df = fetch_extended_df(crypto_id, total_hours)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\user\Desktop\kode\forecrypt\main.py", line 170, in fetch_extended_df
+    f"{crypto_id}: extended df from {extended_df['date'].min()} "
+                                     ~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\frame.py", line 4102, in __getitem__
+    indexer = self.columns.get_loc(key)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\indexes\base.py", line 3812, in get_loc
+    raise KeyError(key) from err
+KeyError: 'date'
+2025-01-02 22:21:37,246 [INFO] Database connection closed.
+2025-01-02 22:24:54,765 [INFO] database connection established.
+2025-01-02 22:24:54,768 [INFO] database tables initialized.
+2025-01-02 22:24:54,770 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-02 22:24:54,771 [INFO] START_DATE: 2024-12-26 00:00:00, FINISH_DATE: 2025-01-02 15:24:54.770661
+2025-01-02 22:24:54,771 [INFO] Processing cryptocurrency: BTC
+2025-01-02 22:24:56,104 [CRITICAL] An error occurred: 'date'
+Traceback (most recent call last):
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\indexes\base.py", line 3805, in get_loc
+    return self._engine.get_loc(casted_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "index.pyx", line 167, in pandas._libs.index.IndexEngine.get_loc
+  File "index.pyx", line 196, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas\\_libs\\hashtable_class_helper.pxi", line 7081, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas\\_libs\\hashtable_class_helper.pxi", line 7089, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'date'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\user\Desktop\kode\forecrypt\main.py", line 343, in <module>
+    extended_df = fetch_extended_df(crypto_id, total_hours)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\user\Desktop\kode\forecrypt\main.py", line 163, in fetch_extended_df
+    extended_df = get_data.fetch_historical_data(crypto_id, total_hours)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\user\Desktop\kode\forecrypt\get_data.py", line 57, in fetch_historical_data
+    return pd.DataFrame({"date": df['date'], "price": df['close']})
+                                 ~~^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\frame.py", line 4102, in __getitem__
+    indexer = self.columns.get_loc(key)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\indexes\base.py", line 3812, in get_loc
+    raise KeyError(key) from err
+KeyError: 'date'
+2025-01-02 22:24:56,113 [INFO] Database connection closed.
+2025-01-02 22:25:30,578 [INFO] database connection established.
+2025-01-02 22:25:30,581 [INFO] database tables initialized.
+2025-01-02 22:25:30,583 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-02 22:25:30,584 [INFO] START_DATE: 2024-12-26 00:00:00, FINISH_DATE: 2025-01-02 15:25:30.583867
+2025-01-02 22:25:30,584 [INFO] Processing cryptocurrency: BTC
+2025-01-02 22:25:31,814 [INFO] Data for BTC successfully loaded.
+2025-01-02 22:26:10,798 [INFO] Processing cryptocurrency: ETH
+2025-01-02 22:26:16,943 [INFO] Database connection closed.
+2025-01-02 22:26:49,903 [INFO] database connection established.
+2025-01-02 22:26:49,905 [INFO] database tables initialized.
+2025-01-02 22:26:49,908 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-02 22:26:49,908 [INFO] START_DATE: 2024-12-26 00:00:00, FINISH_DATE: 2025-01-02 15:26:49.908461
+2025-01-02 22:26:49,909 [INFO] Processing cryptocurrency: BTC
+2025-01-02 22:26:51,432 [INFO] Data for BTC successfully loaded.
+2025-01-02 22:27:31,540 [INFO] Processing cryptocurrency: ETH
+2025-01-02 22:27:38,282 [INFO] Data for ETH successfully loaded.
+2025-01-02 22:28:21,519 [INFO] Database connection closed.
+2025-01-02 22:29:35,688 [INFO] database connection established.
+2025-01-02 22:29:35,690 [INFO] database tables initialized.
+2025-01-02 22:29:35,693 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-02 22:29:35,694 [INFO] START_DATE: 2024-12-26 00:00:00, FINISH_DATE: 2025-01-02 15:29:35.693369
+2025-01-02 22:29:35,695 [INFO] Processing cryptocurrency: BTC
+2025-01-02 22:29:37,071 [CRITICAL] An error occurred: 'date'
+Traceback (most recent call last):
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\indexes\base.py", line 3805, in get_loc
+    return self._engine.get_loc(casted_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "index.pyx", line 167, in pandas._libs.index.IndexEngine.get_loc
+  File "index.pyx", line 196, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas\\_libs\\hashtable_class_helper.pxi", line 7081, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas\\_libs\\hashtable_class_helper.pxi", line 7089, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'date'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\user\Desktop\kode\forecrypt\main.py", line 343, in <module>
+    extended_df = fetch_extended_df(crypto_id, total_hours)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\user\Desktop\kode\forecrypt\main.py", line 170, in fetch_extended_df
+    f"{crypto_id}: extended df from {extended_df['date'].min()} "
+                                     ~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\frame.py", line 4102, in __getitem__
+    indexer = self.columns.get_loc(key)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\indexes\base.py", line 3812, in get_loc
+    raise KeyError(key) from err
+KeyError: 'date'
+2025-01-02 22:29:37,078 [INFO] Database connection closed.
+2025-01-02 22:32:59,197 [INFO] database connection established.
+2025-01-02 22:32:59,199 [INFO] database tables initialized.
+2025-01-02 22:32:59,202 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-02 22:32:59,202 [INFO] START_DATE: 2024-12-26 00:00:00, FINISH_DATE: 2025-01-02 15:32:59.202558
+2025-01-02 22:32:59,203 [INFO] Processing cryptocurrency: BTC
+2025-01-02 22:33:00,662 [INFO] Data for BTC successfully loaded.
+2025-01-02 22:33:40,334 [INFO] Processing cryptocurrency: ETH
+2025-01-02 22:33:41,611 [INFO] Data for ETH successfully loaded.
+2025-01-02 22:33:56,530 [INFO] Database connection closed.
+2025-01-02 22:34:13,968 [INFO] database connection established.
+2025-01-02 22:34:13,999 [INFO] database tables initialized.
+2025-01-02 22:34:14,004 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-02 22:34:14,005 [INFO] START_DATE: 2024-12-26 00:00:00, FINISH_DATE: 2025-01-02 15:34:14.004493
+2025-01-02 22:34:14,005 [INFO] Processing cryptocurrency: BTC
+2025-01-02 22:34:19,931 [INFO] Data for BTC successfully loaded.
+2025-01-02 22:35:01,070 [INFO] Processing cryptocurrency: ETH
+2025-01-02 22:35:02,826 [INFO] Data for ETH successfully loaded.
+2025-01-02 22:35:43,282 [INFO] Database connection closed.
+2025-01-02 22:36:55,280 [INFO] database connection established.
+2025-01-02 22:36:55,311 [INFO] database tables initialized.
+2025-01-02 22:36:55,316 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-02 22:36:55,316 [INFO] START_DATE: 2024-12-26 00:00:00, FINISH_DATE: 2025-01-02 15:36:55.316130
+2025-01-02 22:36:55,317 [INFO] Processing cryptocurrency: BTC
+2025-01-02 22:36:59,586 [INFO] Data for BTC successfully loaded.
+2025-01-02 22:37:40,886 [INFO] Processing cryptocurrency: ETH
+2025-01-02 22:37:42,109 [INFO] Data for ETH successfully loaded.
+2025-01-02 22:38:24,222 [INFO] Database connection closed.
+2025-01-02 22:48:00,464 [INFO] database connection established.
+2025-01-02 22:48:00,481 [INFO] database tables initialized.
+2025-01-02 22:48:00,483 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-02 22:48:00,484 [INFO] START_DATE: 2024-12-26 00:00:00, FINISH_DATE: 2025-01-02 15:48:00.483083
+2025-01-02 22:48:00,485 [INFO] Processing cryptocurrency: BTC
+2025-01-02 22:48:03,604 [INFO] Data for BTC successfully loaded.
+2025-01-02 22:48:44,879 [INFO] Processing cryptocurrency: ETH
+2025-01-02 22:48:46,325 [INFO] Data for ETH successfully loaded.
+2025-01-02 22:49:29,551 [INFO] Database connection closed.
+2025-01-03 16:50:35,831 [INFO] database connection established.
+2025-01-03 16:50:35,863 [INFO] database tables initialized.
+2025-01-03 16:50:35,872 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-03 16:50:35,875 [INFO] START_DATE: 2024-12-26 00:00:00, FINISH_DATE: 2025-01-03 09:50:35.872407
+2025-01-03 16:50:35,875 [INFO] Processing cryptocurrency: BTC
+2025-01-03 16:50:37,249 [INFO] Data for BTC successfully loaded.
+2025-01-03 16:51:35,066 [INFO] Processing cryptocurrency: ETH
+2025-01-03 16:51:36,528 [INFO] Data for ETH successfully loaded.
+2025-01-03 16:52:37,395 [INFO] Database connection closed.
+2025-01-03 17:28:48,659 [INFO] database connection established.
+2025-01-03 17:28:48,668 [INFO] database tables initialized.
+2025-01-03 17:28:48,672 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-03 17:28:48,673 [INFO] START_DATE: 2024-12-26 00:00:00, FINISH_DATE: 2025-01-03 10:28:48.672211
+2025-01-03 17:28:48,674 [INFO] Processing cryptocurrency: BTC
+2025-01-03 17:28:50,317 [INFO] Data for BTC successfully loaded.
+2025-01-03 17:29:53,792 [INFO] Processing cryptocurrency: ETH
+2025-01-03 17:29:55,560 [INFO] Data for ETH successfully loaded.
+2025-01-03 17:31:13,797 [INFO] Database connection closed.
+2025-01-03 17:43:59,537 [INFO] database connection established.
+2025-01-03 17:43:59,541 [INFO] database tables initialized.
+2025-01-03 17:43:59,543 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-03 17:43:59,544 [INFO] START_DATE: 2024-12-26 00:00:00, FINISH_DATE: 2025-01-03 10:43:59.543540
+2025-01-03 17:43:59,544 [INFO] Processing cryptocurrency: BTC
+2025-01-03 17:44:01,284 [INFO] Data for BTC successfully loaded.
+2025-01-03 17:44:42,481 [INFO] Processing cryptocurrency: ETH
+2025-01-03 17:44:44,128 [INFO] Data for ETH successfully loaded.
+2025-01-03 17:45:27,593 [INFO] Database connection closed.
+2025-01-04 20:48:09,332 [INFO] database connection established.
+2025-01-04 20:48:09,364 [INFO] database tables initialized.
+2025-01-04 20:48:09,373 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-04 20:48:09,375 [INFO] START_DATE: 2024-12-26 00:00:00, FINISH_DATE: 2025-01-04 13:48:09.373081
+2025-01-04 20:48:09,376 [INFO] Processing cryptocurrency: BTC
+2025-01-04 20:48:14,174 [INFO] Data for BTC successfully loaded.
+2025-01-04 20:49:02,719 [INFO] Processing cryptocurrency: ETH
+2025-01-04 20:49:04,359 [INFO] Data for ETH successfully loaded.
+2025-01-04 20:49:51,269 [INFO] Database connection closed.
