@@ -87,11 +87,28 @@ def create_combined_view(conn):
     """
     query = """
     CREATE OR REPLACE VIEW combined_data AS
-    SELECT id, timestamp, currency, 'historical' AS model, price AS value, 0 AS forecast_step, timestamp AS created_at
-    FROM historical_data
+    SELECT 
+        id, 
+        timestamp, 
+        currency, 
+        'historical' AS model, 
+        price AS value, 
+        0 AS forecast_step, 
+        MIN(timestamp) OVER (PARTITION BY 'historical') AS created_at
+    FROM 
+        historical_data
     UNION ALL
-    SELECT id, timestamp, currency, model, forecast_value AS value, forecast_step, created_at
-    FROM forecast_data;
+    SELECT 
+        id, 
+        timestamp, 
+        currency, 
+        model, 
+        forecast_value AS value, 
+        forecast_step, 
+        created_at
+    FROM 
+        forecast_data;
+
     """
     try:
         with conn.cursor() as cursor:

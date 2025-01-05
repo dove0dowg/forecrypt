@@ -5,7 +5,7 @@ __pycache__/
 **/__pycache__/
 tests.py
 .env
-
+superset_config.py
 
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,windows,jupyternotebooks
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,windows,jupyternotebooks

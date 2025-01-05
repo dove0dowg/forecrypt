@@ -16703,3 +16703,442 @@ New start date for extended historical data:2024-12-02 00:00:00.
 2025-01-05 22:48:01,008 [INFO] Processing model: theta at 2025-01-05 22:48:01.008246
 2025-01-05 22:48:05,149 [INFO] theta model processing completed successfully at 2025-01-05 22:48:05.149101
 2025-01-05 22:48:05,150 [INFO] Database connection closed.
+2025-01-06 03:59:12,418 [INFO] database connection established.
+2025-01-06 03:59:12,447 [INFO] database tables initialized.
+2025-01-06 03:59:12,456 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 03:59:12,467 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-06 03:59:12,471 [INFO] Forecasts will be created for period: START_DATE: 2025-01-01 00:00:00, FINISH_DATE: 2025-01-05 20:59:12.467947.
+Historical data extended by 720 hours of training dataset.
+New start date for extended historical data:2024-12-02 00:00:00.
+837 hours of data will be fetched
+2025-01-06 03:59:12,475 [INFO] Processing cryptocurrency: BTC
+2025-01-06 03:59:23,854 [INFO] Historical data for BTC successfully loaded.
+2025-01-06 03:59:23,855 [INFO] Processing model: arima at 2025-01-06 03:59:23.855478
+2025-01-06 03:59:33,800 [INFO] Processing model: ets at 2025-01-06 03:59:33.800087
+2025-01-06 03:59:34,834 [INFO] Processing model: theta at 2025-01-06 03:59:34.834997
+2025-01-06 03:59:37,496 [INFO] theta model processing completed successfully at 2025-01-06 03:59:37.496978
+2025-01-06 03:59:37,497 [INFO] Processing cryptocurrency: ETH
+2025-01-06 03:59:38,710 [INFO] Historical data for ETH successfully loaded.
+2025-01-06 03:59:38,711 [INFO] Processing model: arima at 2025-01-06 03:59:38.711812
+2025-01-06 03:59:46,257 [INFO] Processing model: ets at 2025-01-06 03:59:46.257267
+2025-01-06 03:59:47,267 [INFO] Processing model: theta at 2025-01-06 03:59:47.267679
+2025-01-06 03:59:49,867 [INFO] theta model processing completed successfully at 2025-01-06 03:59:49.867256
+2025-01-06 03:59:49,868 [INFO] Database connection closed.
+2025-01-06 04:03:13,756 [INFO] database connection established.
+2025-01-06 04:03:13,762 [INFO] database tables initialized.
+2025-01-06 04:03:13,770 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 04:03:13,775 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-06 04:03:13,776 [INFO] Forecasts will be created for period: START_DATE: 2025-01-01 00:00:00, FINISH_DATE: 2025-01-05 21:03:13.775101.
+Historical data now contains 838 hours, extended by 720 hours of training dataset.
+New start date for extended historical data:2024-12-02 00:00:00.
+2025-01-06 04:03:13,778 [INFO] Processing cryptocurrency: BTC
+2025-01-06 04:03:15,423 [INFO] Historical data for BTC successfully loaded.
+2025-01-06 04:03:15,424 [INFO] Processing model: arima at 2025-01-06 04:03:15.424356
+2025-01-06 04:03:24,348 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.348239
+2025-01-06 04:03:24,350 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.350239
+2025-01-06 04:03:24,351 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.351238
+2025-01-06 04:03:24,353 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.353238
+2025-01-06 04:03:24,355 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.355241
+2025-01-06 04:03:24,357 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.357240
+2025-01-06 04:03:24,359 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.359240
+2025-01-06 04:03:24,361 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.361244
+2025-01-06 04:03:24,367 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.367262
+2025-01-06 04:03:24,369 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.369239
+2025-01-06 04:03:24,373 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.373284
+2025-01-06 04:03:24,375 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.375243
+2025-01-06 04:03:24,447 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.447310
+2025-01-06 04:03:24,449 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.449307
+2025-01-06 04:03:24,451 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.451345
+2025-01-06 04:03:24,453 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.453345
+2025-01-06 04:03:24,455 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.454305
+2025-01-06 04:03:24,456 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.456348
+2025-01-06 04:03:24,458 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.458320
+2025-01-06 04:03:24,460 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.460361
+2025-01-06 04:03:24,462 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.462320
+2025-01-06 04:03:24,464 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.463321
+2025-01-06 04:03:24,465 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.465320
+2025-01-06 04:03:24,467 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.467323
+2025-01-06 04:03:24,535 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.535865
+2025-01-06 04:03:24,537 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.537843
+2025-01-06 04:03:24,539 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.539850
+2025-01-06 04:03:24,541 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.541846
+2025-01-06 04:03:24,542 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.542814
+2025-01-06 04:03:24,544 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.544809
+2025-01-06 04:03:24,549 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.548837
+2025-01-06 04:03:24,552 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.552829
+2025-01-06 04:03:24,554 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.554848
+2025-01-06 04:03:24,556 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.556809
+2025-01-06 04:03:24,558 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.558847
+2025-01-06 04:03:24,559 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.559850
+2025-01-06 04:03:24,638 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.638374
+2025-01-06 04:03:24,640 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.640374
+2025-01-06 04:03:24,642 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.642576
+2025-01-06 04:03:24,644 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.644141
+2025-01-06 04:03:24,646 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.645705
+2025-01-06 04:03:24,648 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.648947
+2025-01-06 04:03:24,654 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.654849
+2025-01-06 04:03:24,657 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.657647
+2025-01-06 04:03:24,660 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.660419
+2025-01-06 04:03:24,663 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.663386
+2025-01-06 04:03:24,668 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.668033
+2025-01-06 04:03:24,672 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.672211
+2025-01-06 04:03:24,769 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.768044
+2025-01-06 04:03:24,770 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.770046
+2025-01-06 04:03:24,772 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.772713
+2025-01-06 04:03:24,774 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.774713
+2025-01-06 04:03:24,776 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.776714
+2025-01-06 04:03:24,778 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.778712
+2025-01-06 04:03:24,780 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.780711
+2025-01-06 04:03:24,782 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.782712
+2025-01-06 04:03:24,784 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.784712
+2025-01-06 04:03:24,787 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.787716
+2025-01-06 04:03:24,791 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.791711
+2025-01-06 04:03:24,793 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.793711
+2025-01-06 04:03:24,861 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.861748
+2025-01-06 04:03:24,863 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.863712
+2025-01-06 04:03:24,864 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.864750
+2025-01-06 04:03:24,867 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.867414
+2025-01-06 04:03:24,869 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.869426
+2025-01-06 04:03:24,870 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.870458
+2025-01-06 04:03:24,872 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.872458
+2025-01-06 04:03:24,874 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.874424
+2025-01-06 04:03:24,875 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.875428
+2025-01-06 04:03:24,877 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.877375
+2025-01-06 04:03:24,879 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.879368
+2025-01-06 04:03:24,881 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.881364
+2025-01-06 04:03:24,980 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.980714
+2025-01-06 04:03:24,982 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.982715
+2025-01-06 04:03:24,985 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.985718
+2025-01-06 04:03:24,987 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.987720
+2025-01-06 04:03:24,992 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.992717
+2025-01-06 04:03:24,994 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.994716
+2025-01-06 04:03:24,996 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.996756
+2025-01-06 04:03:24,998 [INFO] arima model processing completed successfully at 2025-01-06 04:03:24.997715
+2025-01-06 04:03:25,001 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.001717
+2025-01-06 04:03:25,003 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.003718
+2025-01-06 04:03:25,005 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.005719
+2025-01-06 04:03:25,007 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.007753
+2025-01-06 04:03:25,090 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.090752
+2025-01-06 04:03:25,092 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.092755
+2025-01-06 04:03:25,094 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.094753
+2025-01-06 04:03:25,095 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.095714
+2025-01-06 04:03:25,097 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.097718
+2025-01-06 04:03:25,099 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.099718
+2025-01-06 04:03:25,101 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.101717
+2025-01-06 04:03:25,106 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.106753
+2025-01-06 04:03:25,108 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.108753
+2025-01-06 04:03:25,110 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.110756
+2025-01-06 04:03:25,111 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.111717
+2025-01-06 04:03:25,113 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.113755
+2025-01-06 04:03:25,186 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.186770
+2025-01-06 04:03:25,188 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.188719
+2025-01-06 04:03:25,190 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.190756
+2025-01-06 04:03:25,192 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.192755
+2025-01-06 04:03:25,193 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.193753
+2025-01-06 04:03:25,195 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.195754
+2025-01-06 04:03:25,199 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.198841
+2025-01-06 04:03:25,202 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.202719
+2025-01-06 04:03:25,205 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.205715
+2025-01-06 04:03:25,207 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.207721
+2025-01-06 04:03:25,209 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.209754
+2025-01-06 04:03:25,210 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.210754
+2025-01-06 04:03:25,285 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.285755
+2025-01-06 04:03:25,288 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.288754
+2025-01-06 04:03:25,290 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.290721
+2025-01-06 04:03:25,292 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.292755
+2025-01-06 04:03:25,295 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.295719
+2025-01-06 04:03:25,300 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.299736
+2025-01-06 04:03:25,302 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.302716
+2025-01-06 04:03:25,306 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.306877
+2025-01-06 04:03:25,308 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.308834
+2025-01-06 04:03:25,310 [INFO] arima model processing completed successfully at 2025-01-06 04:03:25.310831
+2025-01-06 04:03:25,311 [INFO] Processing model: ets at 2025-01-06 04:03:25.311791
+2025-01-06 04:03:25,509 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.509122
+2025-01-06 04:03:25,511 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.511122
+2025-01-06 04:03:25,513 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.513121
+2025-01-06 04:03:25,516 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.516122
+2025-01-06 04:03:25,520 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.520121
+2025-01-06 04:03:25,523 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.523121
+2025-01-06 04:03:25,525 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.525121
+2025-01-06 04:03:25,527 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.527124
+2025-01-06 04:03:25,530 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.530122
+2025-01-06 04:03:25,532 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.532128
+2025-01-06 04:03:25,536 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.536125
+2025-01-06 04:03:25,540 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.540125
+2025-01-06 04:03:25,588 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.588971
+2025-01-06 04:03:25,590 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.590972
+2025-01-06 04:03:25,592 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.592971
+2025-01-06 04:03:25,595 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.595972
+2025-01-06 04:03:25,597 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.597971
+2025-01-06 04:03:25,599 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.599970
+2025-01-06 04:03:25,605 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.604972
+2025-01-06 04:03:25,608 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.608971
+2025-01-06 04:03:25,610 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.610971
+2025-01-06 04:03:25,612 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.612973
+2025-01-06 04:03:25,614 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.614971
+2025-01-06 04:03:25,615 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.615971
+2025-01-06 04:03:25,664 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.664970
+2025-01-06 04:03:25,667 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.667978
+2025-01-06 04:03:25,671 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.671984
+2025-01-06 04:03:25,674 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.674909
+2025-01-06 04:03:25,676 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.676968
+2025-01-06 04:03:25,677 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.677957
+2025-01-06 04:03:25,680 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.680996
+2025-01-06 04:03:25,682 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.682960
+2025-01-06 04:03:25,688 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.688175
+2025-01-06 04:03:25,690 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.690174
+2025-01-06 04:03:25,692 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.692216
+2025-01-06 04:03:25,694 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.694173
+2025-01-06 04:03:25,731 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.731426
+2025-01-06 04:03:25,734 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.734438
+2025-01-06 04:03:25,739 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.739427
+2025-01-06 04:03:25,741 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.741426
+2025-01-06 04:03:25,743 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.743423
+2025-01-06 04:03:25,744 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.744424
+2025-01-06 04:03:25,747 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.746426
+2025-01-06 04:03:25,749 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.749423
+2025-01-06 04:03:25,753 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.753466
+2025-01-06 04:03:25,755 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.755429
+2025-01-06 04:03:25,758 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.758478
+2025-01-06 04:03:25,760 [INFO] ets model processing completed successfully at 2025-01-06 04:03:25.760480
+2025-01-06 04:03:26,009 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.009977
+2025-01-06 04:03:26,011 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.011975
+2025-01-06 04:03:26,013 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.013015
+2025-01-06 04:03:26,015 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.015015
+2025-01-06 04:03:26,016 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.016978
+2025-01-06 04:03:26,019 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.019978
+2025-01-06 04:03:26,022 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.022014
+2025-01-06 04:03:26,023 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.023978
+2025-01-06 04:03:26,025 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.025976
+2025-01-06 04:03:26,033 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.033007
+2025-01-06 04:03:26,035 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.035989
+2025-01-06 04:03:26,038 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.038989
+2025-01-06 04:03:26,079 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.079934
+2025-01-06 04:03:26,081 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.081934
+2025-01-06 04:03:26,083 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.083937
+2025-01-06 04:03:26,089 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.089936
+2025-01-06 04:03:26,091 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.091934
+2025-01-06 04:03:26,093 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.093937
+2025-01-06 04:03:26,095 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.095934
+2025-01-06 04:03:26,097 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.097937
+2025-01-06 04:03:26,099 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.099938
+2025-01-06 04:03:26,102 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.102935
+2025-01-06 04:03:26,104 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.104936
+2025-01-06 04:03:26,110 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.110936
+2025-01-06 04:03:26,148 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.148934
+2025-01-06 04:03:26,152 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.152934
+2025-01-06 04:03:26,156 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.156940
+2025-01-06 04:03:26,163 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.163938
+2025-01-06 04:03:26,166 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.166935
+2025-01-06 04:03:26,172 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.172935
+2025-01-06 04:03:26,175 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.175938
+2025-01-06 04:03:26,181 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.181936
+2025-01-06 04:03:26,188 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.188935
+2025-01-06 04:03:26,191 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.191940
+2025-01-06 04:03:26,197 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.197937
+2025-01-06 04:03:26,199 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.199933
+2025-01-06 04:03:26,247 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.247933
+2025-01-06 04:03:26,249 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.249936
+2025-01-06 04:03:26,253 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.252938
+2025-01-06 04:03:26,256 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.255967
+2025-01-06 04:03:26,257 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.257933
+2025-01-06 04:03:26,259 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.259938
+2025-01-06 04:03:26,261 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.261937
+2025-01-06 04:03:26,263 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.263933
+2025-01-06 04:03:26,265 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.265933
+2025-01-06 04:03:26,268 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.268940
+2025-01-06 04:03:26,270 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.270935
+2025-01-06 04:03:26,273 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.273940
+2025-01-06 04:03:26,469 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.469813
+2025-01-06 04:03:26,472 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.472814
+2025-01-06 04:03:26,474 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.474814
+2025-01-06 04:03:26,476 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.476816
+2025-01-06 04:03:26,479 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.479814
+2025-01-06 04:03:26,482 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.482851
+2025-01-06 04:03:26,486 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.485815
+2025-01-06 04:03:26,492 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.492822
+2025-01-06 04:03:26,495 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.495818
+2025-01-06 04:03:26,498 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.498814
+2025-01-06 04:03:26,502 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.502815
+2025-01-06 04:03:26,509 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.509027
+2025-01-06 04:03:26,552 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.552782
+2025-01-06 04:03:26,555 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.555783
+2025-01-06 04:03:26,558 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.558783
+2025-01-06 04:03:26,566 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.566811
+2025-01-06 04:03:26,572 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.572358
+2025-01-06 04:03:26,575 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.575359
+2025-01-06 04:03:26,579 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.579361
+2025-01-06 04:03:26,588 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.588360
+2025-01-06 04:03:26,591 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.591359
+2025-01-06 04:03:26,594 [INFO] ets model processing completed successfully at 2025-01-06 04:03:26.594358
+2025-01-06 04:03:26,595 [INFO] Processing model: theta at 2025-01-06 04:03:26.594358
+2025-01-06 04:03:26,727 [INFO] theta model processing completed successfully at 2025-01-06 04:03:26.726360
+2025-01-06 04:03:26,759 [INFO] theta model processing completed successfully at 2025-01-06 04:03:26.759355
+2025-01-06 04:03:26,789 [INFO] theta model processing completed successfully at 2025-01-06 04:03:26.789357
+2025-01-06 04:03:26,841 [INFO] theta model processing completed successfully at 2025-01-06 04:03:26.841358
+2025-01-06 04:03:26,873 [INFO] theta model processing completed successfully at 2025-01-06 04:03:26.873266
+2025-01-06 04:03:26,908 [INFO] theta model processing completed successfully at 2025-01-06 04:03:26.908660
+2025-01-06 04:03:26,944 [INFO] theta model processing completed successfully at 2025-01-06 04:03:26.944228
+2025-01-06 04:03:26,975 [INFO] theta model processing completed successfully at 2025-01-06 04:03:26.975501
+2025-01-06 04:03:27,004 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.004432
+2025-01-06 04:03:27,030 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.030430
+2025-01-06 04:03:27,065 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.065428
+2025-01-06 04:03:27,095 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.095027
+2025-01-06 04:03:27,150 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.150056
+2025-01-06 04:03:27,175 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.175056
+2025-01-06 04:03:27,197 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.197060
+2025-01-06 04:03:27,221 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.221061
+2025-01-06 04:03:27,247 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.247066
+2025-01-06 04:03:27,275 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.275058
+2025-01-06 04:03:27,297 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.297057
+2025-01-06 04:03:27,335 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.335065
+2025-01-06 04:03:27,364 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.364059
+2025-01-06 04:03:27,395 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.395056
+2025-01-06 04:03:27,416 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.416056
+2025-01-06 04:03:27,441 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.441097
+2025-01-06 04:03:27,488 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.488318
+2025-01-06 04:03:27,509 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.509376
+2025-01-06 04:03:27,531 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.531009
+2025-01-06 04:03:27,554 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.554164
+2025-01-06 04:03:27,581 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.581020
+2025-01-06 04:03:27,615 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.615826
+2025-01-06 04:03:27,646 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.646827
+2025-01-06 04:03:27,684 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.684825
+2025-01-06 04:03:27,719 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.719863
+2025-01-06 04:03:27,749 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.749824
+2025-01-06 04:03:27,781 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.781822
+2025-01-06 04:03:27,811 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.811823
+2025-01-06 04:03:27,872 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.872823
+2025-01-06 04:03:27,901 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.901824
+2025-01-06 04:03:27,928 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.928829
+2025-01-06 04:03:27,953 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.953851
+2025-01-06 04:03:27,977 [INFO] theta model processing completed successfully at 2025-01-06 04:03:27.977823
+2025-01-06 04:03:28,002 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.002826
+2025-01-06 04:03:28,030 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.030920
+2025-01-06 04:03:28,057 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.057767
+2025-01-06 04:03:28,083 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.083785
+2025-01-06 04:03:28,112 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.112123
+2025-01-06 04:03:28,134 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.134142
+2025-01-06 04:03:28,160 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.160151
+2025-01-06 04:03:28,214 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.214263
+2025-01-06 04:03:28,238 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.238490
+2025-01-06 04:03:28,265 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.265045
+2025-01-06 04:03:28,314 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.314057
+2025-01-06 04:03:28,359 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.359053
+2025-01-06 04:03:28,382 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.382055
+2025-01-06 04:03:28,412 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.412055
+2025-01-06 04:03:28,436 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.436052
+2025-01-06 04:03:28,462 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.462058
+2025-01-06 04:03:28,486 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.486070
+2025-01-06 04:03:28,513 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.513014
+2025-01-06 04:03:28,537 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.537013
+2025-01-06 04:03:28,587 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.587068
+2025-01-06 04:03:28,612 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.612064
+2025-01-06 04:03:28,635 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.635159
+2025-01-06 04:03:28,659 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.659179
+2025-01-06 04:03:28,683 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.683034
+2025-01-06 04:03:28,706 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.706988
+2025-01-06 04:03:28,730 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.730877
+2025-01-06 04:03:28,750 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.750899
+2025-01-06 04:03:28,771 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.771866
+2025-01-06 04:03:28,792 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.792900
+2025-01-06 04:03:28,815 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.815861
+2025-01-06 04:03:28,839 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.839113
+2025-01-06 04:03:28,887 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.887183
+2025-01-06 04:03:28,905 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.905242
+2025-01-06 04:03:28,929 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.928135
+2025-01-06 04:03:28,950 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.950214
+2025-01-06 04:03:28,976 [INFO] theta model processing completed successfully at 2025-01-06 04:03:28.976089
+2025-01-06 04:03:29,000 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.000062
+2025-01-06 04:03:29,033 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.033063
+2025-01-06 04:03:29,069 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.069654
+2025-01-06 04:03:29,104 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.104302
+2025-01-06 04:03:29,132 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.132422
+2025-01-06 04:03:29,170 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.170359
+2025-01-06 04:03:29,192 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.192359
+2025-01-06 04:03:29,241 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.241358
+2025-01-06 04:03:29,263 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.263992
+2025-01-06 04:03:29,284 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.284886
+2025-01-06 04:03:29,311 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.311919
+2025-01-06 04:03:29,333 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.333989
+2025-01-06 04:03:29,358 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.358029
+2025-01-06 04:03:29,378 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.378995
+2025-01-06 04:03:29,401 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.401056
+2025-01-06 04:03:29,424 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.424021
+2025-01-06 04:03:29,446 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.446125
+2025-01-06 04:03:29,468 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.468283
+2025-01-06 04:03:29,497 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.497963
+2025-01-06 04:03:29,542 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.542149
+2025-01-06 04:03:29,563 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.563847
+2025-01-06 04:03:29,584 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.584946
+2025-01-06 04:03:29,611 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.611075
+2025-01-06 04:03:29,638 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.637167
+2025-01-06 04:03:29,665 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.665221
+2025-01-06 04:03:29,689 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.689826
+2025-01-06 04:03:29,716 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.716919
+2025-01-06 04:03:29,739 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.739846
+2025-01-06 04:03:29,767 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.767920
+2025-01-06 04:03:29,793 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.793979
+2025-01-06 04:03:29,815 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.815952
+2025-01-06 04:03:29,872 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.872069
+2025-01-06 04:03:29,891 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.891067
+2025-01-06 04:03:29,915 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.915881
+2025-01-06 04:03:29,942 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.942837
+2025-01-06 04:03:29,964 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.964911
+2025-01-06 04:03:29,987 [INFO] theta model processing completed successfully at 2025-01-06 04:03:29.987272
+2025-01-06 04:03:30,009 [INFO] theta model processing completed successfully at 2025-01-06 04:03:30.009914
+2025-01-06 04:03:30,030 [INFO] theta model processing completed successfully at 2025-01-06 04:03:30.030019
+2025-01-06 04:03:30,051 [INFO] theta model processing completed successfully at 2025-01-06 04:03:30.051056
+2025-01-06 04:03:30,071 [INFO] theta model processing completed successfully at 2025-01-06 04:03:30.071772
+2025-01-06 04:03:30,072 [INFO] Processing cryptocurrency: ETH
+2025-01-06 04:03:31,516 [INFO] Historical data for ETH successfully loaded.
+2025-01-06 04:03:31,517 [INFO] Processing model: arima at 2025-01-06 04:03:31.517082
+2025-01-06 04:03:36,635 [INFO] Database connection closed.
+2025-01-06 04:03:43,871 [INFO] database connection established.
+2025-01-06 04:03:43,872 [INFO] database tables initialized.
+2025-01-06 04:03:43,876 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 04:03:43,879 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-06 04:03:43,880 [INFO] Forecasts will be created for period: START_DATE: 2025-01-01 00:00:00, FINISH_DATE: 2025-01-05 21:03:43.879236.
+Historical data now contains 838 hours, extended by 720 hours of training dataset.
+New start date for extended historical data:2024-12-02 00:00:00.
+2025-01-06 04:03:43,881 [INFO] Processing cryptocurrency: BTC
+2025-01-06 04:03:45,136 [INFO] Historical data for BTC successfully loaded.
+2025-01-06 04:03:45,137 [INFO] Processing model: arima at 2025-01-06 04:03:45.137142
+2025-01-06 04:03:52,745 [INFO] arima model processing completed successfully at 2025-01-06 04:03:52.745168
+2025-01-06 04:03:52,746 [INFO] Processing model: ets at 2025-01-06 04:03:52.746165
+2025-01-06 04:03:53,832 [INFO] ets model processing completed successfully at 2025-01-06 04:03:53.832758
+2025-01-06 04:03:53,832 [INFO] Processing model: theta at 2025-01-06 04:03:53.832758
+2025-01-06 04:03:56,441 [INFO] theta model processing completed successfully at 2025-01-06 04:03:56.441995
+2025-01-06 04:03:56,442 [INFO] Processing cryptocurrency: ETH
+2025-01-06 04:03:58,022 [INFO] Historical data for ETH successfully loaded.
+2025-01-06 04:03:58,022 [INFO] Processing model: arima at 2025-01-06 04:03:58.022026
+2025-01-06 04:04:04,851 [INFO] arima model processing completed successfully at 2025-01-06 04:04:04.851870
+2025-01-06 04:04:04,852 [INFO] Processing model: ets at 2025-01-06 04:04:04.852838
+2025-01-06 04:04:05,800 [INFO] ets model processing completed successfully at 2025-01-06 04:04:05.800308
+2025-01-06 04:04:05,801 [INFO] Processing model: theta at 2025-01-06 04:04:05.801306
+2025-01-06 04:04:08,457 [INFO] theta model processing completed successfully at 2025-01-06 04:04:08.457338
+2025-01-06 04:04:08,458 [INFO] Database connection closed.
+2025-01-06 04:12:41,811 [INFO] database connection established.
+2025-01-06 04:12:41,834 [INFO] database tables initialized.
+2025-01-06 04:12:41,840 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 04:12:41,848 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-06 04:12:41,851 [INFO] Forecasts will be created for period: START_DATE: 2025-01-01 00:00:00, FINISH_DATE: 2025-01-05 21:12:41.848598.
+Historical data now contains 838 hours, extended by 720 hours of training dataset.
+New start date for extended historical data: 2024-12-02 00:00:00.
+2025-01-06 04:12:41,851 [INFO] Processing cryptocurrency: BTC
+2025-01-06 04:12:43,171 [INFO] Historical data for BTC successfully loaded.
+2025-01-06 04:12:43,172 [INFO] Processing model: arima at 2025-01-06 04:12:43.172108
+2025-01-06 04:12:52,271 [INFO] arima model processing completed successfully at 2025-01-06 04:12:52.271373
+2025-01-06 04:12:52,271 [INFO] Processing model: ets at 2025-01-06 04:12:52.271890
+2025-01-06 04:12:53,146 [INFO] ets model processing completed successfully at 2025-01-06 04:12:53.146014
+2025-01-06 04:12:53,147 [INFO] Processing model: theta at 2025-01-06 04:12:53.147014
+2025-01-06 04:12:55,647 [INFO] theta model processing completed successfully at 2025-01-06 04:12:55.647336
+2025-01-06 04:12:55,648 [INFO] Processing cryptocurrency: ETH
+2025-01-06 04:12:56,885 [INFO] Historical data for ETH successfully loaded.
+2025-01-06 04:12:56,885 [INFO] Processing model: arima at 2025-01-06 04:12:56.885182
+2025-01-06 04:13:05,370 [INFO] arima model processing completed successfully at 2025-01-06 04:13:05.370430
+2025-01-06 04:13:05,370 [INFO] Processing model: ets at 2025-01-06 04:13:05.370430
+2025-01-06 04:13:06,482 [INFO] ets model processing completed successfully at 2025-01-06 04:13:06.482037
+2025-01-06 04:13:06,482 [INFO] Processing model: theta at 2025-01-06 04:13:06.482037
+2025-01-06 04:13:09,126 [INFO] theta model processing completed successfully at 2025-01-06 04:13:09.126039
+2025-01-06 04:13:09,126 [INFO] Database connection closed.

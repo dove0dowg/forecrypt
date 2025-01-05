@@ -46,7 +46,7 @@ MODELS_DIRECTORY = r"C:\forecrypt_models"
 
 MODEL_PARAMETERS = {
     'arima': {
-        'training_dataset_size': 720,
+        'training_dataset_size': 120,
         'model_update_interval': 1440,
         'forecast_dataset_size': 48,
         'forecast_frequency': 12,
@@ -71,7 +71,7 @@ MODEL_PARAMETERS = {
         }
     },
     'theta': {
-        'training_dataset_size': 720,
+        'training_dataset_size': 240,
         'model_update_interval': 1,
         'forecast_dataset_size': 48,
         'forecast_frequency': 12,

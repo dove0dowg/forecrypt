@@ -32,7 +32,6 @@ def fetch_historical_data(crypto_id, hours, api_key=None):
     print(f"Failed to fetch data for {crypto_id}. Status code: {response.status_code}")
     return pd.DataFrame()
 
-
 def fetch_specific_historical_hours(crypto_id, hours_list, api_key=None):
     """
     Fetch specific hourly cryptocurrency data for a list of timestamps from an external API.

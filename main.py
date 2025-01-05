@@ -95,9 +95,8 @@ def calculate_total_fetch_interval(start_date: str, finish_date: str = None, **m
     # Logging
     logger.info(
         f"Forecasts will be created for period: START_DATE: {start_naive}, FINISH_DATE: {finish_naive}.\n"
-        f"Historical data extended by {max_hours} hours of training dataset.\n"
-        f"New start date for extended historical data:{extended_start_dt}.\n"
-        f"{total_hours} hours of data will be fetched"
+        f"Historical data now contains {total_hours} hours, extended by {max_hours} hours of training dataset.\n"
+        f"New start date for extended historical data: {extended_start_dt}."
         )
 
     return start_naive, finish_naive, total_hours, extended_start_dt
@@ -232,7 +231,7 @@ if __name__ == "__main__":
                     training_dataset_size = params["training_dataset_size"]
                     train_df = get_train_df(extended_df, current_dt, training_dataset_size, crypto_id, model_name)
                     
-                    # Get forecast input dataset
+                    # Get forecast input datasetl
                     forecast_dataset_size = params["forecast_dataset_size"]
                     forecast_input_df = get_forecast_input_df(extended_df, current_dt, forecast_dataset_size, crypto_id, model_name)
                     
@@ -263,7 +262,7 @@ if __name__ == "__main__":
                     # continue to next hour
                     current_dt += timedelta(hours=1)
 
-            logger.info(f"{model_name} model processing completed successfully at {datetime.now()}")
+                logger.info(f"{model_name} model processing completed successfully at {datetime.now()}")
 
     except Exception as e:
         logger.critical(f"An error occurred: {e}", exc_info=True)
