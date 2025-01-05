@@ -148,14 +148,16 @@ def load_to_db_historical(dataframe, crypto_id, conn):
         INSERT INTO historical_data (id, timestamp, currency, price)
         VALUES %s
         ON CONFLICT (timestamp, currency)
-        DO NOTHING;
+        DO UPDATE 
+        SET price = EXCLUDED.price
+        WHERE historical_data.price <> EXCLUDED.price;
     """
 
     try:
         with conn.cursor() as cursor:
             execute_values(cursor, query, records)
             conn.commit()
-            logger.info(f"Data for {crypto_id} successfully loaded.")
+            logger.info(f"Historical data for {crypto_id} successfully loaded.")
     except Exception as e:
         conn.rollback()
         logger.critical(f"Failed to load data for {crypto_id}. Error: {e}")
@@ -186,7 +188,10 @@ def load_to_db_forecast(dataframe, crypto_id, model_name, conn, created_at):
         INSERT INTO forecast_data (id, timestamp, currency, model, forecast_step, forecast_value, created_at)
         VALUES %s
         ON CONFLICT (timestamp, currency, model, forecast_step)
-        DO NOTHING;
+        DO UPDATE 
+        SET forecast_value = EXCLUDED.forecast_value,
+            created_at = EXCLUDED.created_at
+        WHERE forecast_data.forecast_value <> EXCLUDED.forecast_value;
     """
 
     try:

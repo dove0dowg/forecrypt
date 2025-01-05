@@ -120,90 +120,6 @@ def fetch_extended_df(crypto_id: str, total_hours: int):
     )
     return extended_df
 
-#def retrain_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id, model_last_retrain):
-#    """
-#    Handle model retraining for a specific hour.
-#
-#    Args:
-#        model_name (str): Name of the model.
-#        params (dict): Configuration parameters for the model.
-#        sub_df (DataFrame): Historical data for training.
-#        current_dt (datetime): Current datetime being processed.
-#        crypto_id (str): Cryptocurrency ID.
-#        model_last_retrain (dict): Tracks last retrain times for models.
-#
-#    Returns:
-#        model_fit (object): The trained or loaded model, or None if failed.
-#    """
-#    update_interval = params.get('model_update_interval')
-#
-#    do_retrain = False
-#    if model_last_retrain[model_name] is None:
-#        logger.debug(f"[{crypto_id} - {model_name}] No previous retrain. Initiating first training.")
-#        do_retrain = True
-#    else:
-#        hours_since_retrain = (current_dt - model_last_retrain[model_name]).total_seconds() / 3600
-#        logger.debug(f"[{crypto_id} - {model_name}] Hours since last retrain: {hours_since_retrain}, update interval: {update_interval}.")
-#        if hours_since_retrain >= update_interval:
-#            logger.debug(f"[{crypto_id} - {model_name}] Update interval exceeded. Marking for retraining.")
-#            do_retrain = True
-#
-#    if do_retrain:
-#        try:
-#            model_fit = models_processing.fit_model_any(sub_df, model_name)
-#            models_processing.save_model(crypto_id, model_name, model_fit)
-#            model_last_retrain[model_name] = current_dt
-#            logger.debug(f"[{crypto_id} - {model_name}] Model retrained and saved.")
-#            return model_fit
-#        except Exception as e:
-#            logger.error(f"[{crypto_id} - {model_name}] Error during retraining: {e}")
-#            return None
-#
-#    try:
-#        model_fit = models_processing.load_model(crypto_id, model_name)
-#        logger.debug(f"[{crypto_id} - {model_name}] Model loaded successfully.")
-#        return model_fit
-#    except Exception as e:
-#        logger.error(f"[{crypto_id} - {model_name}] Error loading model: {e}")
-#        return None
-#
-#def forecast_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id, conn, model_fit, model_last_forecast):
-#    """
-#    Handle forecasting for a specific hour.
-#
-#    Args:
-#        model_name (str): Name of the model.
-#        params (dict): Configuration parameters for the model.
-#        sub_df (DataFrame): Data for forecasting.
-#        current_dt (datetime): Current datetime being processed.
-#        crypto_id (str): Cryptocurrency ID.
-#        conn (Connection): Database connection for saving forecasts.
-#        model_fit (object): The trained model.
-#        model_last_forecast (dict): Tracks last forecast times for models.
-#
-#    Returns:
-#        None
-#    """
-#    forecast_freq = params.get('forecast_frequency')
-#    forecast_hours = params.get('forecast_hours')
-#
-#    do_forecast = False
-#    if model_last_forecast[model_name] is None:
-#        do_forecast = True
-#    else:
-#        hours_since_forecast = (current_dt - model_last_forecast[model_name]).total_seconds() / 3600
-#        if hours_since_forecast >= forecast_freq:
-#            do_forecast = True
-#
-#    if do_forecast:
-#        try:
-#            df_forecast = create_forecast_dataframe(sub_df, model_fit, steps=forecast_hours)
-#            db_utils.load_to_db_forecast(df_forecast, crypto_id, model_name, conn, created_at=current_dt)
-#            logger.debug(f"[{crypto_id} - {model_name}] Forecast saved for {current_dt}.")
-#            model_last_forecast[model_name] = current_dt
-#        except Exception as e:
-#            logger.error(f"[{crypto_id} - {model_name}] Error during forecasting: {e}")
-
 def get_train_df(extended_df, current_dt, training_dataset_size, crypto_id, model_name):
     """
     Extracts the training dataset for a specific time window.
@@ -302,6 +218,7 @@ if __name__ == "__main__":
 
                 # Cycle for each model
                 for model_name, params in MODEL_PARAMETERS.items():
+                    logger.info(f"Processing model: {model_name}")
 
                     # Get training dataset
                     training_dataset_size = params["training_dataset_size"]
