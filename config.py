@@ -1,6 +1,6 @@
 #  Project config
 CRYPTO_LIST = ['BTC', 'ETH'] #, 'DOGE', 'ADA', 'SOL']
-START_DATE = "2024-12-26T00:00:00" # first day and hour of historical data in naive.
+START_DATE = "2025-01-01T00:00:00" # first day and hour of historical data in naive.
 FINISH_DATE = "NOW" # last day and hour of historical data in naive, "yyyy-mm-ddThh:mm:ss" format.
 API_KEY = "YOUR_API_KEY" # not hidden, cause it is not nessesarry for free requests. Implemented in code for the case of future changes.
 # ---------------------------------------------------------
@@ -47,7 +47,7 @@ MODELS_DIRECTORY = r"C:\forecrypt_models"
 MODEL_PARAMETERS = {
     'arima': {
         'training_dataset_size': 720,
-        'model_update_interval': 720,
+        'model_update_interval': 1440,
         'forecast_dataset_size': 48,
         'forecast_frequency': 12,
         'forecast_hours': 120,

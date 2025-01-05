@@ -118,8 +118,7 @@ def retrain_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id, 
 
     This function determines whether the model requires retraining based on the elapsed time
     since the last retraining. If retraining is necessary, the model is trained using the provided
-    historical data and saved. If retraining is not required, the function attempts to load the
-    existing model.
+    historical data and saved. If retraining is not required, no action is taken.
 
     Args:
         model_name (str): The name of the model being processed. This is used for logging and 
@@ -132,16 +131,15 @@ def retrain_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id, 
         crypto_id (str): The cryptocurrency identifier (e.g., 'BTC', 'ETH') for which the model is being processed.
         model_last_retrain (dict): A dictionary tracking the last retrain times for each model. 
                                    The key is the model name, and the value is the datetime of the last retraining.
-    
+
     Returns:
-        model_fit (object): The fitted model object if retraining or loading is successful. 
-                            Returns None if an error occurs during training or loading.
+        None
 
     Raises:
-        Exception: Logs any exceptions that occur during model fitting or loading.
+        Exception: Logs any exceptions that occur during model fitting or saving.
     """
     update_interval = params.get('model_update_interval')
-    
+
     do_retrain = False
     if model_last_retrain[model_name] is None:
         logger.debug(f"[{crypto_id} - {model_name}] No previous retrain. Initiating first training.")
@@ -159,26 +157,16 @@ def retrain_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id, 
             save_model(crypto_id, model_name, model_fit)
             model_last_retrain[model_name] = current_dt
             logger.debug(f"[{crypto_id} - {model_name}] Model retrained and saved.")
-            return model_fit
         except Exception as e:
             logger.error(f"[{crypto_id} - {model_name}] Error during retraining: {e}")
-            return None
 
-    try:
-        model_fit = load_model(crypto_id, model_name)
-        logger.debug(f"[{crypto_id} - {model_name}] Model loaded successfully.")
-        return model_fit
-    except Exception as e:
-        logger.error(f"[{crypto_id} - {model_name}] Error loading model: {e}")
-        return None
-
-def forecast_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id, conn, model_fit, model_last_forecast):
+def forecast_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id, conn, model_last_forecast):
     """
     Handle forecasting for a specific hour.
 
     This function checks whether a new forecast is needed based on the elapsed time since the
-    last forecast. If a forecast is required, the function generates predictions for the specified
-    number of hours and saves the forecast results to the database.
+    last forecast. If a forecast is required, the function attempts to load the existing model,
+    generates predictions for the specified number of hours, and saves the forecast results to the database.
 
     Args:
         model_name (str): The name of the model being used for forecasting.
@@ -189,7 +177,6 @@ def forecast_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id,
         current_dt (datetime): The current datetime being processed in the hourly cycle.
         crypto_id (str): The cryptocurrency identifier (e.g., 'BTC', 'ETH') for which the forecast is being generated.
         conn (Connection): A database connection object used to save the forecast results.
-        model_fit (object): The trained model object used for generating the forecast.
         model_last_forecast (dict): A dictionary tracking the last forecast times for each model. 
                                     The key is the model name, and the value is the datetime of the last forecast.
 
@@ -212,6 +199,10 @@ def forecast_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id,
 
     if do_forecast:
         try:
+            logger.debug(f"[{crypto_id} - {model_name}] Loading existing model for forecasting.")
+            model_fit = load_model(crypto_id, model_name)
+            logger.debug(f"[{crypto_id} - {model_name}] Model loaded successfully.")
+
             df_forecast = create_forecast_dataframe(sub_df, model_fit, steps=forecast_hours)
             load_to_db_forecast(df_forecast, crypto_id, model_name, conn, created_at=current_dt)
             logger.debug(f"[{crypto_id} - {model_name}] Forecast saved for {current_dt}.")

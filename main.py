@@ -93,10 +93,12 @@ def calculate_total_fetch_interval(start_date: str, finish_date: str = None, **m
     total_hours = int((finish_naive - extended_start_dt).total_seconds() // 3600) + 1
 
     # Logging
-    logger.info(f"START_DATE: {start_naive}, FINISH_DATE: {finish_naive}")
-    logger.debug(f"max training_dataset_size: {max_hours}")
-    logger.debug(f"extended start date: {extended_start_dt}")
-    logger.debug(f"total hours to fetch: {total_hours}")
+    logger.info(
+        f"Forecasts will be created for period: START_DATE: {start_naive}, FINISH_DATE: {finish_naive}.\n"
+        f"Historical data extended by {max_hours} hours of training dataset.\n"
+        f"New start date for extended historical data:{extended_start_dt}.\n"
+        f"{total_hours} hours of data will be fetched"
+        )
 
     return start_naive, finish_naive, total_hours, extended_start_dt
 
@@ -193,8 +195,14 @@ if __name__ == "__main__":
     try:
         # Initialize database tables
         db_utils.create_tables(conn)
+        
+        db_utils.create_combined_view(conn)
 
         # Calculate fetch intervals
+        # start_naive
+        # finish_naive
+        # total_hours
+        # 
         start_naive, finish_naive, total_hours, extended_start_dt = calculate_total_fetch_interval(
             START_DATE, finish_date=FINISH_DATE, **MODEL_PARAMETERS
         )
@@ -212,28 +220,25 @@ if __name__ == "__main__":
             # Initialize tracking for retrain and forecast. 
             model_last_retrain, model_last_forecast = initialize_model_tracking()
 
-            # Process hourly data
-            current_dt = start_naive
-            while current_dt <= finish_naive:
+            # Cycle for each model
+            for model_name, params in MODEL_PARAMETERS.items():
+                logger.info(f"Processing model: {model_name} at {datetime.now()}")
 
-                # Cycle for each model
-                for model_name, params in MODEL_PARAMETERS.items():
-                    logger.info(f"Processing model: {model_name}")
+                # Process hourly data
+                current_dt = start_naive
+                while current_dt <= finish_naive:    
 
                     # Get training dataset
                     training_dataset_size = params["training_dataset_size"]
                     train_df = get_train_df(extended_df, current_dt, training_dataset_size, crypto_id, model_name)
-                    if train_df is None:
-                        continue  # train_df is empty if time check returns no need for retraining. Continue to next hour
                     
                     # Get forecast input dataset
                     forecast_dataset_size = params["forecast_dataset_size"]
                     forecast_input_df = get_forecast_input_df(extended_df, current_dt, forecast_dataset_size, crypto_id, model_name)
-                    if forecast_input_df is None:
-                        continue  # forecast_input_df is empty if time check returns no need for forecast. Continue to next hour
-
-                    # Handle retraining
-                    model_fit = models_processing.retrain_in_hour_cycle(
+                    
+                    # Handle retraining. Check if retrain required.
+                    # If required - retrain and save model.
+                    models_processing.retrain_in_hour_cycle(
                         model_name=model_name,
                         params=params,
                         sub_df=train_df,
@@ -242,10 +247,9 @@ if __name__ == "__main__":
                         model_last_retrain=model_last_retrain,
                     )
 
-                    if model_fit is None:
-                        continue
-
-                    # Handle forecasting
+                    # Handle forecasting. Checking config.py if forecast required.
+                    # If yes - load model, create forecast, and load to db.
+                    # If no - skip.
                     models_processing.forecast_in_hour_cycle(
                         model_name=model_name,
                         params=params,
@@ -253,14 +257,13 @@ if __name__ == "__main__":
                         current_dt=current_dt,
                         crypto_id=crypto_id,
                         conn=conn,
-                        model_fit=model_fit,
                         model_last_forecast=model_last_forecast,
                     )
-                    
-                # continue to next hour
-                current_dt += timedelta(hours=1)
 
-        logger.debug(f"Model processing completed successfully at {datetime.now()}")
+                    # continue to next hour
+                    current_dt += timedelta(hours=1)
+
+            logger.info(f"{model_name} model processing completed successfully at {datetime.now()}")
 
     except Exception as e:
         logger.critical(f"An error occurred: {e}", exc_info=True)

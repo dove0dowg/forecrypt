@@ -81,6 +81,27 @@ def create_tables(conn):
         
         conn.commit()
 
+def create_combined_view(conn):
+    """
+    Create or replace the combined view for historical and forecast data.
+    """
+    query = """
+    CREATE OR REPLACE VIEW combined_data AS
+    SELECT id, timestamp, currency, 'historical' AS model, price AS value, 0 AS forecast_step, timestamp AS created_at
+    FROM historical_data
+    UNION ALL
+    SELECT id, timestamp, currency, model, forecast_value AS value, forecast_step, created_at
+    FROM forecast_data;
+    """
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(query)
+            conn.commit()
+            logger.info("Combined view 'combined_data' created or replaced successfully.")
+    except Exception as e:
+        logger.error(f"Failed to create combined view: {e}")
+        conn.rollback()
+
 def get_missing_hours(crypto_id: str, start_date, end_date) -> list:
     """
     Get a list of missing hourly timestamps for a given cryptocurrency within a date range.
