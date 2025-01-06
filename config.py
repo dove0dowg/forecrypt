@@ -1,7 +1,7 @@
 #  Project config
 CRYPTO_LIST = ['BTC', 'ETH'] #, 'DOGE', 'ADA', 'SOL']
-START_DATE = "2025-01-01T00:00:00" # first day and hour of historical data in naive.
-FINISH_DATE = "NOW" # last day and hour of historical data in naive, "yyyy-mm-ddThh:mm:ss" format.
+START_DATE = "2024-01-01T00:00:00" # first day and hour of historical data in naive.
+FINISH_DATE = "2025-01-03T00:00:00" # last day and hour of historical data in naive, "yyyy-mm-ddThh:mm:ss" format.
 API_KEY = "YOUR_API_KEY" # not hidden, cause it is not nessesarry for free requests. Implemented in code for the case of future changes.
 # ---------------------------------------------------------
 # Database configuration.
@@ -25,31 +25,31 @@ DB_CONFIG = {
 # Directory for check, save and load models. Mostly used in models_processing.py
 MODELS_DIRECTORY = r"C:\forecrypt_models"
 # ---------------------------------------------------------
-# Model parameters.
+# Model parameters. Two letters means technical abbreviation mostly used for model objects and forecast rows naming.
 
-# 'model_name' (e.g. 'arima') - Name of the model. This name is mostly used for tagging in logs and the database.
+# 'model_name' (e.g. 'arima') - [MN] - Name of the model. This name is mostly used for tagging in logs and the database.
 #                               It can be customized to suit your project needs. Note: processing is determined by `fit_func_name`.
-# 'training_dataset_size': 720, - Number of hours of historical data used for training the model.
+# 'training_dataset_size': 720, - [TD] - Number of hours of historical data used for training the model.
 #                                 Ensure this value matches the model's requirements for accuracy.
-# 'model_update_interval': 240, - Time interval (in hours) between model retrainings.
+# 'model_update_interval': 240, - [MU] = Time interval (in hours) between model retrainings.
 #                                 If the last retraining was more than this value ago, the model will retrain.
-# 'forecast_dataset_size': 48, - Number of hours of historical data required for forecasting.
+# 'forecast_dataset_size': 48, - [FD] = Number of hours of historical data required for forecasting.
 #                                This dataset is passed to the model for generating predictions.
-# 'forecast_frequency': 12, - Frequency (in hours) for generating forecasts.
+# 'forecast_frequency': 12, - [FF] = Frequency (in hours) for generating forecasts.
 #                              If the last forecast was created more than this value ago, a new forecast will be generated.
-# 'forecast_hours': 120, - Total number of hours the model should forecast.
+# 'forecast_hours': 120, - [FH] = Total number of hours the model should forecast.
 #                          This determines the length of the prediction output.
 # 'fit_func_name': 'model_fits.fit_arima_model', - Path to the function responsible for fitting the model.
 #                                                 This function is dynamically imported and executed.
-# 'specific_parameters': - Model-specific hyperparameters required for training.
+# 'specific_parameters': - [SP] = Model-specific hyperparameters required for training.
 #                          These parameters vary between models (e.g., ARIMA orders, ETS seasonal periods, etc.).
 
 MODEL_PARAMETERS = {
     'arima': {
         'training_dataset_size': 240,
-        'model_update_interval': 1440,
+        'model_update_interval': 2880,
         'forecast_dataset_size': 48,
-        'forecast_frequency': 48,
+        'forecast_frequency': 120,
         'forecast_hours': 120,
         'fit_func_name': 'model_fits.fit_arima_model',
         'specific_parameters': {
@@ -58,10 +58,10 @@ MODEL_PARAMETERS = {
         }
     },
     'ets': {
-        'training_dataset_size': 120,
-        'model_update_interval': 48,
+        'training_dataset_size': 1200,
+        'model_update_interval': 4800,
         'forecast_dataset_size': 48,
-        'forecast_frequency': 48,
+        'forecast_frequency': 8760,
         'forecast_hours': 120,
         'fit_func_name': 'model_fits.fit_ets_model',
         'specific_parameters': {
@@ -72,9 +72,9 @@ MODEL_PARAMETERS = {
     },
     'theta': {
         'training_dataset_size': 120,
-        'model_update_interval': 1,
+        'model_update_interval': 24,
         'forecast_dataset_size': 48,
-        'forecast_frequency': 48,
+        'forecast_frequency': 120,
         'forecast_hours': 120,
         'fit_func_name': 'model_fits.fit_theta_model',
         'specific_parameters': {}

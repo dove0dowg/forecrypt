@@ -18707,3 +18707,503 @@ New start date for extended historical data: 2024-12-22 00:00:00.
 2025-01-06 19:20:21,997 [INFO] Processing model: theta at 2025-01-06 19:20:21.997345
 2025-01-06 19:20:24,343 [INFO] theta model processing completed successfully at 2025-01-06 19:20:24.343742
 2025-01-06 19:20:24,343 [INFO] Database connection closed.
+2025-01-06 19:30:10,324 [INFO] database connection established.
+2025-01-06 19:30:10,345 [INFO] database tables initialized.
+2025-01-06 19:30:10,347 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 19:30:10,350 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-06 19:30:10,351 [INFO] Forecasts will be created for period: START_DATE: 2024-01-01 00:00:00, FINISH_DATE: 2025-01-06 12:30:10.350625.
+Historical data now contains 9157 hours, extended by 240 hours of training dataset.
+New start date for extended historical data: 2023-12-22 00:00:00.
+2025-01-06 19:30:10,353 [INFO] Processing cryptocurrency: BTC
+2025-01-06 19:30:11,284 [ERROR] No historical data fetched for BTC
+2025-01-06 19:30:11,285 [CRITICAL] An error occurred: 'NoneType' object has no attribute 'empty'
+Traceback (most recent call last):
+  File "c:\Users\user\Desktop\kode\forecrypt\main.py", line 219, in <module>
+    db_utils.load_to_db_train_and_historical(extended_df, crypto_id, conn, max_train_dataset_hours)
+  File "c:\Users\user\Desktop\kode\forecrypt\db_utils.py", line 217, in load_to_db_train_and_historical
+    if extended_df.empty:
+       ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'empty'
+2025-01-06 19:30:11,287 [INFO] Database connection closed.
+2025-01-06 19:35:45,935 [INFO] database connection established.
+2025-01-06 19:35:45,938 [INFO] database tables initialized.
+2025-01-06 19:35:45,946 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 19:35:45,948 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-06 19:35:45,949 [INFO] Forecasts will be created for period: START_DATE: 2025-01-01 00:00:00, FINISH_DATE: 2025-01-06 12:35:45.948768.
+Historical data now contains 373 hours, extended by 240 hours of training dataset.
+New start date for extended historical data: 2024-12-22 00:00:00.
+2025-01-06 19:35:45,950 [INFO] Processing cryptocurrency: BTC
+2025-01-06 19:35:48,267 [INFO] Training and historical data for BTC successfully loaded.
+2025-01-06 19:35:48,268 [INFO] Processing model: arima at 2025-01-06 19:35:48.268229
+2025-01-06 19:35:56,331 [INFO] arima model processing completed successfully at 2025-01-06 19:35:56.331805
+2025-01-06 19:35:56,331 [INFO] Processing model: ets at 2025-01-06 19:35:56.331805
+2025-01-06 19:35:56,739 [INFO] ets model processing completed successfully at 2025-01-06 19:35:56.739865
+2025-01-06 19:35:56,739 [INFO] Processing model: theta at 2025-01-06 19:35:56.739865
+2025-01-06 19:35:57,040 [INFO] theta model processing completed successfully at 2025-01-06 19:35:57.040867
+2025-01-06 19:35:57,041 [INFO] Processing cryptocurrency: ETH
+2025-01-06 19:35:57,947 [INFO] Training and historical data for ETH successfully loaded.
+2025-01-06 19:35:57,947 [INFO] Processing model: arima at 2025-01-06 19:35:57.947953
+2025-01-06 19:36:06,644 [INFO] arima model processing completed successfully at 2025-01-06 19:36:06.644184
+2025-01-06 19:36:06,645 [INFO] Processing model: ets at 2025-01-06 19:36:06.645185
+2025-01-06 19:36:07,235 [INFO] ets model processing completed successfully at 2025-01-06 19:36:07.235814
+2025-01-06 19:36:07,236 [INFO] Processing model: theta at 2025-01-06 19:36:07.235814
+2025-01-06 19:36:07,537 [INFO] theta model processing completed successfully at 2025-01-06 19:36:07.537748
+2025-01-06 19:36:07,537 [INFO] Database connection closed.
+2025-01-06 19:36:23,309 [INFO] database connection established.
+2025-01-06 19:36:23,337 [INFO] database tables initialized.
+2025-01-06 19:36:23,339 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 19:36:23,342 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-06 19:36:23,343 [INFO] Forecasts will be created for period: START_DATE: 2024-01-01 00:00:00, FINISH_DATE: 2025-01-06 12:36:23.342099.
+Historical data now contains 9157 hours, extended by 240 hours of training dataset.
+New start date for extended historical data: 2023-12-22 00:00:00.
+2025-01-06 19:36:23,344 [INFO] Processing cryptocurrency: BTC
+2025-01-06 19:36:24,156 [ERROR] No historical data fetched for BTC
+2025-01-06 19:36:24,156 [CRITICAL] An error occurred: 'NoneType' object has no attribute 'empty'
+Traceback (most recent call last):
+  File "c:\Users\user\Desktop\kode\forecrypt\main.py", line 219, in <module>
+    db_utils.load_to_db_train_and_historical(extended_df, crypto_id, conn, max_train_dataset_hours)
+  File "c:\Users\user\Desktop\kode\forecrypt\db_utils.py", line 217, in load_to_db_train_and_historical
+    if extended_df.empty:
+       ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'empty'
+2025-01-06 19:36:24,159 [INFO] Database connection closed.
+2025-01-06 19:36:38,072 [INFO] database connection established.
+2025-01-06 19:36:38,075 [INFO] database tables initialized.
+2025-01-06 19:36:38,083 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 19:36:38,085 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-06 19:36:38,086 [INFO] Forecasts will be created for period: START_DATE: 2024-02-01 00:00:00, FINISH_DATE: 2025-01-06 12:36:38.085846.
+Historical data now contains 8413 hours, extended by 240 hours of training dataset.
+New start date for extended historical data: 2024-01-22 00:00:00.
+2025-01-06 19:36:38,087 [INFO] Processing cryptocurrency: BTC
+2025-01-06 19:36:38,900 [ERROR] No historical data fetched for BTC
+2025-01-06 19:36:38,900 [CRITICAL] An error occurred: 'NoneType' object has no attribute 'empty'
+Traceback (most recent call last):
+  File "c:\Users\user\Desktop\kode\forecrypt\main.py", line 219, in <module>
+    db_utils.load_to_db_train_and_historical(extended_df, crypto_id, conn, max_train_dataset_hours)
+  File "c:\Users\user\Desktop\kode\forecrypt\db_utils.py", line 217, in load_to_db_train_and_historical
+    if extended_df.empty:
+       ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'empty'
+2025-01-06 19:36:38,903 [INFO] Database connection closed.
+2025-01-06 19:36:53,622 [INFO] database connection established.
+2025-01-06 19:36:53,624 [INFO] database tables initialized.
+2025-01-06 19:36:53,628 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 19:36:53,630 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-06 19:36:53,631 [INFO] Forecasts will be created for period: START_DATE: 2024-08-01 00:00:00, FINISH_DATE: 2025-01-06 12:36:53.630939.
+Historical data now contains 4045 hours, extended by 240 hours of training dataset.
+New start date for extended historical data: 2024-07-22 00:00:00.
+2025-01-06 19:36:53,632 [INFO] Processing cryptocurrency: BTC
+2025-01-06 19:36:54,471 [ERROR] No historical data fetched for BTC
+2025-01-06 19:36:54,471 [CRITICAL] An error occurred: 'NoneType' object has no attribute 'empty'
+Traceback (most recent call last):
+  File "c:\Users\user\Desktop\kode\forecrypt\main.py", line 219, in <module>
+    db_utils.load_to_db_train_and_historical(extended_df, crypto_id, conn, max_train_dataset_hours)
+  File "c:\Users\user\Desktop\kode\forecrypt\db_utils.py", line 217, in load_to_db_train_and_historical
+    if extended_df.empty:
+       ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'empty'
+2025-01-06 19:36:54,473 [INFO] Database connection closed.
+2025-01-06 19:37:04,180 [INFO] database connection established.
+2025-01-06 19:37:04,182 [INFO] database tables initialized.
+2025-01-06 19:37:04,190 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 19:37:04,193 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-06 19:37:04,193 [INFO] Forecasts will be created for period: START_DATE: 2024-12-01 00:00:00, FINISH_DATE: 2025-01-06 12:37:04.192020.
+Historical data now contains 1117 hours, extended by 240 hours of training dataset.
+New start date for extended historical data: 2024-11-21 00:00:00.
+2025-01-06 19:37:04,194 [INFO] Processing cryptocurrency: BTC
+2025-01-06 19:37:06,578 [INFO] Training and historical data for BTC successfully loaded.
+2025-01-06 19:37:06,579 [INFO] Processing model: arima at 2025-01-06 19:37:06.579953
+2025-01-06 19:37:18,803 [INFO] arima model processing completed successfully at 2025-01-06 19:37:18.803948
+2025-01-06 19:37:18,804 [INFO] Processing model: ets at 2025-01-06 19:37:18.804906
+2025-01-06 19:37:21,763 [INFO] ets model processing completed successfully at 2025-01-06 19:37:21.763452
+2025-01-06 19:37:21,764 [INFO] Processing model: theta at 2025-01-06 19:37:21.764413
+2025-01-06 19:37:23,699 [INFO] theta model processing completed successfully at 2025-01-06 19:37:23.699666
+2025-01-06 19:37:23,699 [INFO] Processing cryptocurrency: ETH
+2025-01-06 19:37:25,473 [INFO] Training and historical data for ETH successfully loaded.
+2025-01-06 19:37:25,474 [INFO] Processing model: arima at 2025-01-06 19:37:25.474052
+2025-01-06 19:37:36,252 [INFO] arima model processing completed successfully at 2025-01-06 19:37:36.252247
+2025-01-06 19:37:36,253 [INFO] Processing model: ets at 2025-01-06 19:37:36.253250
+2025-01-06 19:37:40,226 [INFO] ets model processing completed successfully at 2025-01-06 19:37:40.226541
+2025-01-06 19:37:40,227 [INFO] Processing model: theta at 2025-01-06 19:37:40.227501
+2025-01-06 19:37:42,070 [INFO] theta model processing completed successfully at 2025-01-06 19:37:42.070950
+2025-01-06 19:37:42,071 [INFO] Database connection closed.
+2025-01-06 19:38:13,367 [INFO] database connection established.
+2025-01-06 19:38:13,392 [INFO] database tables initialized.
+2025-01-06 19:38:13,394 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 19:38:13,397 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-06 19:38:13,397 [INFO] Forecasts will be created for period: START_DATE: 2024-10-01 00:00:00, FINISH_DATE: 2025-01-06 12:38:13.397350.
+Historical data now contains 2581 hours, extended by 240 hours of training dataset.
+New start date for extended historical data: 2024-09-21 00:00:00.
+2025-01-06 19:38:13,398 [INFO] Processing cryptocurrency: BTC
+2025-01-06 19:38:14,230 [ERROR] No historical data fetched for BTC
+2025-01-06 19:38:14,231 [CRITICAL] An error occurred: 'NoneType' object has no attribute 'empty'
+Traceback (most recent call last):
+  File "c:\Users\user\Desktop\kode\forecrypt\main.py", line 219, in <module>
+    db_utils.load_to_db_train_and_historical(extended_df, crypto_id, conn, max_train_dataset_hours)
+  File "c:\Users\user\Desktop\kode\forecrypt\db_utils.py", line 217, in load_to_db_train_and_historical
+    if extended_df.empty:
+       ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'empty'
+2025-01-06 19:38:14,233 [INFO] Database connection closed.
+2025-01-06 19:38:24,028 [INFO] database connection established.
+2025-01-06 19:38:24,031 [INFO] database tables initialized.
+2025-01-06 19:38:24,039 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 19:38:24,041 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-06 19:38:24,042 [INFO] Forecasts will be created for period: START_DATE: 2024-10-15 00:00:00, FINISH_DATE: 2025-01-06 12:38:24.041746.
+Historical data now contains 2245 hours, extended by 240 hours of training dataset.
+New start date for extended historical data: 2024-10-05 00:00:00.
+2025-01-06 19:38:24,043 [INFO] Processing cryptocurrency: BTC
+2025-01-06 19:38:24,900 [ERROR] No historical data fetched for BTC
+2025-01-06 19:38:24,901 [CRITICAL] An error occurred: 'NoneType' object has no attribute 'empty'
+Traceback (most recent call last):
+  File "c:\Users\user\Desktop\kode\forecrypt\main.py", line 219, in <module>
+    db_utils.load_to_db_train_and_historical(extended_df, crypto_id, conn, max_train_dataset_hours)
+  File "c:\Users\user\Desktop\kode\forecrypt\db_utils.py", line 217, in load_to_db_train_and_historical
+    if extended_df.empty:
+       ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'empty'
+2025-01-06 19:38:24,903 [INFO] Database connection closed.
+2025-01-06 19:39:18,788 [INFO] database connection established.
+2025-01-06 19:39:18,790 [INFO] database tables initialized.
+2025-01-06 19:39:18,798 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 19:39:18,801 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-06 19:39:18,802 [INFO] Forecasts will be created for period: START_DATE: 2024-11-01 00:00:00, FINISH_DATE: 2025-01-06 12:39:18.801975.
+Historical data now contains 1837 hours, extended by 240 hours of training dataset.
+New start date for extended historical data: 2024-10-22 00:00:00.
+2025-01-06 19:39:18,802 [INFO] Processing cryptocurrency: BTC
+2025-01-06 19:39:20,521 [INFO] Training and historical data for BTC successfully loaded.
+2025-01-06 19:39:20,522 [INFO] Processing model: arima at 2025-01-06 19:39:20.522002
+2025-01-06 19:39:32,164 [INFO] arima model processing completed successfully at 2025-01-06 19:39:32.164763
+2025-01-06 19:39:32,164 [INFO] Processing model: ets at 2025-01-06 19:39:32.164763
+2025-01-06 19:39:36,770 [INFO] ets model processing completed successfully at 2025-01-06 19:39:36.770019
+2025-01-06 19:39:36,770 [INFO] Processing model: theta at 2025-01-06 19:39:36.770019
+2025-01-06 19:39:39,961 [INFO] theta model processing completed successfully at 2025-01-06 19:39:39.961759
+2025-01-06 19:39:39,961 [INFO] Processing cryptocurrency: ETH
+2025-01-06 19:39:41,693 [INFO] Training and historical data for ETH successfully loaded.
+2025-01-06 19:39:41,693 [INFO] Processing model: arima at 2025-01-06 19:39:41.693786
+2025-01-06 19:39:52,317 [INFO] arima model processing completed successfully at 2025-01-06 19:39:52.317704
+2025-01-06 19:39:52,317 [INFO] Processing model: ets at 2025-01-06 19:39:52.317704
+2025-01-06 19:39:59,500 [INFO] ets model processing completed successfully at 2025-01-06 19:39:59.500717
+2025-01-06 19:39:59,500 [INFO] Processing model: theta at 2025-01-06 19:39:59.500717
+2025-01-06 19:40:02,863 [INFO] theta model processing completed successfully at 2025-01-06 19:40:02.863026
+2025-01-06 19:40:02,863 [INFO] Database connection closed.
+2025-01-06 19:43:53,050 [INFO] database connection established.
+2025-01-06 19:43:53,074 [INFO] database tables initialized.
+2025-01-06 19:43:53,078 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 19:43:53,081 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-06 19:43:53,082 [INFO] Forecasts will be created for period: START_DATE: 2024-11-01 00:00:00, FINISH_DATE: 2025-01-06 12:43:53.081664.
+Historical data now contains 1837 hours, extended by 240 hours of training dataset.
+New start date for extended historical data: 2024-10-22 00:00:00.
+2025-01-06 19:43:53,082 [INFO] Processing cryptocurrency: BTC
+2025-01-06 19:43:55,479 [INFO] Training and historical data for BTC successfully loaded.
+2025-01-06 19:43:55,480 [INFO] Processing model: arima at 2025-01-06 19:43:55.480886
+2025-01-06 19:44:06,313 [INFO] arima model processing completed successfully at 2025-01-06 19:44:06.313343
+2025-01-06 19:44:06,314 [INFO] Processing model: ets at 2025-01-06 19:44:06.314363
+2025-01-06 19:44:10,828 [INFO] ets model processing completed successfully at 2025-01-06 19:44:10.828825
+2025-01-06 19:44:10,828 [INFO] Processing model: theta at 2025-01-06 19:44:10.828825
+2025-01-06 19:44:14,013 [INFO] theta model processing completed successfully at 2025-01-06 19:44:14.013693
+2025-01-06 19:44:14,014 [INFO] Processing cryptocurrency: ETH
+2025-01-06 19:44:15,886 [INFO] Training and historical data for ETH successfully loaded.
+2025-01-06 19:44:15,887 [INFO] Processing model: arima at 2025-01-06 19:44:15.887157
+2025-01-06 19:44:27,846 [INFO] arima model processing completed successfully at 2025-01-06 19:44:27.846698
+2025-01-06 19:44:27,847 [INFO] Processing model: ets at 2025-01-06 19:44:27.847700
+2025-01-06 19:44:34,817 [INFO] ets model processing completed successfully at 2025-01-06 19:44:34.817800
+2025-01-06 19:44:34,818 [INFO] Processing model: theta at 2025-01-06 19:44:34.818758
+2025-01-06 19:44:37,966 [INFO] theta model processing completed successfully at 2025-01-06 19:44:37.966845
+2025-01-06 19:44:37,966 [INFO] Database connection closed.
+2025-01-06 20:14:38,934 [INFO] database connection established.
+2025-01-06 20:14:38,944 [INFO] database tables initialized.
+2025-01-06 20:14:38,955 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 20:14:38,969 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-06 20:14:38,976 [INFO] Forecasts will be created for period: START_DATE: 2024-11-01 00:00:00, FINISH_DATE: 2025-01-06 13:14:38.969981.
+Historical data now contains 1838 hours, extended by 240 hours of training dataset.
+New start date for extended historical data: 2024-10-22 00:00:00.
+2025-01-06 20:14:38,979 [INFO] Processing cryptocurrency: BTC
+2025-01-06 20:14:41,431 [INFO] Training and historical data for BTC successfully loaded.
+2025-01-06 20:14:41,432 [INFO] Processing model: arima at 2025-01-06 20:14:41.432678
+2025-01-06 20:14:41,433 [CRITICAL] An error occurred: Invalid comparison between dtype=datetime64[ns, UTC] and Timestamp
+Traceback (most recent call last):
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\arrays\datetimelike.py", line 565, in _validate_comparison_value
+    self._check_compatible_with(other)
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\arrays\datetimes.py", line 522, in _check_compatible_with
+    self._assert_tzawareness_compat(other)
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\arrays\datetimes.py", line 748, in _assert_tzawareness_compat
+    raise TypeError(
+TypeError: Cannot compare tz-naive and tz-aware datetime-like objects
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\arrays\datetimelike.py", line 935, in _cmp_method
+    other = self._validate_comparison_value(other)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\arrays\datetimelike.py", line 568, in _validate_comparison_value
+    raise InvalidComparison(other) from err
+pandas.errors.InvalidComparison: 2024-10-22 00:00:00
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\Users\user\Desktop\kode\forecrypt\main.py", line 234, in <module>
+    train_df = get_train_df(extended_df, current_dt, training_dataset_size, crypto_id, model_name)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\user\Desktop\kode\forecrypt\main.py", line 139, in get_train_df
+    (extended_df["date"] >= current_dt - timedelta(hours=training_dataset_size)) &
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\ops\common.py", line 81, in new_method
+    return method(self, other)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\arraylike.py", line 60, in __ge__
+    return self._cmp_method(other, operator.ge)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\series.py", line 6096, in _cmp_method
+    res_values = ops.comparison_op(lvalues, rvalues, op)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\ops\array_ops.py", line 279, in comparison_op
+    res_values = op(lvalues, rvalues)
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\ops\common.py", line 81, in new_method
+    return method(self, other)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\arraylike.py", line 60, in __ge__
+    return self._cmp_method(other, operator.ge)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\arrays\datetimelike.py", line 937, in _cmp_method
+    return invalid_comparison(self, other, op)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\ops\invalid.py", line 36, in invalid_comparison
+    raise TypeError(f"Invalid comparison between dtype={left.dtype} and {typ}")
+TypeError: Invalid comparison between dtype=datetime64[ns, UTC] and Timestamp
+2025-01-06 20:14:41,453 [INFO] Database connection closed.
+2025-01-06 20:15:53,536 [INFO] database connection established.
+2025-01-06 20:15:53,539 [INFO] database tables initialized.
+2025-01-06 20:15:53,547 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 20:15:53,549 [INFO] FINISH_DATE is set to NOW (current time).
+2025-01-06 20:15:53,550 [INFO] Forecasts will be created for period: START_DATE: 2024-11-01 00:00:00, FINISH_DATE: 2025-01-06 13:15:53.549280.
+Historical data now contains 1838 hours, extended by 240 hours of training dataset.
+New start date for extended historical data: 2024-10-22 00:00:00.
+2025-01-06 20:15:53,550 [INFO] Processing cryptocurrency: BTC
+2025-01-06 20:16:00,316 [INFO] Training and historical data for BTC successfully loaded.
+2025-01-06 20:16:00,317 [INFO] Processing model: arima at 2025-01-06 20:16:00.317185
+2025-01-06 20:16:22,243 [INFO] arima model processing completed successfully at 2025-01-06 20:16:22.243888
+2025-01-06 20:16:22,244 [INFO] Processing model: ets at 2025-01-06 20:16:22.243888
+2025-01-06 20:16:28,741 [INFO] ets model processing completed successfully at 2025-01-06 20:16:28.741545
+2025-01-06 20:16:28,741 [INFO] Processing model: theta at 2025-01-06 20:16:28.741545
+2025-01-06 20:16:32,851 [INFO] theta model processing completed successfully at 2025-01-06 20:16:32.851012
+2025-01-06 20:16:32,851 [INFO] Processing cryptocurrency: ETH
+2025-01-06 20:16:36,309 [INFO] Training and historical data for ETH successfully loaded.
+2025-01-06 20:16:36,310 [INFO] Processing model: arima at 2025-01-06 20:16:36.310023
+2025-01-06 20:16:51,691 [INFO] arima model processing completed successfully at 2025-01-06 20:16:51.691338
+2025-01-06 20:16:51,692 [INFO] Processing model: ets at 2025-01-06 20:16:51.692334
+2025-01-06 20:16:59,340 [INFO] ets model processing completed successfully at 2025-01-06 20:16:59.340018
+2025-01-06 20:16:59,341 [INFO] Processing model: theta at 2025-01-06 20:16:59.341019
+2025-01-06 20:17:03,098 [INFO] theta model processing completed successfully at 2025-01-06 20:17:03.098145
+2025-01-06 20:17:03,099 [INFO] Database connection closed.
+2025-01-06 20:23:54,551 [INFO] database connection established.
+2025-01-06 20:23:54,553 [INFO] database tables initialized.
+2025-01-06 20:23:54,563 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 20:23:54,566 [INFO] FINISH_DATE is set to 2025-01-01 00:00:00.
+2025-01-06 20:23:54,567 [INFO] Forecasts will be created for period: START_DATE: 2024-01-01 00:00:00, FINISH_DATE: 2025-01-01 00:00:00.
+Historical data now contains 9025 hours, extended by 240 hours of training dataset.
+New start date for extended historical data: 2023-12-22 00:00:00.
+2025-01-06 20:23:54,568 [INFO] Processing cryptocurrency: BTC
+2025-01-06 20:24:11,185 [CRITICAL] An error occurred: cannot reindex on an axis with duplicate labels
+Traceback (most recent call last):
+  File "c:\Users\user\Desktop\kode\forecrypt\main.py", line 214, in <module>
+    extended_df = fetch_extended_df(crypto_id, total_hours)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\user\Desktop\kode\forecrypt\main.py", line 112, in fetch_extended_df
+    extended_df = get_data.fetch_historical_data(crypto_id, total_hours)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\user\Desktop\kode\forecrypt\get_data.py", line 79, in fetch_historical_data
+    full_df = full_df.asfreq('h')  # Set DatetimeIndex to hourly frequency
+              ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\frame.py", line 10971, in asfreq
+    return super().asfreq(
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\generic.py", line 8347, in asfreq
+    return asfreq(
+           ^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\resample.py", line 2234, in asfreq
+    new_obj = obj.reindex(dti, method=method, fill_value=fill_value)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\frame.py", line 5055, in reindex
+    return super().reindex(
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\generic.py", line 5360, in reindex
+    return self._reindex_axes(
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\frame.py", line 4896, in _reindex_axes
+    frame = frame._reindex_index(
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\frame.py", line 4912, in _reindex_index
+    new_index, indexer = self.index.reindex(
+                         ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\indexes\base.py", line 4275, in reindex
+    raise ValueError("cannot reindex on an axis with duplicate labels")
+ValueError: cannot reindex on an axis with duplicate labels
+2025-01-06 20:24:11,205 [INFO] Database connection closed.
+2025-01-06 20:25:00,440 [INFO] database connection established.
+2025-01-06 20:25:00,442 [INFO] database tables initialized.
+2025-01-06 20:25:00,450 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 20:25:00,453 [INFO] FINISH_DATE is set to 2025-01-03 00:00:00.
+2025-01-06 20:25:00,454 [INFO] Forecasts will be created for period: START_DATE: 2025-01-01 00:00:00, FINISH_DATE: 2025-01-03 00:00:00.
+Historical data now contains 289 hours, extended by 240 hours of training dataset.
+New start date for extended historical data: 2024-12-22 00:00:00.
+2025-01-06 20:25:00,454 [INFO] Processing cryptocurrency: BTC
+2025-01-06 20:25:02,225 [INFO] Training and historical data for BTC successfully loaded.
+2025-01-06 20:25:02,225 [INFO] Processing model: arima at 2025-01-06 20:25:02.225270
+2025-01-06 20:25:11,280 [INFO] arima model processing completed successfully at 2025-01-06 20:25:11.279194
+2025-01-06 20:25:11,280 [INFO] Processing model: ets at 2025-01-06 20:25:11.280193
+2025-01-06 20:25:11,529 [INFO] ets model processing completed successfully at 2025-01-06 20:25:11.529592
+2025-01-06 20:25:11,535 [INFO] Processing model: theta at 2025-01-06 20:25:11.535592
+2025-01-06 20:25:11,674 [INFO] theta model processing completed successfully at 2025-01-06 20:25:11.674187
+2025-01-06 20:25:11,674 [INFO] Processing cryptocurrency: ETH
+2025-01-06 20:25:14,154 [INFO] Training and historical data for ETH successfully loaded.
+2025-01-06 20:25:14,155 [INFO] Processing model: arima at 2025-01-06 20:25:14.155507
+2025-01-06 20:25:22,732 [INFO] arima model processing completed successfully at 2025-01-06 20:25:22.732136
+2025-01-06 20:25:22,732 [INFO] Processing model: ets at 2025-01-06 20:25:22.732136
+2025-01-06 20:25:23,095 [INFO] ets model processing completed successfully at 2025-01-06 20:25:23.095431
+2025-01-06 20:25:23,095 [INFO] Processing model: theta at 2025-01-06 20:25:23.095431
+2025-01-06 20:25:23,239 [INFO] theta model processing completed successfully at 2025-01-06 20:25:23.239111
+2025-01-06 20:25:23,240 [INFO] Database connection closed.
+2025-01-06 20:31:24,896 [INFO] database connection established.
+2025-01-06 20:31:24,898 [INFO] database tables initialized.
+2025-01-06 20:31:24,906 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 20:31:24,909 [INFO] FINISH_DATE is set to 2025-01-03 00:00:00.
+2025-01-06 20:31:24,909 [INFO] Forecasts will be created for period: START_DATE: 2025-01-01 00:00:00, FINISH_DATE: 2025-01-03 00:00:00.
+Historical data now contains 289 hours, extended by 240 hours of training dataset.
+New start date for extended historical data: 2024-12-22 00:00:00.
+2025-01-06 20:31:24,910 [INFO] Processing cryptocurrency: BTC
+2025-01-06 20:31:27,872 [INFO] Training and historical data for BTC successfully loaded.
+2025-01-06 20:31:27,872 [INFO] Processing model: arima at 2025-01-06 20:31:27.872891
+2025-01-06 20:31:36,007 [INFO] arima model processing completed successfully at 2025-01-06 20:31:36.007691
+2025-01-06 20:31:36,007 [INFO] Processing model: ets at 2025-01-06 20:31:36.007691
+2025-01-06 20:31:36,232 [INFO] ets model processing completed successfully at 2025-01-06 20:31:36.232835
+2025-01-06 20:31:36,232 [INFO] Processing model: theta at 2025-01-06 20:31:36.232835
+2025-01-06 20:31:36,371 [INFO] theta model processing completed successfully at 2025-01-06 20:31:36.371821
+2025-01-06 20:31:36,372 [INFO] Processing cryptocurrency: ETH
+2025-01-06 20:31:39,070 [INFO] Training and historical data for ETH successfully loaded.
+2025-01-06 20:31:39,070 [INFO] Processing model: arima at 2025-01-06 20:31:39.070740
+2025-01-06 20:31:48,937 [INFO] arima model processing completed successfully at 2025-01-06 20:31:48.937967
+2025-01-06 20:31:48,937 [INFO] Processing model: ets at 2025-01-06 20:31:48.937967
+2025-01-06 20:31:49,326 [INFO] ets model processing completed successfully at 2025-01-06 20:31:49.326163
+2025-01-06 20:31:49,326 [INFO] Processing model: theta at 2025-01-06 20:31:49.326163
+2025-01-06 20:31:49,452 [INFO] theta model processing completed successfully at 2025-01-06 20:31:49.452903
+2025-01-06 20:31:49,453 [INFO] Database connection closed.
+2025-01-06 20:32:12,802 [INFO] database connection established.
+2025-01-06 20:32:12,805 [INFO] database tables initialized.
+2025-01-06 20:32:12,813 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 20:32:12,816 [INFO] FINISH_DATE is set to 2025-01-03 00:00:00.
+2025-01-06 20:32:12,817 [INFO] Forecasts will be created for period: START_DATE: 2024-01-01 00:00:00, FINISH_DATE: 2025-01-03 00:00:00.
+Historical data now contains 9073 hours, extended by 240 hours of training dataset.
+New start date for extended historical data: 2023-12-22 00:00:00.
+2025-01-06 20:32:12,818 [INFO] Processing cryptocurrency: BTC
+2025-01-06 20:32:24,568 [CRITICAL] An error occurred: cannot reindex on an axis with duplicate labels
+Traceback (most recent call last):
+  File "c:\Users\user\Desktop\kode\forecrypt\main.py", line 214, in <module>
+    extended_df = fetch_extended_df(crypto_id, total_hours)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\user\Desktop\kode\forecrypt\main.py", line 112, in fetch_extended_df
+    extended_df = get_data.fetch_historical_data(crypto_id, total_hours)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\user\Desktop\kode\forecrypt\get_data.py", line 80, in fetch_historical_data
+    full_df = full_df.asfreq('h')  # Set DatetimeIndex to hourly frequency
+              ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\frame.py", line 10971, in asfreq
+    return super().asfreq(
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\generic.py", line 8347, in asfreq
+    return asfreq(
+           ^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\resample.py", line 2234, in asfreq
+    new_obj = obj.reindex(dti, method=method, fill_value=fill_value)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\frame.py", line 5055, in reindex
+    return super().reindex(
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\generic.py", line 5360, in reindex
+    return self._reindex_axes(
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\frame.py", line 4896, in _reindex_axes
+    frame = frame._reindex_index(
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\frame.py", line 4912, in _reindex_index
+    new_index, indexer = self.index.reindex(
+                         ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\kode\forecrypt\.venv\Lib\site-packages\pandas\core\indexes\base.py", line 4275, in reindex
+    raise ValueError("cannot reindex on an axis with duplicate labels")
+ValueError: cannot reindex on an axis with duplicate labels
+2025-01-06 20:32:24,582 [INFO] Database connection closed.
+2025-01-06 20:33:42,658 [INFO] database connection established.
+2025-01-06 20:33:42,681 [INFO] database tables initialized.
+2025-01-06 20:33:42,683 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 20:33:42,686 [INFO] FINISH_DATE is set to 2025-01-03 00:00:00.
+2025-01-06 20:33:42,686 [INFO] Forecasts will be created for period: START_DATE: 2024-01-01 00:00:00, FINISH_DATE: 2025-01-03 00:00:00.
+Historical data now contains 9073 hours, extended by 240 hours of training dataset.
+New start date for extended historical data: 2023-12-22 00:00:00.
+2025-01-06 20:33:42,687 [INFO] Processing cryptocurrency: BTC
+2025-01-06 20:33:52,119 [INFO] Training and historical data for BTC successfully loaded.
+2025-01-06 20:33:52,121 [INFO] Processing model: arima at 2025-01-06 20:33:52.121906
+2025-01-06 20:34:53,499 [INFO] arima model processing completed successfully at 2025-01-06 20:34:53.499646
+2025-01-06 20:34:53,500 [INFO] Processing model: ets at 2025-01-06 20:34:53.500607
+2025-01-06 20:35:21,676 [INFO] ets model processing completed successfully at 2025-01-06 20:35:21.676299
+2025-01-06 20:35:21,677 [INFO] Processing model: theta at 2025-01-06 20:35:21.677296
+2025-01-06 20:35:42,876 [INFO] theta model processing completed successfully at 2025-01-06 20:35:42.876331
+2025-01-06 20:35:42,876 [INFO] Processing cryptocurrency: ETH
+2025-01-06 20:35:54,433 [INFO] Training and historical data for ETH successfully loaded.
+2025-01-06 20:35:54,435 [INFO] Processing model: arima at 2025-01-06 20:35:54.435181
+2025-01-06 20:37:03,169 [INFO] arima model processing completed successfully at 2025-01-06 20:37:03.169057
+2025-01-06 20:37:03,170 [INFO] Processing model: ets at 2025-01-06 20:37:03.170018
+2025-01-06 20:37:53,555 [INFO] ets model processing completed successfully at 2025-01-06 20:37:53.555046
+2025-01-06 20:37:53,556 [INFO] Processing model: theta at 2025-01-06 20:37:53.556049
+2025-01-06 20:38:13,186 [INFO] theta model processing completed successfully at 2025-01-06 20:38:13.186992
+2025-01-06 20:38:13,186 [INFO] Database connection closed.
+2025-01-06 20:45:29,440 [INFO] database connection established.
+2025-01-06 20:45:29,465 [INFO] database tables initialized.
+2025-01-06 20:45:29,468 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 20:45:29,472 [INFO] FINISH_DATE is set to 2025-01-03 00:00:00.
+2025-01-06 20:45:29,473 [INFO] Forecasts will be created for period: START_DATE: 2024-01-01 00:00:00, FINISH_DATE: 2025-01-03 00:00:00.
+Historical data now contains 9073 hours, extended by 240 hours of training dataset.
+New start date for extended historical data: 2023-12-22 00:00:00.
+2025-01-06 20:45:29,474 [INFO] Processing cryptocurrency: BTC
+2025-01-06 20:45:58,775 [INFO] Training and historical data for BTC successfully loaded.
+2025-01-06 20:45:58,776 [INFO] Processing model: arima at 2025-01-06 20:45:58.776072
+2025-01-06 20:46:50,175 [INFO] arima model processing completed successfully at 2025-01-06 20:46:50.175197
+2025-01-06 20:46:50,175 [INFO] Processing model: ets at 2025-01-06 20:46:50.175197
+2025-01-06 20:47:17,423 [INFO] ets model processing completed successfully at 2025-01-06 20:47:17.423218
+2025-01-06 20:47:17,423 [INFO] Processing model: theta at 2025-01-06 20:47:17.423218
+2025-01-06 20:47:38,228 [INFO] theta model processing completed successfully at 2025-01-06 20:47:38.228042
+2025-01-06 20:47:38,229 [INFO] Processing cryptocurrency: ETH
+2025-01-06 20:47:52,454 [INFO] Training and historical data for ETH successfully loaded.
+2025-01-06 20:47:52,455 [INFO] Processing model: arima at 2025-01-06 20:47:52.455852
+2025-01-06 20:48:54,870 [INFO] arima model processing completed successfully at 2025-01-06 20:48:54.870223
+2025-01-06 20:48:54,870 [INFO] Processing model: ets at 2025-01-06 20:48:54.870223
+2025-01-06 20:49:34,271 [INFO] ets model processing completed successfully at 2025-01-06 20:49:34.271175
+2025-01-06 20:49:34,271 [INFO] Processing model: theta at 2025-01-06 20:49:34.271175
+2025-01-06 20:49:52,457 [INFO] theta model processing completed successfully at 2025-01-06 20:49:52.457296
+2025-01-06 20:49:52,458 [INFO] Database connection closed.
+2025-01-06 21:56:45,207 [INFO] database connection established.
+2025-01-06 21:56:45,249 [INFO] database tables initialized.
+2025-01-06 21:56:45,254 [INFO] Combined view 'combined_data' created or replaced successfully.
+2025-01-06 21:56:45,263 [INFO] FINISH_DATE is set to 2025-01-03 00:00:00.
+2025-01-06 21:56:45,266 [INFO] Forecasts will be created for period: START_DATE: 2024-01-01 00:00:00, FINISH_DATE: 2025-01-03 00:00:00.
+Historical data now contains 10033 hours, extended by 1200 hours of training dataset.
+New start date for extended historical data: 2023-11-12 00:00:00.
+2025-01-06 21:56:45,266 [INFO] Processing cryptocurrency: BTC
+2025-01-06 21:57:01,414 [INFO] Training and historical data for BTC successfully loaded.
+2025-01-06 21:57:01,415 [INFO] Processing model: arima at 2025-01-06 21:57:01.415640
+2025-01-06 21:58:04,826 [INFO] arima model processing completed successfully at 2025-01-06 21:58:04.826866
+2025-01-06 21:58:04,826 [INFO] Processing model: ets at 2025-01-06 21:58:04.826866
+2025-01-06 21:58:17,792 [INFO] ets model processing completed successfully at 2025-01-06 21:58:17.792068
+2025-01-06 21:58:17,792 [INFO] Processing model: theta at 2025-01-06 21:58:17.792068
+2025-01-06 21:58:37,688 [INFO] theta model processing completed successfully at 2025-01-06 21:58:37.688663
+2025-01-06 21:58:37,688 [INFO] Processing cryptocurrency: ETH
+2025-01-06 21:58:54,860 [INFO] Training and historical data for ETH successfully loaded.
+2025-01-06 21:58:54,862 [INFO] Processing model: arima at 2025-01-06 21:58:54.862641
+2025-01-06 21:59:55,261 [INFO] arima model processing completed successfully at 2025-01-06 21:59:55.260661
+2025-01-06 21:59:55,261 [INFO] Processing model: ets at 2025-01-06 21:59:55.261661
+2025-01-06 22:00:08,481 [INFO] ets model processing completed successfully at 2025-01-06 22:00:08.481955
+2025-01-06 22:00:08,482 [INFO] Processing model: theta at 2025-01-06 22:00:08.482954
+2025-01-06 22:00:27,821 [INFO] theta model processing completed successfully at 2025-01-06 22:00:27.821338
+2025-01-06 22:00:27,822 [INFO] Database connection closed.

@@ -1,27 +1,27 @@
 import pandas as pd
 
-def create_forecast_dataframe(crypto_df, model_fit, steps):
+def create_forecast_dataframe(df, model_fit, steps):
     """
     generate a pandas DataFrame containing a forecast based on the input DataFrame and model.
 
-    :param crypto_df: Historical cryptocurrency data as a pandas DataFrame with columns ['date', 'price'].
+    :param df: Historical cryptocurrency data as a pandas DataFrame with columns ['date', 'price'].
     :param model_fit: A trained forecasting model.
     :param steps: Number of forecast steps (hours) to generate.
     :return: A pandas DataFrame with columns ['date', 'price'] containing the forecast data.
     """
     # ensure input is a DataFrame and validate structure
-    if not isinstance(crypto_df, pd.DataFrame):
+    if not isinstance(df, pd.DataFrame):
         raise ValueError("The input must be a DataFrame.")
-    if not {'date', 'price'}.issubset(crypto_df.columns):
+    if not {'date', 'price'}.issubset(df.columns):
         raise ValueError("The DataFrame must contain 'date' and 'price' columns.")
 
     # set 'date' as index and ensure it's a DatetimeIndex
-    crypto_df = crypto_df.set_index('date')
-    if not isinstance(crypto_df.index, pd.DatetimeIndex):
-        crypto_df.index = pd.to_datetime(crypto_df.index)
+    df = df.set_index('date')
+    if not isinstance(df.index, pd.DatetimeIndex):
+        df.index = pd.to_datetime(df.index)
 
     # extract 'price' column
-    price_series = crypto_df['price']
+    price_series = df['price']
 
     # generate forecast
     if hasattr(model_fit, 'get_forecast'):  # for ARIMA models
