@@ -86,8 +86,8 @@ def calculate_total_fetch_interval(start_date: str, finish_date: str = None, **m
         logger.info(f"FINISH_DATE is set to {finish_naive}.")
 
     # Calculate maximum hours required
-    max_hours = max(params["training_dataset_size"] for params in model_parameters.values())
-    extended_start_dt = start_naive - timedelta(hours=max_hours)
+    max_train_dataset_hours = max(params["training_dataset_size"] for params in model_parameters.values())
+    extended_start_dt = start_naive - timedelta(hours=max_train_dataset_hours)
 
     # Calculate total hours to fetch
     total_hours = int((finish_naive - extended_start_dt).total_seconds() // 3600) + 1
@@ -95,11 +95,11 @@ def calculate_total_fetch_interval(start_date: str, finish_date: str = None, **m
     # Logging
     logger.info(
         f"Forecasts will be created for period: START_DATE: {start_naive}, FINISH_DATE: {finish_naive}.\n"
-        f"Historical data now contains {total_hours} hours, extended by {max_hours} hours of training dataset.\n"
+        f"Historical data now contains {total_hours} hours, extended by {max_train_dataset_hours} hours of training dataset.\n"
         f"New start date for extended historical data: {extended_start_dt}."
         )
 
-    return start_naive, finish_naive, total_hours, extended_start_dt
+    return start_naive, finish_naive, total_hours, extended_start_dt, max_train_dataset_hours
 
 def fetch_extended_df(crypto_id: str, total_hours: int):
     """
@@ -202,7 +202,7 @@ if __name__ == "__main__":
         # finish_naive
         # total_hours
         # 
-        start_naive, finish_naive, total_hours, extended_start_dt = calculate_total_fetch_interval(
+        start_naive, finish_naive, total_hours, extended_start_dt, max_train_dataset_hours = calculate_total_fetch_interval(
             START_DATE, finish_date=FINISH_DATE, **MODEL_PARAMETERS
         )
 
@@ -214,7 +214,9 @@ if __name__ == "__main__":
             extended_df = fetch_extended_df(crypto_id, total_hours)
 
             # Load historical data into the database
-            db_utils.load_to_db_historical(extended_df, crypto_id, conn)
+            #db_utils.load_to_db_historical(extended_df, crypto_id, conn)
+
+            db_utils.load_to_db_train_and_historical(extended_df, crypto_id, conn, max_train_dataset_hours)
 
             # Initialize tracking for retrain and forecast. 
             model_last_retrain, model_last_forecast = initialize_model_tracking()

@@ -46,10 +46,10 @@ MODELS_DIRECTORY = r"C:\forecrypt_models"
 
 MODEL_PARAMETERS = {
     'arima': {
-        'training_dataset_size': 120,
+        'training_dataset_size': 240,
         'model_update_interval': 1440,
         'forecast_dataset_size': 48,
-        'forecast_frequency': 12,
+        'forecast_frequency': 48,
         'forecast_hours': 120,
         'fit_func_name': 'model_fits.fit_arima_model',
         'specific_parameters': {
@@ -58,10 +58,10 @@ MODEL_PARAMETERS = {
         }
     },
     'ets': {
-        'training_dataset_size': 720,
+        'training_dataset_size': 120,
         'model_update_interval': 48,
         'forecast_dataset_size': 48,
-        'forecast_frequency': 12,
+        'forecast_frequency': 48,
         'forecast_hours': 120,
         'fit_func_name': 'model_fits.fit_ets_model',
         'specific_parameters': {
@@ -71,10 +71,10 @@ MODEL_PARAMETERS = {
         }
     },
     'theta': {
-        'training_dataset_size': 240,
+        'training_dataset_size': 120,
         'model_update_interval': 1,
         'forecast_dataset_size': 48,
-        'forecast_frequency': 12,
+        'forecast_frequency': 48,
         'forecast_hours': 120,
         'fit_func_name': 'model_fits.fit_theta_model',
         'specific_parameters': {}

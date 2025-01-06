@@ -30,16 +30,24 @@ def create_forecast_dataframe(crypto_df, model_fit, steps):
     else:  # for ETS, Theta models
         forecast = model_fit.forecast(steps=steps)
 
-    # generate timestamps for forecast
+    # generate timestamps for forecast (steps timestamps starting from the next hour)
     forecast_dates = pd.date_range(
         start=price_series.index[-1] + pd.Timedelta(hours=1),  # start after the last historical point
         periods=steps,  # generate exactly 'steps' timestamps
         freq='h'
     )
+    
+    # create forecast series with timestamps
     forecast_series = pd.Series(forecast.values, index=forecast_dates)
-
+    
+    # add zero step (last historical value) manually
+    zero_step = pd.Series([price_series.iloc[-1]], index=[price_series.index[-1]])
+    
+    # concatenate zero step with forecast
+    forecast_series = pd.concat([zero_step, forecast_series])
+    
     # convert to DataFrame
     forecast_df = forecast_series.reset_index()
     forecast_df.columns = ['date', 'price']  # match historical data
-
+    
     return forecast_df
