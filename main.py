@@ -12,7 +12,6 @@ import db_utils
 import models_processing
 import get_data
 from config import CRYPTO_LIST, START_DATE, FINISH_DATE, DB_CONFIG, MODEL_PARAMETERS
-from forecasting import create_forecast_dataframe
 # ---------------------------------------------------------
 # ---------------------------------------------------------
 # 1. configure logging
@@ -101,7 +100,7 @@ def calculate_total_fetch_interval(start_date: str, finish_date: str = None, **m
 
     return start_naive, finish_naive, total_hours, extended_start_dt, max_train_dataset_hours
 
-def fetch_extended_df(crypto_id: str, total_hours: int):
+def fetch_extended_df(crypto_id: str, start_date, end_date, api_key=None):
     """
     Fetch extended historical data for a cryptocurrency through get_data.fetch_historical_data function.
 
@@ -109,10 +108,12 @@ def fetch_extended_df(crypto_id: str, total_hours: int):
     :param total_hours: Total number of hours to fetch.
     :return: DataFrame with historical data or None if data is empty.
     """
-    extended_df = get_data.fetch_historical_data(crypto_id, total_hours)
+    
+    extended_df = get_data.fetch_historical_data(crypto_id, start_date, end_date, api_key)
+    logger.debug(f"5 debug df call: {extended_df.head()}")
 
     if extended_df.empty:
-        logger.error(f"No historical data fetched for {crypto_id}")
+        logger.critical(f"No historical data fetched for {crypto_id}")
         return None
 
     logger.debug(
@@ -135,11 +136,17 @@ def get_train_df(extended_df, current_dt, training_dataset_size, crypto_id, mode
     Returns:
         DataFrame: Training dataset for the model, or None if data is insufficient.
     """
+    logger.debug(f"6 debug df call: {extended_df.head()}")
+    #logger.debug(f"6 debug call: {current_dt}")
+    #logger.debug(f"6 debug call: {timedelta(hours=training_dataset_size)}")
+    #logger.debug(f"6 debug call: {current_dt - timedelta(hours=training_dataset_size)}")
     train_df = extended_df[
         (extended_df["date"] >= current_dt - timedelta(hours=training_dataset_size)) &
         (extended_df["date"] <= current_dt)
     ]
-
+    
+    logger.debug(f"7 debug df call: {train_df.head()}")
+    
     if len(train_df) < training_dataset_size:
         logger.debug(f"Not enough training data for {crypto_id} - {model_name} at {current_dt}, skipping.")
         return None
@@ -201,9 +208,10 @@ if __name__ == "__main__":
         # start_naive
         # finish_naive
         # total_hours
-        # 
+        # extended_start_dt
+        # max_train_dataset_hours
         start_naive, finish_naive, total_hours, extended_start_dt, max_train_dataset_hours = calculate_total_fetch_interval(
-            START_DATE, finish_date=FINISH_DATE, **MODEL_PARAMETERS
+            START_DATE, FINISH_DATE, **MODEL_PARAMETERS
         )
 
         # Cycle for each cryptocurrency
@@ -211,7 +219,7 @@ if __name__ == "__main__":
             logger.info(f"Processing cryptocurrency: {crypto_id}")
 
             # Fetch extended historical dataset (max hours for training dataset + historical dataset from START_DATE to FINISH_DATE)
-            extended_df = fetch_extended_df(crypto_id, total_hours)
+            extended_df = fetch_extended_df(crypto_id, extended_start_dt, FINISH_DATE)
 
             # Load historical data into the database
             #db_utils.load_to_db_historical(extended_df, crypto_id, conn)
@@ -223,7 +231,7 @@ if __name__ == "__main__":
 
             # Cycle for each model
             for model_name, params in MODEL_PARAMETERS.items():
-                logger.info(f"Processing model: {model_name} at {datetime.now()}")
+                logger.debug(f"Processing model: {model_name} at {datetime.now()}")
 
                 # Process hourly data
                 current_dt = start_naive
@@ -233,6 +241,10 @@ if __name__ == "__main__":
                     training_dataset_size = params["training_dataset_size"]
                     train_df = get_train_df(extended_df, current_dt, training_dataset_size, crypto_id, model_name)
                     
+                    logger.debug(train_df.head())
+                    logger.debug(f"Index type: {type(train_df.index)}, Is DatetimeIndex: {isinstance(train_df.index, pd.DatetimeIndex)}")
+                    logger.debug(f"Missing values: {train_df.isnull().sum()}")
+
                     # Get forecast input datasetl
                     forecast_dataset_size = params["forecast_dataset_size"]
                     forecast_input_df = get_forecast_input_df(extended_df, current_dt, forecast_dataset_size, crypto_id, model_name)
