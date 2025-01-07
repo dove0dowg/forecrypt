@@ -69,6 +69,7 @@ def save_model(crypto_id: str, model_name: str, model_fit):
 def load_model(crypto_id: str, model_name: str):
     """
     Loads the saved model for the given cryptocurrency and model name.
+    Path to folder with models determined by config.py/MODELS_DIRECTORY.
     
     :param crypto_id: e.g., 'BTC'
     :param model_name: e.g., 'arima'
@@ -204,7 +205,7 @@ def forecast_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id,
             logger.debug(f"[{crypto_id} - {model_name}] Model loaded successfully.")
 
             df_forecast = create_forecast_dataframe(sub_df, model_fit, steps=forecast_hours)
-            load_to_db_forecast(df_forecast, crypto_id, model_name, conn, created_at=current_dt)
+            load_to_db_forecast(df_forecast, crypto_id, model_name, params, conn, created_at=current_dt)
             logger.debug(f"[{crypto_id} - {model_name}] Forecast saved for {current_dt}.")
             model_last_forecast[model_name] = current_dt
         except Exception as e:
