@@ -34,6 +34,13 @@ if intro_text.strip() not in content:
     with open(index_file, "w", encoding="utf-8") as f:
         f.write(intro_text + content)
 
+
+# Очистить папку _build/html перед сборкой новой документации
+build_dir = os.path.join(docs_dir, "_build", "html")
+if os.path.exists(build_dir):
+    shutil.rmtree(build_dir)
+    print("Папка _build/html очищена.")
+
 # Собрать HTML документацию
 subprocess.run([
     python_executable, "-m", "sphinx",
@@ -65,16 +72,29 @@ for root, _, files in os.walk(build_dir):
 
 print("HTML файлы успешно скопированы в папку docs.")
 
-# Копировать папку _static
-static_src = os.path.join(build_dir, "_static")
-static_dest = os.path.join(docs_dir, "_static")
-
+# Удалить старую папку static, если она существует
+static_dest = os.path.join(docs_dir, "static")
 if os.path.exists(static_dest):
-    shutil.rmtree(static_dest)  # Удаляем старую папку _static, если есть
+    shutil.rmtree(static_dest)
 
+# Копировать папку static
+static_src = os.path.join(build_dir, "_static")
 shutil.copytree(static_src, static_dest)
 
-print("Папка _static успешно скопирована.")
+print("Папка static успешно скопирована.")
+
+# Заменить ссылки на _static в .html файлах
+for root, _, files in os.walk(docs_dir):
+    for file in files:
+        if file.endswith(".html"):
+            file_path = os.path.join(root, file)
+            with open(file_path, "r", encoding="utf-8") as f:
+                content = f.read()
+            content = content.replace("_static", "static")
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write(content)
+
+print("Ссылки на static успешно обновлены.")
 
 
 #import os
