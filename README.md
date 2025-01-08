@@ -73,7 +73,7 @@ Forecrypt is a flexible tool that adapts easily to your needs. Whether you're fo
 
 ## Documentation
 
-Detailed documentation is available [here](docs/_build/html/index.html).
+Detailed documentation is available [here](https://dove0dowg.github.io/forecrypt/).
 
 ---
 
