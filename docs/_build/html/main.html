@@ -36,6 +36,24 @@
   <section id="module-main">
 <span id="main-module"></span><h1>main module<a class="headerlink" href="#module-main" title="Link to this heading">¶</a></h1>
 <dl class="py function">
+<dt class="sig sig-object py" id="main.calculate_total_fetch_interval">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">calculate_total_fetch_interval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">finish_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">model_parameters</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.calculate_total_fetch_interval" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the time intervals and total hours needed to fetch historical data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_date</strong> – Start date string from configuration.</p></li>
+<li><p><strong>finish_date</strong> – Optional finish date string from configuration. Defaults to the current time if not provided.</p></li>
+<li><p><strong>model_parameters</strong> – Named model parameters (e.g., arima, ets).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple (start_naive, finish_naive, total_hours, extended_start_dt).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="main.check_and_save_models_cycle">
 <span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">check_and_save_models_cycle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crypto_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.check_and_save_models_cycle" title="Link to this definition">¶</a></dt>
 <dd><p>processes and saves models for the specified cryptocurrencies and models.
@@ -44,52 +62,80 @@ if no arguments are provided, processes all cryptocurrencies in CRYPTO_LIST and 
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="main.combine_historical_and_forecast">
-<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">combine_historical_and_forecast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">historical_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forecast_df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.combine_historical_and_forecast" title="Link to this definition">¶</a></dt>
-<dd><p>combines historical and forecast data into a single dataframe.</p>
+<dt class="sig sig-object py" id="main.fetch_extended_df">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">fetch_extended_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.fetch_extended_df" title="Link to this definition">¶</a></dt>
+<dd><p>Fetch extended historical data for a cryptocurrency through get_data.fetch_historical_data function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>historical_df</strong> – dataframe with historical data, must contain ‘date’ and ‘price’ columns.</p></li>
-<li><p><strong>forecast_df</strong> – dataframe with forecast data, must contain ‘date’ and ‘price’ columns.</p></li>
+<li><p><strong>crypto_id</strong> – Cryptocurrency identifier (e.g., ‘BTC’).</p></li>
+<li><p><strong>total_hours</strong> – Total number of hours to fetch.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>combined dataframe with historical and forecast data.</p>
+<dd class="field-even"><p>DataFrame with historical data or None if data is empty.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="main.extract_model_specific_df">
-<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">extract_model_specific_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">training_dataset_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.extract_model_specific_df" title="Link to this definition">¶</a></dt>
-<dd><p>extract the last <cite>training_dataset_size</cite> rows from the given DataFrame.</p>
+<dt class="sig sig-object py" id="main.get_forecast_input_df">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">get_forecast_input_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extended_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forecast_dataset_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.get_forecast_input_df" title="Link to this definition">¶</a></dt>
+<dd><p>Extracts the forecast input dataset for a specific time window.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>extended_df</strong> (<em>DataFrame</em>) – Full historical dataset.</p></li>
+<li><p><strong>current_dt</strong> (<em>datetime</em>) – Current datetime being processed.</p></li>
+<li><p><strong>forecast_dataset_size</strong> (<em>int</em>) – Number of hours required for forecasting.</p></li>
+<li><p><strong>crypto_id</strong> (<em>str</em>) – Cryptocurrency ID.</p></li>
+<li><p><strong>model_name</strong> (<em>str</em>) – Name of the model.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Forecast input dataset for the model, or None if data is insufficient.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="main.get_additional_start_date">
-<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">get_additional_start_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_hours</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">datetime</span></span></span><a class="headerlink" href="#main.get_additional_start_date" title="Link to this definition">¶</a></dt>
-<dd><p>compute the earliest date we need to fetch,
-so that at START_DATE we already have ‘max_hours’ worth of data.</p>
+<dt class="sig sig-object py" id="main.get_train_df">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">get_train_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extended_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">training_dataset_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.get_train_df" title="Link to this definition">¶</a></dt>
+<dd><p>Extracts the training dataset for a specific time window.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>extended_df</strong> (<em>DataFrame</em>) – Full historical dataset.</p></li>
+<li><p><strong>current_dt</strong> (<em>datetime</em>) – Current datetime being processed.</p></li>
+<li><p><strong>training_dataset_size</strong> (<em>int</em>) – Number of hours required for training.</p></li>
+<li><p><strong>crypto_id</strong> (<em>str</em>) – Cryptocurrency ID.</p></li>
+<li><p><strong>model_name</strong> (<em>str</em>) – Name of the model.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Training dataset for the model, or None if data is insufficient.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="main.get_max_training_dataset_size">
-<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">get_max_training_dataset_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_parameters</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.get_max_training_dataset_size" title="Link to this definition">¶</a></dt>
-<dd><p>find the maximum training_dataset_size among all models.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="main.get_max_historical_df">
-<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">get_max_historical_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_hours</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.get_max_historical_df" title="Link to this definition">¶</a></dt>
-<dd><p>get historical data for the maximum required range (max_hours).</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="main.test_forecasts">
-<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">test_forecasts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.test_forecasts" title="Link to this definition">¶</a></dt>
-<dd><p>generates forecasts for all cryptocurrencies and models,
-and compares forecast formats with historical data.</p>
+<dt class="sig sig-object py" id="main.initialize_model_tracking">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">initialize_model_tracking</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.initialize_model_tracking" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize tracking dictionaries for retraining and forecasting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionaries for model_last_retrain and model_last_forecast.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple[dict, dict]</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -125,20 +171,18 @@ and compares forecast formats with historical data.</p>
 <li class="toctree-l1"><a class="reference internal" href="db_utils.html">db_utils module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">config module</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">main module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#main.calculate_total_fetch_interval"><code class="docutils literal notranslate"><span class="pre">calculate_total_fetch_interval()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#main.check_and_save_models_cycle"><code class="docutils literal notranslate"><span class="pre">check_and_save_models_cycle()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#main.combine_historical_and_forecast"><code class="docutils literal notranslate"><span class="pre">combine_historical_and_forecast()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#main.extract_model_specific_df"><code class="docutils literal notranslate"><span class="pre">extract_model_specific_df()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#main.get_additional_start_date"><code class="docutils literal notranslate"><span class="pre">get_additional_start_date()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#main.get_max_training_dataset_size"><code class="docutils literal notranslate"><span class="pre">get_max_training_dataset_size()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#main.get_max_historical_df"><code class="docutils literal notranslate"><span class="pre">get_max_historical_df()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#main.test_forecasts"><code class="docutils literal notranslate"><span class="pre">test_forecasts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#main.fetch_extended_df"><code class="docutils literal notranslate"><span class="pre">fetch_extended_df()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#main.get_forecast_input_df"><code class="docutils literal notranslate"><span class="pre">get_forecast_input_df()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#main.get_train_df"><code class="docutils literal notranslate"><span class="pre">get_train_df()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#main.initialize_model_tracking"><code class="docutils literal notranslate"><span class="pre">initialize_model_tracking()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="forecasting.html">forecasting module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="get_data.html">get_data module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="model_fits.html">model_fits module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models_processing.html">models_processing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="scheduler.html">scheduler module</a></li>
 </ul>
 
 <div class="relations">

@@ -42,9 +42,21 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="db_utils.create_combined_view">
+<span class="sig-prename descclassname"><span class="pre">db_utils.</span></span><span class="sig-name descname"><span class="pre">create_combined_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils.create_combined_view" title="Link to this definition">¶</a></dt>
+<dd><p>Create or replace the combined view for historical and forecast data.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="db_utils.create_tables">
-<span class="sig-prename descclassname"><span class="pre">db_utils.</span></span><span class="sig-name descname"><span class="pre">create_tables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#db_utils.create_tables" title="Link to this definition">¶</a></dt>
-<dd><p>create tables historical_data и forecast_data, if there are none in database</p>
+<span class="sig-prename descclassname"><span class="pre">db_utils.</span></span><span class="sig-name descname"><span class="pre">create_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils.create_tables" title="Link to this definition">¶</a></dt>
+<dd><p>Create tables historical_data и forecast_data, if there are none in database</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="db_utils.delete_view_and_tables">
+<span class="sig-prename descclassname"><span class="pre">db_utils.</span></span><span class="sig-name descname"><span class="pre">delete_view_and_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils.delete_view_and_tables" title="Link to this definition">¶</a></dt>
+<dd><p>Delete the view ‘combined_data’ and the tables ‘historical_data’ and ‘forecast_data’ from the database.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -54,17 +66,36 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="db_utils.init_database_connection">
+<span class="sig-prename descclassname"><span class="pre">db_utils.</span></span><span class="sig-name descname"><span class="pre">init_database_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils.init_database_connection" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize a database connection. Replaces DB_CONFIG from config.py by .env values.
+DB_CONFIG from config.py is usable, but .env preferred for security reasons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>kwargs</strong> – Database connection parameters (overrides defaults in DB_CONFIG).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A psycopg2 connection object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="db_utils.load_to_db_forecast">
-<span class="sig-prename descclassname"><span class="pre">db_utils.</span></span><span class="sig-name descname"><span class="pre">load_to_db_forecast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">created_at</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils.load_to_db_forecast" title="Link to this definition">¶</a></dt>
-<dd><p>save forecast data into the database table <cite>forecast_data</cite>.</p>
+<span class="sig-prename descclassname"><span class="pre">db_utils.</span></span><span class="sig-name descname"><span class="pre">load_to_db_forecast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">created_at</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils.load_to_db_forecast" title="Link to this definition">¶</a></dt>
+<dd><p>Save forecast data into the database table <cite>forecast_data</cite>.</p>
+<p>The model name is dynamically generated from key parameters to avoid conflicts.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dataframe</strong> – forecast data as pandas DataFrame with columns [‘date’, ‘price’].</p></li>
-<li><p><strong>crypto_id</strong> – the cryptocurrency identifier (e.g., ‘BTC’, ‘ETH’).</p></li>
-<li><p><strong>model_name</strong> – the name of the model (e.g., ‘arima’, ‘ets’).</p></li>
-<li><p><strong>conn</strong> – active connection to the PostgreSQL database.</p></li>
-<li><p><strong>created_at</strong> – timestamp representing the starting point of the forecast.</p></li>
+<li><p><strong>dataframe</strong> – Forecast data as pandas DataFrame with columns [‘date’, ‘price’].</p></li>
+<li><p><strong>crypto_id</strong> – The cryptocurrency identifier (e.g., ‘BTC’, ‘ETH’).</p></li>
+<li><p><strong>model_name</strong> – The base name of the model (e.g., ‘arima’, ‘ets’).</p></li>
+<li><p><strong>params</strong> – Dictionary containing model parameters, including ‘training_dataset_size’,
+‘model_update_interval’, ‘forecast_dataset_size’, ‘forecast_frequency’,
+and ‘forecast_hours’.</p></li>
+<li><p><strong>conn</strong> – Active connection to the PostgreSQL database.</p></li>
+<li><p><strong>created_at</strong> – Timestamp representing the starting point of the forecast.</p></li>
 </ul>
 </dd>
 </dl>
@@ -73,7 +104,33 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="db_utils.load_to_db_historical">
 <span class="sig-prename descclassname"><span class="pre">db_utils.</span></span><span class="sig-name descname"><span class="pre">load_to_db_historical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils.load_to_db_historical" title="Link to this definition">¶</a></dt>
-<dd><p>save historical data into the database table <cite>historical_data</cite></p>
+<dd><p>save historical data into the database table <cite>historical_data</cite>
+with a ‘historical’ label</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="db_utils.load_to_db_train_and_historical">
+<span class="sig-prename descclassname"><span class="pre">db_utils.</span></span><span class="sig-name descname"><span class="pre">load_to_db_train_and_historical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extended_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_train_dataset_hours</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils.load_to_db_train_and_historical" title="Link to this definition">¶</a></dt>
+<dd><p>save both training and historical data into the database table <cite>historical_data</cite>.</p>
+<p>the first <cite>max_train_dataset_hours</cite> rows are marked as ‘training’,
+and the remaining rows are marked as ‘historical’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>extended_df</strong> – pandas DataFrame with columns [‘date’, ‘price’] containing both training and historical data.</p></li>
+<li><p><strong>crypto_id</strong> – the cryptocurrency identifier (e.g., ‘BTC’, ‘ETH’).</p></li>
+<li><p><strong>conn</strong> – active connection to the PostgreSQL database.</p></li>
+<li><p><strong>max_train_dataset_hours</strong> – number of hours to be marked as ‘training’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="db_utils.load_to_db_training">
+<span class="sig-prename descclassname"><span class="pre">db_utils.</span></span><span class="sig-name descname"><span class="pre">load_to_db_training</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils.load_to_db_training" title="Link to this definition">¶</a></dt>
+<dd><p>save training data into the database table <cite>historical_data</cite>
+with a ‘training’ label</p>
 </dd></dl>
 
 </section>
@@ -108,10 +165,15 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">db_utils module</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#db_utils.check_consistency"><code class="docutils literal notranslate"><span class="pre">check_consistency()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#db_utils.create_combined_view"><code class="docutils literal notranslate"><span class="pre">create_combined_view()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#db_utils.create_tables"><code class="docutils literal notranslate"><span class="pre">create_tables()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#db_utils.delete_view_and_tables"><code class="docutils literal notranslate"><span class="pre">delete_view_and_tables()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#db_utils.get_missing_hours"><code class="docutils literal notranslate"><span class="pre">get_missing_hours()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#db_utils.init_database_connection"><code class="docutils literal notranslate"><span class="pre">init_database_connection()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#db_utils.load_to_db_forecast"><code class="docutils literal notranslate"><span class="pre">load_to_db_forecast()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#db_utils.load_to_db_historical"><code class="docutils literal notranslate"><span class="pre">load_to_db_historical()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#db_utils.load_to_db_train_and_historical"><code class="docutils literal notranslate"><span class="pre">load_to_db_train_and_historical()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#db_utils.load_to_db_training"><code class="docutils literal notranslate"><span class="pre">load_to_db_training()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">config module</a></li>
@@ -120,7 +182,6 @@
 <li class="toctree-l1"><a class="reference internal" href="get_data.html">get_data module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="model_fits.html">model_fits module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models_processing.html">models_processing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="scheduler.html">scheduler module</a></li>
 </ul>
 
 <div class="relations">

@@ -11,16 +11,14 @@ index_file = os.path.join(docs_dir, "index.rst")
 
 # Добавить вводное описание в index.rst
 intro_text = """
-Welcome to Forecrypt's Documentation!
+Welcome to ForecrypT's Documentation!
 ======================================
 
-Forecrypt is a powerful cryptocurrency forecasting tool that combines modern algorithms, real-time data, and seamless database integration. Here's what it can do for you:
+ForecrypT is a powerful cryptocurrency forecasting tool that combines modern algorithms, real-time data, and seamless database integration. Here's what it can do for you:
 
 - Predict cryptocurrency prices using ARIMA, ETS, and Theta models.
 - Store and analyze historical and forecast data in PostgreSQL.
-- Automatically update forecasts and retrain models on a schedule.
-
-Get started today and take your crypto analytics to the next level!
+- Automatically update forecasts and retrain models on a schedule.(development)
 
 """
 

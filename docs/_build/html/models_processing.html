@@ -14,7 +14,6 @@
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="scheduler module" href="scheduler.html" />
     <link rel="prev" title="model_fits module" href="model_fits.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -59,9 +58,41 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="models_processing.forecast_in_hour_cycle">
+<span class="sig-prename descclassname"><span class="pre">models_processing.</span></span><span class="sig-name descname"><span class="pre">forecast_in_hour_cycle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_last_forecast</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models_processing.forecast_in_hour_cycle" title="Link to this definition">¶</a></dt>
+<dd><p>Handle forecasting for a specific hour.</p>
+<p>This function checks whether a new forecast is needed based on the elapsed time since the
+last forecast. If a forecast is required, the function attempts to load the existing model,
+generates predictions for the specified number of hours, and saves the forecast results to the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_name</strong> (<em>str</em>) – The name of the model being used for forecasting.</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – A dictionary containing configuration parameters for the model.
+Must include ‘forecast_frequency’ (time interval in hours between forecasts)
+and ‘forecast_hours’ (number of hours to forecast).</p></li>
+<li><p><strong>sub_df</strong> (<em>DataFrame</em>) – A pandas DataFrame containing the input data for forecasting.</p></li>
+<li><p><strong>current_dt</strong> (<em>datetime</em>) – The current datetime being processed in the hourly cycle.</p></li>
+<li><p><strong>crypto_id</strong> (<em>str</em>) – The cryptocurrency identifier (e.g., ‘BTC’, ‘ETH’) for which the forecast is being generated.</p></li>
+<li><p><strong>conn</strong> (<em>Connection</em>) – A database connection object used to save the forecast results.</p></li>
+<li><p><strong>model_last_forecast</strong> (<em>dict</em>) – A dictionary tracking the last forecast times for each model.
+The key is the model name, and the value is the datetime of the last forecast.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Exception</strong> – Logs any exceptions that occur during forecasting or saving the forecast.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="models_processing.load_model">
 <span class="sig-prename descclassname"><span class="pre">models_processing.</span></span><span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models_processing.load_model" title="Link to this definition">¶</a></dt>
-<dd><p>Loads the saved model for the given cryptocurrency and model name.</p>
+<dd><p>Loads the saved model for the given cryptocurrency and model name.
+Path to folder with models determined by config.py/MODELS_DIRECTORY.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -74,6 +105,77 @@
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>FileNotFoundError</strong> – if the model file does not exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="models_processing.process_model_for_hour">
+<span class="sig-prename descclassname"><span class="pre">models_processing.</span></span><span class="sig-name descname"><span class="pre">process_model_for_hour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_last_retrain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_last_forecast</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models_processing.process_model_for_hour" title="Link to this definition">¶</a></dt>
+<dd><p>Do</p>
+<p>Process a single model for a specific cryptocurrency and time interval.
+This function handles retraining or loading an existing model, checking whether a forecast is needed,
+and generating and saving the forecast.
+:param model_name: Name of the model to process.
+:type model_name: str
+:param params: Configuration parameters for the model, including update interval and forecast frequency.
+:type params: dict
+:param sub_df: Filtered historical data for the specific time window.
+:type sub_df: DataFrame
+:param current_dt: The current datetime being processed.
+:type current_dt: datetime
+:param crypto_id: Identifier for the cryptocurrency (e.g., ‘BTC’, ‘ETH’).
+:type crypto_id: str
+:param conn: Database connection for saving forecasts.
+:type conn: Connection
+:param model_last_retrain: Tracks the last retrain time for each model.
+:type model_last_retrain: dict
+:param model_last_forecast: Tracks the last forecast time for each model.
+:type model_last_forecast: dict</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Logic:</dt><dd><ul class="simple">
+<li><p>Filters the input data to ensure sufficient historical coverage.</p></li>
+<li><p>Checks whether retraining is needed based on the model’s update interval.</p></li>
+<li><p>Either retrains the model or loads an existing one.</p></li>
+<li><p>Checks if a forecast is needed based on the model’s forecast frequency.</p></li>
+<li><p>Generates a forecast and saves it to the database if required.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="models_processing.retrain_in_hour_cycle">
+<span class="sig-prename descclassname"><span class="pre">models_processing.</span></span><span class="sig-name descname"><span class="pre">retrain_in_hour_cycle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_last_retrain</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models_processing.retrain_in_hour_cycle" title="Link to this definition">¶</a></dt>
+<dd><p>Handle model retraining for a specific hour.</p>
+<p>This function determines whether the model requires retraining based on the elapsed time
+since the last retraining. If retraining is necessary, the model is trained using the provided
+historical data and saved. If retraining is not required, no action is taken.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_name</strong> (<em>str</em>) – The name of the model being processed. This is used for logging and
+identifying the model in the database.</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – A dictionary containing configuration parameters for the model.
+Must include ‘model_update_interval’, which defines the time interval
+(in hours) for retraining.</p></li>
+<li><p><strong>sub_df</strong> (<em>DataFrame</em>) – A pandas DataFrame containing historical data used for training the model.</p></li>
+<li><p><strong>current_dt</strong> (<em>datetime</em>) – The current datetime being processed in the hourly cycle.</p></li>
+<li><p><strong>crypto_id</strong> (<em>str</em>) – The cryptocurrency identifier (e.g., ‘BTC’, ‘ETH’) for which the model is being processed.</p></li>
+<li><p><strong>model_last_retrain</strong> (<em>dict</em>) – A dictionary tracking the last retrain times for each model.
+The key is the model name, and the value is the datetime of the last retraining.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Exception</strong> – Logs any exceptions that occur during model fitting or saving.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -132,11 +234,13 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">models_processing module</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#models_processing.check_model"><code class="docutils literal notranslate"><span class="pre">check_model()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#models_processing.fit_model_any"><code class="docutils literal notranslate"><span class="pre">fit_model_any()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#models_processing.forecast_in_hour_cycle"><code class="docutils literal notranslate"><span class="pre">forecast_in_hour_cycle()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#models_processing.load_model"><code class="docutils literal notranslate"><span class="pre">load_model()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#models_processing.process_model_for_hour"><code class="docutils literal notranslate"><span class="pre">process_model_for_hour()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#models_processing.retrain_in_hour_cycle"><code class="docutils literal notranslate"><span class="pre">retrain_in_hour_cycle()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#models_processing.save_model"><code class="docutils literal notranslate"><span class="pre">save_model()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="scheduler.html">scheduler module</a></li>
 </ul>
 
 <div class="relations">
@@ -144,7 +248,6 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="model_fits.html" title="previous chapter">model_fits module</a></li>
-      <li>Next: <a href="scheduler.html" title="next chapter">scheduler module</a></li>
   </ul></li>
 </ul>
 </div>

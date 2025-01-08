@@ -37,18 +37,19 @@
 <span id="get-data-module"></span><h1>get_data module<a class="headerlink" href="#module-get_data" title="Link to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="get_data.fetch_historical_data">
-<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">fetch_historical_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hours</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.fetch_historical_data" title="Link to this definition">¶</a></dt>
-<dd><p>Fetch historical hourly cryptocurrency data from an external API.</p>
+<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">fetch_historical_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.fetch_historical_data" title="Link to this definition">¶</a></dt>
+<dd><p>Fetch historical hourly cryptocurrency data from an external API for a specific time range with support for pagination.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>crypto_id</strong> – The cryptocurrency identifier (e.g., ‘BTC’, ‘ETH’).</p></li>
-<li><p><strong>hours</strong> – The number of hours of historical data to fetch.</p></li>
+<li><p><strong>start_date</strong> – The start date (inclusive) as a string in ‘yyyy-mm-dd HH:MM:SS’ format.</p></li>
+<li><p><strong>end_date</strong> – The end date (inclusive) as a string in ‘yyyy-mm-dd HH:MM:SS’ format.</p></li>
 <li><p><strong>api_key</strong> – API key for authentication (optional).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A pandas DataFrame with columns [‘date’, ‘price’] containing the fetched data.</p>
+<dd class="field-even"><p>A pandas DataFrame with columns [‘date’, ‘price’] and a DatetimeIndex (naive, hourly frequency).</p>
 </dd>
 </dl>
 </dd></dl>
@@ -112,7 +113,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="model_fits.html">model_fits module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models_processing.html">models_processing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="scheduler.html">scheduler module</a></li>
 </ul>
 
 <div class="relations">

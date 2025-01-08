@@ -26,4 +26,3 @@ Get started today and take your crypto analytics to the next level!
    get_data
    model_fits
    models_processing
-   scheduler
