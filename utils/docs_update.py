@@ -65,6 +65,17 @@ for root, _, files in os.walk(build_dir):
 
 print("HTML файлы успешно скопированы в папку docs.")
 
+# Копировать папку _static
+static_src = os.path.join(build_dir, "_static")
+static_dest = os.path.join(docs_dir, "_static")
+
+if os.path.exists(static_dest):
+    shutil.rmtree(static_dest)  # Удаляем старую папку _static, если есть
+
+shutil.copytree(static_src, static_dest)
+
+print("Папка _static успешно скопирована.")
+
 
 #import os
 #import subprocess
