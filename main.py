@@ -187,6 +187,7 @@ def initialize_model_tracking():
     """
     model_last_retrain = {model: None for model in MODEL_PARAMETERS.keys()}
     model_last_forecast = {model: None for model in MODEL_PARAMETERS.keys()}
+    
     return model_last_retrain, model_last_forecast
 
 # ---------------------------------------------------------
@@ -218,6 +219,9 @@ if __name__ == "__main__":
         for crypto_id in CRYPTO_LIST:
             logger.info(f"Processing cryptocurrency: {crypto_id}")
 
+            # Initialize tracking for retrain and forecast. 
+            model_last_retrain, model_last_forecast = initialize_model_tracking()
+
             # Fetch extended historical dataset (max hours for training dataset + historical dataset from START_DATE to FINISH_DATE)
             extended_df = fetch_extended_df(crypto_id, extended_start_dt, FINISH_DATE)
 
@@ -225,9 +229,6 @@ if __name__ == "__main__":
             #db_utils.load_to_db_historical(extended_df, crypto_id, conn)
 
             db_utils.load_to_db_train_and_historical(extended_df, crypto_id, conn, max_train_dataset_hours)
-
-            # Initialize tracking for retrain and forecast. 
-            model_last_retrain, model_last_forecast = initialize_model_tracking()
 
             # Cycle for each model
             for model_name, params in MODEL_PARAMETERS.items():
@@ -251,6 +252,7 @@ if __name__ == "__main__":
                     
                     # Handle retraining. Check if retrain required.
                     # If required - retrain and save model.
+                    # Dictionary model_last_retrain affected by this function.
                     models_processing.retrain_in_hour_cycle(
                         model_name=model_name,
                         params=params,
@@ -263,6 +265,7 @@ if __name__ == "__main__":
                     # Handle forecasting. Checking config.py if forecast required.
                     # If yes - load model, create forecast, and load to db.
                     # If no - skip.
+                    # Dictionary model_last_forecast affected by this function.
                     models_processing.forecast_in_hour_cycle(
                         model_name=model_name,
                         params=params,
