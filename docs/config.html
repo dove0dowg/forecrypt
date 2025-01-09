@@ -129,8 +129,107 @@
                 <div class="row">
                     <div class="col-12 col-lg-9 order-last order-lg-first rst-content">
                         <main role="main" id="main">
-    <section id="module-config">
-<span id="config"></span><h1>config<a class="headerlink" href="#module-config" title="Link to this heading">¶</a></h1>
+    <section id="config">
+<span id="id1"></span><h1>config<a class="headerlink" href="#config" title="Link to this heading">¶</a></h1>
+<section id="forecrypt-configuration-parameters">
+<h2>ForecrypT Configuration Parameters<a class="headerlink" href="#forecrypt-configuration-parameters" title="Link to this heading">¶</a></h2>
+<p>This file contains key configuration parameters used by ForecrypT to manage data collection, model training, and forecasting processes.</p>
+<section id="general-parameters">
+<h3>General Parameters<a class="headerlink" href="#general-parameters" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CRYPTO_LIST</span></code> (<em>list</em>)
+List of cryptocurrencies to process. Each value represents a cryptocurrency identifier (e.g., <code class="docutils literal notranslate"><span class="pre">'BTC'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ETH'</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">START_DATE</span></code> (<em>str</em>)
+Start date and time for historical data in the format <code class="docutils literal notranslate"><span class="pre">yyyy-mm-ddThh:mm:ss</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FINISH_DATE</span></code> (<em>str</em>)
+End date and time for historical data.</p></li>
+</ul>
+</section>
+<section id="database-configuration">
+<h3>Database Configuration<a class="headerlink" href="#database-configuration" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">DB_CONFIG</span></code> (<em>dict</em>)
+Parameters for connecting to the PostgreSQL database:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dbname</span></code>: Name of the database.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">user</span></code>: Database user.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">password</span></code>: User password.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host</span></code>: Database host.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">port</span></code>: Port for connection.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is recommended to use environment variables instead of hardcoding values:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">FORECRYPT_DB_NAME</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FORECRYPT_DB_USER</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FORECRYPT_DB_PASS</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FORECRYPT_DB_HOST</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FORECRYPT_DB_PORT</span></code></p></li>
+</ul>
+</div>
+</li>
+</ul>
+</section>
+<section id="model-parameters">
+<h3>Model Parameters<a class="headerlink" href="#model-parameters" title="Link to this heading">¶</a></h3>
+<p>Each model’s parameters are specified in a dictionary within the <code class="docutils literal notranslate"><span class="pre">MODEL_PARAMETERS</span></code> variable. Each key represents the model name (e.g., <code class="docutils literal notranslate"><span class="pre">'arima'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ets'</span></code>, <code class="docutils literal notranslate"><span class="pre">'theta'</span></code>). The main model parameters are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">training_dataset_size</span></code> (<em>int</em>)
+[TD] Number of hours of data used for training the model.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model_update_interval</span></code> (<em>int</em>)
+[MU] Time interval (in hours) between model retrainings. If the last retraining was more than this interval ago, the model will retrain.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">forecast_dataset_size</span></code> (<em>int</em>)
+[FD] Number of hours of historical data required for forecasting.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">forecast_frequency</span></code> (<em>int</em>)
+[FF] Frequency (in hours) of generating forecasts.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">forecast_hours</span></code> (<em>int</em>)
+[FH] Number of hours to forecast.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fit_func_name</span></code> (<em>str</em>)
+Path to the function responsible for fitting the model.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">specific_parameters</span></code> (<em>dict</em>)
+[SP] Model-specific hyperparameters for training (e.g., ARIMA orders, ETS seasonal periods).</p></li>
+</ul>
+<p>Example configuration for the ARIMA model:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;arima&#39;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s1">&#39;training_dataset_size&#39;</span><span class="p">:</span> <span class="mi">240</span><span class="p">,</span>
+    <span class="s1">&#39;model_update_interval&#39;</span><span class="p">:</span> <span class="mi">2880</span><span class="p">,</span>
+    <span class="s1">&#39;forecast_dataset_size&#39;</span><span class="p">:</span> <span class="mi">48</span><span class="p">,</span>
+    <span class="s1">&#39;forecast_frequency&#39;</span><span class="p">:</span> <span class="mi">120</span><span class="p">,</span>
+    <span class="s1">&#39;forecast_hours&#39;</span><span class="p">:</span> <span class="mi">120</span><span class="p">,</span>
+    <span class="s1">&#39;fit_func_name&#39;</span><span class="p">:</span> <span class="s1">&#39;model_fits.fit_arima_model&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;specific_parameters&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;order&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
+        <span class="s1">&#39;seasonal_order&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="update-schedule">
+<h3>Update Schedule<a class="headerlink" href="#update-schedule" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">HISTORICAL_UPDATE_TIME</span></code> (<em>dict</em>)
+Time for daily updates of historical data. By default, every day at 00:00.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FORECAST_UPDATE_TIME</span></code> (<em>dict</em>)
+Time for hourly forecast updates. By default, every hour at xx:00.</p></li>
+</ul>
+</section>
+<section id="api-parameters">
+<h3>API Parameters<a class="headerlink" href="#api-parameters" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">API_KEY</span></code> (<em>str</em>)
+API key for accessing CryptoCompare. Currently, it is not required for free requests but is included for potential future changes.</p></li>
+</ul>
+</section>
+<section id="additional-parameters">
+<h3>Additional Parameters<a class="headerlink" href="#additional-parameters" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MODELS_DIRECTORY</span></code> (<em>str</em>)
+Path to the directory for saving and loading models. Used in <code class="docutils literal notranslate"><span class="pre">models_processing</span></code>.</p></li>
+</ul>
+</section>
+</section>
 </section>
 
 </main>
@@ -143,6 +242,27 @@
     </a>
 </nav>
                     </div>
+                    
+                    <nav class="col-12 col-lg-3 pb-4">
+                        <div class="sticky-top toc page-toc" aria-labelledby="page-toc-heading">
+                            <p class="font-weight-bold" id="page-toc-heading">Page contents</p>
+                            <ul>
+<li><a class="reference internal" href="#">config</a><ul>
+<li><a class="reference internal" href="#forecrypt-configuration-parameters">ForecrypT Configuration Parameters</a><ul>
+<li><a class="reference internal" href="#general-parameters">General Parameters</a></li>
+<li><a class="reference internal" href="#database-configuration">Database Configuration</a></li>
+<li><a class="reference internal" href="#model-parameters">Model Parameters</a></li>
+<li><a class="reference internal" href="#update-schedule">Update Schedule</a></li>
+<li><a class="reference internal" href="#api-parameters">API Parameters</a></li>
+<li><a class="reference internal" href="#additional-parameters">Additional Parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+                        </div>
+                    </nav>
                     
                 </div>
             </div>

@@ -131,32 +131,36 @@
                         <main role="main" id="main">
     <section id="how-to-set-up-a-custom-time-series-source">
 <h1>How to Set Up a Custom Time Series Source?<a class="headerlink" href="#how-to-set-up-a-custom-time-series-source" title="Link to this heading">¶</a></h1>
-<p>To modify the time series source in Forecrypt, you simply need to rewrite the <cite>fetch_historical_data</cite> function. This function is responsible for retrieving the time series data and returning it as a pandas DataFrame in a specific format with an additional time index.</p>
+<p>To modify the time series source in Forecrypt, you simply need to rewrite the <code class="docutils literal notranslate"><span class="pre">fetch_historical_data</span></code> function. This function is responsible for retrieving the time series data and returning it as a pandas DataFrame in a specific format with an additional time index.</p>
 <p>The goal is to ensure that your custom implementation provides a DataFrame with the required structure:</p>
 <ul class="simple">
-<li><p><strong>Columns</strong>: <cite>[‘date’, ‘price’]</cite></p></li>
+<li><p><strong>Columns</strong>: <code class="docutils literal notranslate"><span class="pre">['date',</span> <span class="pre">'price']</span></code></p></li>
 <li><p><strong>Index</strong>: A datetime index representing the hourly time points.</p></li>
 </ul>
 <p>—</p>
-<p>## Steps to Set Up a Custom Time Series Source</p>
+<section id="steps-to-set-up-a-custom-time-series-source">
+<h2>Steps to Set Up a Custom Time Series Source<a class="headerlink" href="#steps-to-set-up-a-custom-time-series-source" title="Link to this heading">¶</a></h2>
 <ol class="arabic simple">
-<li><p><strong>Open the `get_data.py` module</strong>:
-Locate the <cite>fetch_historical_data</cite> function. This function handles the retrieval and transformation of time series data from the current data source.</p></li>
+<li><p><strong>Open the</strong> <code class="docutils literal notranslate"><span class="pre">get_data.py</span></code> <strong>module</strong>:
+Locate the <code class="docutils literal notranslate"><span class="pre">fetch_historical_data</span></code> function. This function handles the retrieval and transformation of time series data from the current data source.</p></li>
 <li><p><strong>Customize the Data Retrieval Logic</strong>:
 If your time series source is an API, you will likely need to:
-- Send HTTP requests to the API using a library like <cite>requests</cite>.
+- Send HTTP requests to the API using a library like <code class="docutils literal notranslate"><span class="pre">requests</span></code>.
 - Parse the returned JSON data.
-- Convert the parsed data into a pandas DataFrame with the appropriate columns (<cite>‘date’</cite> and <cite>‘price’</cite>).</p></li>
+- Convert the parsed data into a pandas DataFrame with the appropriate columns (<code class="docutils literal notranslate"><span class="pre">'date'</span></code> and <code class="docutils literal notranslate"><span class="pre">'price'</span></code>).</p></li>
 <li><p><strong>Ensure Proper Formatting</strong>:
 Make sure that the resulting DataFrame:
-- Contains a <cite>date</cite> column with datetime values.
-- Contains a <cite>price</cite> column with numerical values.
-- Is indexed by the <cite>date</cite> column, ensuring the index is a pandas <cite>DatetimeIndex</cite> with an hourly frequency.</p></li>
+- Contains a <code class="docutils literal notranslate"><span class="pre">date</span></code> column with datetime values.
+- Contains a <code class="docutils literal notranslate"><span class="pre">price</span></code> column with numerical values.
+- Is indexed by the <code class="docutils literal notranslate"><span class="pre">date</span></code> column, ensuring the index is a pandas <code class="docutils literal notranslate"><span class="pre">DatetimeIndex</span></code> with an hourly frequency.</p></li>
 </ol>
 <p>—</p>
-<p>## Flexibility of the Time Series Source</p>
+</section>
+<section id="flexibility-of-the-time-series-source">
+<h2>Flexibility of the Time Series Source<a class="headerlink" href="#flexibility-of-the-time-series-source" title="Link to this heading">¶</a></h2>
 <p>The application logic in Forecrypt is designed to analyze any hourly time series using mathematical models. This means that the nature and origin of the time series can be highly flexible. Whether it’s cryptocurrency prices, stock market data, or even environmental metrics, as long as your source provides a structured time series, it can be integrated into Forecrypt.</p>
-<p>With proper customization of the <cite>fetch_historical_data</cite> function, nearly any time series source should be compatible with the system.</p>
+<p>With proper customization of the <code class="docutils literal notranslate"><span class="pre">fetch_historical_data</span></code> function, nearly any time series source should be compatible with the system.</p>
+</section>
 </section>
 
 </main>
@@ -169,6 +173,20 @@ Make sure that the resulting DataFrame:
     </a>
 </nav>
                     </div>
+                    
+                    <nav class="col-12 col-lg-3 pb-4">
+                        <div class="sticky-top toc page-toc" aria-labelledby="page-toc-heading">
+                            <p class="font-weight-bold" id="page-toc-heading">Page contents</p>
+                            <ul>
+<li><a class="reference internal" href="#">How to Set Up a Custom Time Series Source?</a><ul>
+<li><a class="reference internal" href="#steps-to-set-up-a-custom-time-series-source">Steps to Set Up a Custom Time Series Source</a></li>
+<li><a class="reference internal" href="#flexibility-of-the-time-series-source">Flexibility of the Time Series Source</a></li>
+</ul>
+</li>
+</ul>
+
+                        </div>
+                    </nav>
                     
                 </div>
             </div>

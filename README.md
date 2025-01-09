@@ -33,6 +33,9 @@ ForecrypT offers the following capabilities, arranged "from simple to advanced":
    If you have a model not included in the platform, you can integrate it for use or comparison with other models.  
    [How to add a custom model?](https://dove0dowg.github.io/forecrypt/add_custom_model.html)
 
+Project Schemes:
+[External Systems](https://dove0dowg.github.io/forecrypt/Systems_of_ForecrypT.html)
+[Internal Python Processes](https://dove0dowg.github.io/forecrypt/ForecrypT_Python_Internal_Processes.html)
 
 > **Note:** This project is in an early stage of development. Even the core functionality, such as automating data collection and prediction, is not yet fully implemented. Contributions and suggestions are welcome!
 

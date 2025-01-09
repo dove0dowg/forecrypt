@@ -131,41 +131,49 @@
                         <main role="main" id="main">
     <section id="how-to-manage-the-config-py-configuration">
 <h1>How to Manage the config.py Configuration?<a class="headerlink" href="#how-to-manage-the-config-py-configuration" title="Link to this heading">¶</a></h1>
-<p>The <cite>config.py</cite> file is the main control element of Forecrypt. Proper configuration allows you to automate the forecasting process for multiple cryptocurrencies, models, and time intervals. By adjusting the parameters, you can set up large-scale “batch” forecasting with minimal manual effort.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">config.py</span></code> file is the main control element of Forecrypt. Proper configuration allows you to automate the forecasting process for multiple cryptocurrencies, models, and time intervals. By adjusting the parameters, you can set up large-scale “batch” forecasting with minimal manual effort.</p>
+<p>Refer to the <a class="reference internal" href="config.html#config"><span class="std std-ref">config</span></a> section for details about the configuration parameters.</p>
 <p>—</p>
-<p>## Key Concepts in config.py</p>
-<p>The <cite>config.py</cite> file consists of several key sections that determine the behavior of the forecasting system. Below are detailed examples of how to manage and customize its settings.</p>
+<section id="key-concepts-in-config-py">
+<h2>Key Concepts in config.py<a class="headerlink" href="#key-concepts-in-config-py" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">config.py</span></code> file consists of several key sections that determine the behavior of the forecasting system. Below are detailed examples of how to manage and customize its settings.</p>
 <p>—</p>
-<p>## Example 1: Setting Up Basic Configuration</p>
+<section id="example-1-setting-up-basic-configuration">
+<h3>Example 1: Setting Up Basic Configuration<a class="headerlink" href="#example-1-setting-up-basic-configuration" title="Link to this heading">¶</a></h3>
 <p>In this example, we’ll walk through setting up a basic configuration for forecasting two cryptocurrencies: Bitcoin (BTC) and Ethereum (ETH).</p>
 <ol class="arabic">
-<li><p>Open the <cite>config.py</cite> file in your preferred code editor.</p>
+<li><p>Open the <code class="docutils literal notranslate"><span class="pre">config.py</span></code> file in your preferred code editor.</p>
 <a class="reference internal image-reference" href="static/pics/config_main.PNG"><img alt="Screenshot of config.py main section" src="static/pics/config_main.PNG" style="width: 600px;" />
 </a>
 </li>
-<li><p>Locate the <cite>CRYPTO_LIST</cite> parameter and set it as follows:</p>
-<p><code class="docutils literal notranslate"><span class="pre">`python</span>
-<span class="pre">CRYPTO_LIST</span> <span class="pre">=</span> <span class="pre">['BTC',</span> <span class="pre">'ETH']</span>
-<span class="pre">`</span></code></p>
-</li>
-<li><p>Set the <cite>START_DATE</cite> and <cite>FINISH_DATE</cite> parameters to define the range of historical data:</p>
-<p><code class="docutils literal notranslate"><span class="pre">`python</span>
-<span class="pre">START_DATE</span> <span class="pre">=</span> <span class="pre">&quot;2024-10-01T00:00:00&quot;</span>
-<span class="pre">FINISH_DATE</span> <span class="pre">=</span> <span class="pre">&quot;2025-01-01T00:00:00&quot;</span>
-<span class="pre">`</span></code></p>
+<li><p>Locate the <code class="docutils literal notranslate"><span class="pre">CRYPTO_LIST</span></code> parameter and set it as follows:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">CRYPTO_LIST</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;BTC&#39;</span><span class="p">,</span> <span class="s1">&#39;ETH&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Set the <code class="docutils literal notranslate"><span class="pre">START_DATE</span></code> and <code class="docutils literal notranslate"><span class="pre">FINISH_DATE</span></code> parameters to define the range of historical data:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">START_DATE</span> <span class="o">=</span> <span class="s2">&quot;2024-10-01T00:00:00&quot;</span>
+<span class="n">FINISH_DATE</span> <span class="o">=</span> <span class="s2">&quot;2025-01-01T00:00:00&quot;</span>
+</pre></div>
+</div>
 <a class="reference internal image-reference" href="static/pics/config_db.PNG"><img alt="Screenshot of database connection parameters" src="static/pics/config_db.PNG" style="width: 600px;" />
 </a>
-</li>
+<ol class="arabic" start="4">
 <li><p>Optionally, adjust the database connection parameters or use environment variables for enhanced security.</p>
 <a class="reference internal image-reference" href="static/pics/config_env.PNG"><img alt="Screenshot of environment variables setup" src="static/pics/config_env.PNG" style="width: 600px;" />
 </a>
 </li>
+<li><p>Start main.py. Database will be filled by historical(+training dataset) and forecast timeseries.</p></li>
 </ol>
 <p>—</p>
-<p>## Example 2: Advanced Model Parameters</p>
+</section>
+<section id="example-2-advanced-model-parameters">
+<h3>Example 2: Advanced Model Parameters<a class="headerlink" href="#example-2-advanced-model-parameters" title="Link to this heading">¶</a></h3>
 <p>This example demonstrates how to configure advanced model parameters for more precise forecasting.</p>
 <ol class="arabic">
-<li><p>Find the <cite>MODEL_PARAMETERS</cite> dictionary in the <cite>config.py</cite> file.</p></li>
+<li><p>Find the <code class="docutils literal notranslate"><span class="pre">MODEL_PARAMETERS</span></code> dictionary in the <code class="docutils literal notranslate"><span class="pre">config.py</span></code> file.</p></li>
 <li><p>Customize the parameters for each model according to your needs:</p>
 <a class="reference internal image-reference" href="static/pics/config_model_params.PNG"><img alt="Screenshot of model parameter setup" src="static/pics/config_model_params.PNG" style="width: 600px;" />
 </a>
@@ -184,21 +192,27 @@
 </li>
 </ol>
 <p>—</p>
-<p>## Summary of Model Parameters</p>
-<p>Below is a detailed explanation of the main model parameters used in <cite>config.py</cite>:</p>
+</section>
+</section>
+<section id="summary-of-model-parameters">
+<h2>Summary of Model Parameters<a class="headerlink" href="#summary-of-model-parameters" title="Link to this heading">¶</a></h2>
+<p>Below is a detailed explanation of the main model parameters used in <code class="docutils literal notranslate"><span class="pre">config.py</span></code>:</p>
 <ul class="simple">
-<li><p><strong>`model_name`</strong> (e.g., <cite>arima</cite>) — <strong>[MN]</strong> — Name of the model. Used for tagging in logs and the database.</p></li>
-<li><p><strong>`training_dataset_size`</strong> — <strong>[TD]</strong> — Number of hours of historical data used for training the model. Ensure this value matches the model’s requirements for accuracy.</p></li>
-<li><p><strong>`model_update_interval`</strong> — <strong>[MU]</strong> — Time interval (in hours) between model retrainings. If the last retraining was more than this value ago, the model will retrain.</p></li>
-<li><p><strong>`forecast_dataset_size`</strong> — <strong>[FD]</strong> — Number of hours of historical data required for forecasting. This dataset is passed to the model for generating predictions.</p></li>
-<li><p><strong>`forecast_frequency`</strong> — <strong>[FF]</strong> — Frequency (in hours) for generating forecasts. If the last forecast was created more than this value ago, a new forecast will be generated.</p></li>
-<li><p><strong>`forecast_hours`</strong> — <strong>[FH]</strong> — Total number of hours the model should forecast. This determines the length of the prediction output.</p></li>
-<li><p><strong>`fit_func_name`</strong> — Path to the function responsible for fitting the model. This function is dynamically imported and executed.</p></li>
-<li><p><strong>`specific_parameters`</strong> — <strong>[SP]</strong> — Model-specific hyperparameters required for training. These parameters vary between models (e.g., ARIMA orders, ETS seasonal periods, etc.).</p></li>
+<li><p><strong>model_name</strong> (e.g., <code class="docutils literal notranslate"><span class="pre">arima</span></code>) — <strong>[MN]</strong> — Name of the model. Used for tagging in logs and the database.</p></li>
+<li><p><strong>training_dataset_size</strong> — <strong>[TD]</strong> — Number of hours of historical data used for training the model. Ensure this value matches the model’s requirements for accuracy.</p></li>
+<li><p><strong>model_update_interval</strong> — <strong>[MU]</strong> — Time interval (in hours) between model retrainings. If the last retraining was more than this value ago, the model will retrain.</p></li>
+<li><p><strong>forecast_dataset_size</strong> — <strong>[FD]</strong> — Number of hours of historical data required for forecasting. This dataset is passed to the model for generating predictions.</p></li>
+<li><p><strong>forecast_frequency</strong> — <strong>[FF]</strong> — Frequency (in hours) for generating forecasts. If the last forecast was created more than this value ago, a new forecast will be generated.</p></li>
+<li><p><strong>forecast_hours</strong> — <strong>[FH]</strong> — Total number of hours the model should forecast. This determines the length of the prediction output.</p></li>
+<li><p><strong>fit_func_name</strong> — Path to the function responsible for fitting the model. This function is dynamically imported and executed.</p></li>
+<li><p><strong>specific_parameters</strong> — <strong>[SP]</strong> — Model-specific hyperparameters required for training. These parameters vary between models (e.g., ARIMA orders, ETS seasonal periods, etc.).</p></li>
 </ul>
 <p>—</p>
-<p>## Conclusion</p>
-<p>By carefully managing the <cite>config.py</cite> file, you can fully control the forecasting process in Forecrypt. Whether you’re working with a single cryptocurrency or managing complex multi-model forecasts, proper configuration is the key to success.</p>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">¶</a></h2>
+<p>By carefully managing the <code class="docutils literal notranslate"><span class="pre">config.py</span></code> file, you can fully control the forecasting process in Forecrypt. Whether you’re working with a single cryptocurrency or managing complex multi-model forecasts, proper configuration is the key to success.</p>
+</section>
 </section>
 
 </main>
@@ -211,6 +225,25 @@
     </a>
 </nav>
                     </div>
+                    
+                    <nav class="col-12 col-lg-3 pb-4">
+                        <div class="sticky-top toc page-toc" aria-labelledby="page-toc-heading">
+                            <p class="font-weight-bold" id="page-toc-heading">Page contents</p>
+                            <ul>
+<li><a class="reference internal" href="#">How to Manage the config.py Configuration?</a><ul>
+<li><a class="reference internal" href="#key-concepts-in-config-py">Key Concepts in config.py</a><ul>
+<li><a class="reference internal" href="#example-1-setting-up-basic-configuration">Example 1: Setting Up Basic Configuration</a></li>
+<li><a class="reference internal" href="#example-2-advanced-model-parameters">Example 2: Advanced Model Parameters</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#summary-of-model-parameters">Summary of Model Parameters</a></li>
+<li><a class="reference internal" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+</ul>
+
+                        </div>
+                    </nav>
                     
                 </div>
             </div>

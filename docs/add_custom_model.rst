@@ -11,28 +11,32 @@ To achieve this, you need to:
 
 ---
 
-## Steps to Add a Custom Model
+Steps to Add a Custom Model
+---------------------------
 
-### 1. Implement the Fitting Function
+1. Implement the Fitting Function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The fitting function is responsible for training the model and returning a model object that can be used for forecasting. This function should be added to the `model_fits.py` module.
+The fitting function is responsible for training the model and returning a model object that can be used for forecasting. This function should be added to the ``model_fits.py`` module.
 
 The function must:
-- Accept a pandas DataFrame as input, with a `date` index and a `price` column.
+- Accept a pandas DataFrame as input, with a ``date`` index and a ``price`` column.
 - Return a trained model object.
 
 ---
 
-### 2. Ensure Compatibility of the Model Object
+2. Ensure Compatibility of the Model Object
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The returned model object must support forecasting. Specifically, it should provide a method to generate forecasts for a specified number of steps.
 
-For example, `get_forecast` method.
+For example, ``get_forecast`` method.
 
 ---
 
-### 3. Register the Model in `config.py`
+3. Register the Model in ``config.py``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-After implementing the fitting function, you need to register the new model in the `MODEL_PARAMETERS` section of `config.py`. This involves specifying the path to the fitting function and defining model-specific parameters.
+After implementing the fitting function, you need to register the new model in the ``MODEL_PARAMETERS`` section of ``config.py``. This involves specifying the path to the fitting function and defining model-specific parameters.
 
 Example configuration for the custom linear regression model:

@@ -31,7 +31,6 @@ html_theme_options = dict(
     logo_url = "/",
     logo_width = 45,
     github_url = "https://github.com/dove0dowg/forecrypt/tree/master/docs/",
-    source_link = "https://github.com/dove0dowg/forecrypt",
     footer_links = ""
 )
 
