@@ -4,7 +4,18 @@
 
 ## Overview
 
-ForecrypT is a set of tools written in Python designed to process time series data and store the results in a PostgreSQL database. The application generates hourly forecasts and saves them as database entries. Historical data sroring as well. It is launched via the `main.py` file, and all configurations are managed through the `config.py` file.
+ForecrypT is a set of tools written in Python designed to process time series data and store the results in a PostgreSQL database. The application generates hourly forecasts and saves them as database entries. Historical and training data storing as well. It is launched via the `main.py` file, and all configurations are managed through the `config.py` file.
+
+
+To run the project at its current development stage, follow these steps:
+
+1. Download the source code.
+2. Install the required Python libraries from requirements.txt.
+3. Set up and configure a PostgreSQL database.
+4. Configure the runtime parameters in the configuration file.
+5. Run main.py.
+
+> Docker support is planned to simplify deployment.
 
 [How to manage the `config.py` configuration?](https://dove0dowg.github.io/forecrypt/how_to_manage_config.html)
 
@@ -82,6 +93,4 @@ This project also aspires to achieve **broader objectives**, which would benefit
      - **Cloud Migration**
 ---
 
-> Docker support is planned for future releases to simplify deployment.
-
-> **Note:** This project is in development. The core functionality, such as automating data collection and prediction, is not yet fully tested. Contributions and suggestions are welcome.
+> **Note:** This project is in the development stage. The core functionality, such as automating data collection and prediction, is not yet fully tested. Contributions and suggestions are welcome.
