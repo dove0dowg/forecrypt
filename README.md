@@ -2,8 +2,6 @@
 
 **ForecrypT** is a platform for cryptocurrency forecasting, with its primary advantage being flexibility. After configuring the application, users can tailor the forecasting process to their specific needs.
 
-> Docker support is planned for future releases to simplify deployment.
-
 ## Overview
 
 ForecrypT is a set of tools written in Python designed to process time series data and store the results in a PostgreSQL database. The application generates hourly forecasts and saves them as database entries. Historical data sroring as well. It is launched via the `main.py` file, and all configurations are managed through the `config.py` file.
@@ -38,8 +36,6 @@ Project Schemes:
 [External Systems](https://dove0dowg.github.io/forecrypt/Systems_of_ForecrypT.html)
 
 [Internal Python Processes](https://dove0dowg.github.io/forecrypt/ForecrypT_Python_Internal_Processes.html)
-
-> **Note:** This project is in an early stage of development. Even the core functionality, such as automating data collection and prediction, is not yet fully implemented. Contributions and suggestions are welcome!
 
 # **Project Goals**
 
@@ -85,3 +81,7 @@ This project also aspires to achieve **broader objectives**, which would benefit
      - **Frontend Development**
      - **Cloud Migration**
 ---
+
+> Docker support is planned for future releases to simplify deployment.
+
+> **Note:** This project is in development. The core functionality, such as automating data collection and prediction, is not yet fully tested. Contributions and suggestions are welcome.
