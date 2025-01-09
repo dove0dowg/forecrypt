@@ -22,14 +22,16 @@ extensions = [
 extensions.append("sphinx_wagtail_theme")
 html_theme = 'sphinx_wagtail_theme'
 
+
 # These are options specifically for the Wagtail Theme.
 html_theme_options = dict(
     project_name = "ForecrypT",
-    logo = "img/wagtail-logo-circle.svg",
+    logo = "pics/forecrypt_updated_logo.png",
+#    favicon = "forecrypt_updated_logo.ico",
     logo_alt = "Wagtail",
-    logo_height = 59,
-    logo_url = "/",
-    logo_width = 45,
+    logo_height = 79,
+    logo_url = "https://github.com/dove0dowg/forecrypt",
+    logo_width = 60,
     github_url = "https://github.com/dove0dowg/forecrypt/tree/master/docs/",
     footer_links = ""
 )
@@ -43,8 +45,10 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'utils/**', 'docstring_e
 
 
 
-html_static_path = ['_static']
+html_static_path = ['static']
 html_logo = ''
+html_favicon = "static/forecrypt_updated_logo.ico"
+
 # -- path --
 
 import os
