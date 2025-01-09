@@ -1,4 +1,4 @@
-db\_utils module
+db\_utils
 ================
 
 .. automodule:: db_utils

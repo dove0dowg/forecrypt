@@ -1,4 +1,4 @@
-models\_processing module
+models\_processing
 =========================
 
 .. automodule:: models_processing

@@ -14,7 +14,7 @@
     <script src="static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="db_utils module" href="db_utils.html" />
+    <link rel="next" title="db_utils" href="db_utils.html" />
    
   <link rel="stylesheet" href="static/custom.css" type="text/css" />
   
@@ -41,9 +41,9 @@
 <li><p>Automatically update forecasts and retrain models on a schedule.(development)</p></li>
 </ul>
 <div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="db_utils.html">db_utils module</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="db_utils.html">db_utils</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="db_utils.html#db_utils.check_consistency"><code class="docutils literal notranslate"><span class="pre">check_consistency()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="db_utils.html#db_utils.create_combined_view"><code class="docutils literal notranslate"><span class="pre">create_combined_view()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="db_utils.html#db_utils.create_tables"><code class="docutils literal notranslate"><span class="pre">create_tables()</span></code></a></li>
@@ -56,8 +56,8 @@
 <li class="toctree-l2"><a class="reference internal" href="db_utils.html#db_utils.load_to_db_training"><code class="docutils literal notranslate"><span class="pre">load_to_db_training()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="config.html">config module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="main.html">main module</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="config.html">config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="main.html">main</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="main.html#main.calculate_total_fetch_interval"><code class="docutils literal notranslate"><span class="pre">calculate_total_fetch_interval()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="main.html#main.check_and_save_models_cycle"><code class="docutils literal notranslate"><span class="pre">check_and_save_models_cycle()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="main.html#main.fetch_extended_df"><code class="docutils literal notranslate"><span class="pre">fetch_extended_df()</span></code></a></li>
@@ -66,22 +66,22 @@
 <li class="toctree-l2"><a class="reference internal" href="main.html#main.initialize_model_tracking"><code class="docutils literal notranslate"><span class="pre">initialize_model_tracking()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="forecasting.html">forecasting module</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="forecasting.html">forecasting</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="forecasting.html#forecasting.create_forecast_dataframe"><code class="docutils literal notranslate"><span class="pre">create_forecast_dataframe()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="get_data.html">get_data module</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="get_data.html">get_data</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="get_data.html#get_data.fetch_historical_data"><code class="docutils literal notranslate"><span class="pre">fetch_historical_data()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="get_data.html#get_data.fetch_specific_historical_hours"><code class="docutils literal notranslate"><span class="pre">fetch_specific_historical_hours()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="model_fits.html">model_fits module</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="model_fits.html">model_fits</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="model_fits.html#model_fits.fit_arima_model"><code class="docutils literal notranslate"><span class="pre">fit_arima_model()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_fits.html#model_fits.fit_ets_model"><code class="docutils literal notranslate"><span class="pre">fit_ets_model()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_fits.html#model_fits.fit_theta_model"><code class="docutils literal notranslate"><span class="pre">fit_theta_model()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="models_processing.html">models_processing module</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="models_processing.html">models_processing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="models_processing.html#models_processing.check_model"><code class="docutils literal notranslate"><span class="pre">check_model()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="models_processing.html#models_processing.fit_model_any"><code class="docutils literal notranslate"><span class="pre">fit_model_any()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="models_processing.html#models_processing.forecast_in_hour_cycle"><code class="docutils literal notranslate"><span class="pre">forecast_in_hour_cycle()</span></code></a></li>
@@ -91,7 +91,14 @@
 <li class="toctree-l2"><a class="reference internal" href="models_processing.html#models_processing.save_model"><code class="docutils literal notranslate"><span class="pre">save_model()</span></code></a></li>
 </ul>
 </li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="how_to_manage_config.html">How to Manage the config.py Configuration?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="add_custom_model.html">How to Add a Custom Model?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_ts_source.html">How to Set Up a Custom Time Series Source?</a></li>
 </ul>
 </div>
 </section>
@@ -122,23 +129,28 @@
     </div>
 </search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="db_utils.html">db_utils module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html">config module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="main.html">main module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="forecasting.html">forecasting module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="get_data.html">get_data module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model_fits.html">model_fits module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="models_processing.html">models_processing module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="db_utils.html">db_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="main.html">main</a></li>
+<li class="toctree-l1"><a class="reference internal" href="forecasting.html">forecasting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_data.html">get_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_fits.html">model_fits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models_processing.html">models_processing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="how_to_manage_config.html">How to Manage the config.py Configuration?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="add_custom_model.html">How to Add a Custom Model?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_ts_source.html">How to Set Up a Custom Time Series Source?</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="db_utils.html" title="next chapter">db_utils module</a></li>
+      <li>Next: <a href="db_utils.html" title="next chapter">db_utils</a></li>
   </ul></li>
 </ul>
 </div>

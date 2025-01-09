@@ -3,8 +3,9 @@
 <html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Python Module Index &#8212; forecrypt 0.1.0 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>How to Add a Custom Model? &#8212; forecrypt 0.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="static/pygments.css?v=d1102ebc" />
     <link rel="stylesheet" type="text/css" href="static/basic.css?v=686e5160" />
     <link rel="stylesheet" type="text/css" href="static/alabaster.css?v=27fed22d" />
@@ -13,19 +14,14 @@
     <script src="static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-
+    <link rel="next" title="How to Set Up a Custom Time Series Source?" href="custom_ts_source.html" />
+    <link rel="prev" title="How to Manage the config.py Configuration?" href="how_to_manage_config.html" />
    
   <link rel="stylesheet" href="static/custom.css" type="text/css" />
   
 
   
   
-
-
-    <script>
-      DOCUMENTATION_OPTIONS.COLLAPSE_INDEX = true;
-    </script>
-
 
   </head><body>
   
@@ -37,69 +33,31 @@
 
           <div class="body" role="main">
             
-
-   <h1>Python Module Index</h1>
-
-   <div class="modindex-jumpbox">
-   <a href="#cap-c"><strong>c</strong></a> | 
-   <a href="#cap-d"><strong>d</strong></a> | 
-   <a href="#cap-f"><strong>f</strong></a> | 
-   <a href="#cap-g"><strong>g</strong></a> | 
-   <a href="#cap-m"><strong>m</strong></a>
-   </div>
-
-   <table class="indextable modindextable">
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-c"><td></td><td>
-       <strong>c</strong></td><td></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="config.html#module-config"><code class="xref">config</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-d"><td></td><td>
-       <strong>d</strong></td><td></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="db_utils.html#module-db_utils"><code class="xref">db_utils</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-f"><td></td><td>
-       <strong>f</strong></td><td></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="forecasting.html#module-forecasting"><code class="xref">forecasting</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-g"><td></td><td>
-       <strong>g</strong></td><td></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="get_data.html#module-get_data"><code class="xref">get_data</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-m"><td></td><td>
-       <strong>m</strong></td><td></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="main.html#module-main"><code class="xref">main</code></a></td><td>
-       <em></em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="model_fits.html#module-model_fits"><code class="xref">model_fits</code></a></td><td>
-       <em></em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="models_processing.html#module-models_processing"><code class="xref">models_processing</code></a></td><td>
-       <em></em></td></tr>
-   </table>
+  <section id="how-to-add-a-custom-model">
+<h1>How to Add a Custom Model?<a class="headerlink" href="#how-to-add-a-custom-model" title="Link to this heading">¶</a></h1>
+<p>Adding a custom model to Forecrypt involves integrating your model’s fitting and forecasting logic into the existing framework. The goal is to ensure that your model can be trained and produce forecasts in a way compatible with the system.</p>
+<p>To achieve this, you need to:</p>
+<ol class="arabic simple">
+<li><p><strong>Create a fitting function</strong> that returns a trained model object.</p></li>
+<li><p><strong>Ensure the trained model provides the required methods</strong> for forecasting.</p></li>
+<li><p><strong>Register the model in the configuration file</strong> by specifying its fitting function and parameters.</p></li>
+</ol>
+<p>—</p>
+<p>## Steps to Add a Custom Model</p>
+<p>### 1. Implement the Fitting Function</p>
+<p>The fitting function is responsible for training the model and returning a model object that can be used for forecasting. This function should be added to the <cite>model_fits.py</cite> module.</p>
+<p>The function must:
+- Accept a pandas DataFrame as input, with a <cite>date</cite> index and a <cite>price</cite> column.
+- Return a trained model object.</p>
+<p>—</p>
+<p>### 2. Ensure Compatibility of the Model Object</p>
+<p>The returned model object must support forecasting. Specifically, it should provide a method to generate forecasts for a specified number of steps.</p>
+<p>For example, <cite>get_forecast</cite> method.</p>
+<p>—</p>
+<p>### 3. Register the Model in <cite>config.py</cite></p>
+<p>After implementing the fitting function, you need to register the new model in the <cite>MODEL_PARAMETERS</cite> section of <cite>config.py</cite>. This involves specifying the path to the fitting function and defining model-specific parameters.</p>
+<p>Example configuration for the custom linear regression model:</p>
+</section>
 
 
           </div>
@@ -138,9 +96,9 @@
 <li class="toctree-l1"><a class="reference internal" href="models_processing.html">models_processing</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Guides</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="how_to_manage_config.html">How to Manage the config.py Configuration?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="add_custom_model.html">How to Add a Custom Model?</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to Add a Custom Model?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="custom_ts_source.html">How to Set Up a Custom Time Series Source?</a></li>
 </ul>
 
@@ -148,6 +106,8 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="how_to_manage_config.html" title="previous chapter">How to Manage the config.py Configuration?</a></li>
+      <li>Next: <a href="custom_ts_source.html" title="next chapter">How to Set Up a Custom Time Series Source?</a></li>
   </ul></li>
 </ul>
 </div>
@@ -170,6 +130,9 @@
       Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
       &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
+      |
+      <a href="_sources/add_custom_model.rst.txt"
+          rel="nofollow">Page source</a>
     </div>
 
     

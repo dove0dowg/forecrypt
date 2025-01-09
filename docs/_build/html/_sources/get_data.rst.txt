@@ -1,4 +1,4 @@
-get\_data module
+get\_data
 ================
 
 .. automodule:: get_data

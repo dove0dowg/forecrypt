@@ -3,8 +3,9 @@
 <html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Python Module Index &#8212; forecrypt 0.1.0 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>How to Set Up a Custom Time Series Source? &#8212; forecrypt 0.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="static/pygments.css?v=d1102ebc" />
     <link rel="stylesheet" type="text/css" href="static/basic.css?v=686e5160" />
     <link rel="stylesheet" type="text/css" href="static/alabaster.css?v=27fed22d" />
@@ -13,19 +14,13 @@
     <script src="static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-
+    <link rel="prev" title="How to Add a Custom Model?" href="add_custom_model.html" />
    
   <link rel="stylesheet" href="static/custom.css" type="text/css" />
   
 
   
   
-
-
-    <script>
-      DOCUMENTATION_OPTIONS.COLLAPSE_INDEX = true;
-    </script>
-
 
   </head><body>
   
@@ -37,69 +32,35 @@
 
           <div class="body" role="main">
             
-
-   <h1>Python Module Index</h1>
-
-   <div class="modindex-jumpbox">
-   <a href="#cap-c"><strong>c</strong></a> | 
-   <a href="#cap-d"><strong>d</strong></a> | 
-   <a href="#cap-f"><strong>f</strong></a> | 
-   <a href="#cap-g"><strong>g</strong></a> | 
-   <a href="#cap-m"><strong>m</strong></a>
-   </div>
-
-   <table class="indextable modindextable">
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-c"><td></td><td>
-       <strong>c</strong></td><td></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="config.html#module-config"><code class="xref">config</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-d"><td></td><td>
-       <strong>d</strong></td><td></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="db_utils.html#module-db_utils"><code class="xref">db_utils</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-f"><td></td><td>
-       <strong>f</strong></td><td></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="forecasting.html#module-forecasting"><code class="xref">forecasting</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-g"><td></td><td>
-       <strong>g</strong></td><td></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="get_data.html#module-get_data"><code class="xref">get_data</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-m"><td></td><td>
-       <strong>m</strong></td><td></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="main.html#module-main"><code class="xref">main</code></a></td><td>
-       <em></em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="model_fits.html#module-model_fits"><code class="xref">model_fits</code></a></td><td>
-       <em></em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="models_processing.html#module-models_processing"><code class="xref">models_processing</code></a></td><td>
-       <em></em></td></tr>
-   </table>
+  <section id="how-to-set-up-a-custom-time-series-source">
+<h1>How to Set Up a Custom Time Series Source?<a class="headerlink" href="#how-to-set-up-a-custom-time-series-source" title="Link to this heading">¶</a></h1>
+<p>To modify the time series source in Forecrypt, you simply need to rewrite the <cite>fetch_historical_data</cite> function. This function is responsible for retrieving the time series data and returning it as a pandas DataFrame in a specific format with an additional time index.</p>
+<p>The goal is to ensure that your custom implementation provides a DataFrame with the required structure:</p>
+<ul class="simple">
+<li><p><strong>Columns</strong>: <cite>[‘date’, ‘price’]</cite></p></li>
+<li><p><strong>Index</strong>: A datetime index representing the hourly time points.</p></li>
+</ul>
+<p>—</p>
+<p>## Steps to Set Up a Custom Time Series Source</p>
+<ol class="arabic simple">
+<li><p><strong>Open the `get_data.py` module</strong>:
+Locate the <cite>fetch_historical_data</cite> function. This function handles the retrieval and transformation of time series data from the current data source.</p></li>
+<li><p><strong>Customize the Data Retrieval Logic</strong>:
+If your time series source is an API, you will likely need to:
+- Send HTTP requests to the API using a library like <cite>requests</cite>.
+- Parse the returned JSON data.
+- Convert the parsed data into a pandas DataFrame with the appropriate columns (<cite>‘date’</cite> and <cite>‘price’</cite>).</p></li>
+<li><p><strong>Ensure Proper Formatting</strong>:
+Make sure that the resulting DataFrame:
+- Contains a <cite>date</cite> column with datetime values.
+- Contains a <cite>price</cite> column with numerical values.
+- Is indexed by the <cite>date</cite> column, ensuring the index is a pandas <cite>DatetimeIndex</cite> with an hourly frequency.</p></li>
+</ol>
+<p>—</p>
+<p>## Flexibility of the Time Series Source</p>
+<p>The application logic in Forecrypt is designed to analyze any hourly time series using mathematical models. This means that the nature and origin of the time series can be highly flexible. Whether it’s cryptocurrency prices, stock market data, or even environmental metrics, as long as your source provides a structured time series, it can be integrated into Forecrypt.</p>
+<p>With proper customization of the <cite>fetch_historical_data</cite> function, nearly any time series source should be compatible with the system.</p>
+</section>
 
 
           </div>
@@ -138,16 +99,17 @@
 <li class="toctree-l1"><a class="reference internal" href="models_processing.html">models_processing</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Guides</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="how_to_manage_config.html">How to Manage the config.py Configuration?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="add_custom_model.html">How to Add a Custom Model?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="custom_ts_source.html">How to Set Up a Custom Time Series Source?</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to Set Up a Custom Time Series Source?</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="add_custom_model.html" title="previous chapter">How to Add a Custom Model?</a></li>
   </ul></li>
 </ul>
 </div>
@@ -170,6 +132,9 @@
       Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
       &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
+      |
+      <a href="_sources/custom_ts_source.rst.txt"
+          rel="nofollow">Page source</a>
     </div>
 
     

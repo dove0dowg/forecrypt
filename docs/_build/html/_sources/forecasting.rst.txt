@@ -1,4 +1,4 @@
-forecasting module
+forecasting
 ==================
 
 .. automodule:: forecasting

@@ -1,4 +1,4 @@
-model\_fits module
+model\_fits
 ==================
 
 .. automodule:: model_fits
