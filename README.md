@@ -6,7 +6,7 @@
 
 Forecrypt is a set of tools written in Python designed to process time series data and store the results in a PostgreSQL database. The application generates hourly forecasts and saves them as database entries. Historical data sroring as well. It is launched via the `main.py` file, and all configurations are managed through the `config.py` file.
 
-[How to manage the `config.py` configuration?](#)
+[How to manage the `config.py` configuration?](https://dove0dowg.github.io/forecrypt/how_to_manage_config.html)
 
 ### Requirements
 - Python with required libraries
@@ -31,11 +31,11 @@ Forecrypt offers the following capabilities, arranged "from simple to advanced":
 
 4. **Custom time series.**  
    If necessary, you can modify the `fetch_historical_data` function to process any hourly time series, such as data for metals or stock markets. The application logic remains unchanged in this case.  
-   [How to set up a custom time series source?](#)
+   [How to set up a custom time series source?](https://dove0dowg.github.io/forecrypt/custom_ts_source.html)
 
 5. **Adding your own model.**  
    If you have a model not included in the platform, you can integrate it for use or comparison with other models.  
-   [How to add a custom model?](#)
+   [How to add a custom model?](https://dove0dowg.github.io/forecrypt/add_custom_model.html)
 
 
 > **Note:** This project is in an early stage of development. Even the core functionality, such as automating data collection and prediction, is not yet fully implemented. Contributions and suggestions are welcome!
