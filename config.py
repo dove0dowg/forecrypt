@@ -2,7 +2,9 @@
 CRYPTO_LIST = ['BTC', 'ETH'] #, 'DOGE', 'ADA', 'SOL']
 START_DATE = "2024-10-01T00:00:00" # first day and hour of historical data in naive.
 FINISH_DATE = "2025-01-01T00:00:00" # last day and hour of historical data in naive, "yyyy-mm-ddThh:mm:ss" format.
-API_KEY = "YOUR_API_KEY" # not hidden, cause it is not nessesarry for free requests. Implemented in code for the case of future changes.
+# ---------------------------------------------------------
+# Directory for check, save and load models. Mostly used in models_processing.py
+MODELS_DIRECTORY = r"C:\forecrypt_models"
 # ---------------------------------------------------------
 # Database configuration.
 # It is empty, as ForecrypT using environmental variables with higher priority:
@@ -21,9 +23,6 @@ DB_CONFIG = {
     'host': 'localhost',
     'port': 5432
 }
-# ---------------------------------------------------------
-# Directory for check, save and load models. Mostly used in models_processing.py
-MODELS_DIRECTORY = r"C:\forecrypt_models"
 # ---------------------------------------------------------
 # Model parameters. Two letters like [TD] means technical abbreviation mostly used for model objects and forecast naming in database.
 
@@ -84,3 +83,6 @@ MODEL_PARAMETERS = {
 # Data update interval for sheduler
 HISTORICAL_UPDATE_TIME = {"hour": 0, "minute": 0}  # every day at 00:00
 FORECAST_UPDATE_TIME = {"minute": 0}  # every hour at xx:00
+# ---------------------------------------------------------
+# CryptoCompare API key. Not hidden, cause it is (suddenly) not nessesarry for free requests. Implemented for the case of future changes.
+API_KEY = "YOUR_API_KEY" 

@@ -96,6 +96,32 @@ for root, _, files in os.walk(docs_dir):
 
 print("Ссылки на static успешно обновлены.")
 
+# Удалить старую папку static/pics, если она существует
+static_pics_dest = os.path.join(static_dest, "pics")
+if os.path.exists(static_pics_dest):
+    shutil.rmtree(static_pics_dest)
+
+# Скопировать новую папку pics в static
+pics_src = r"C:\Users\user\Desktop\kode\forecrypt\docs\pics"
+shutil.copytree(pics_src, static_pics_dest)
+
+
+print(f"{pics_src}")
+print(f"{static_pics_dest}")
+print("Папка pics успешно перенесена в static.")
+
+# Заменить ссылки на _images на static/pics в .html файлах
+for root, _, files in os.walk(docs_dir):
+    for file in files:
+        if file.endswith(".html"):
+            file_path = os.path.join(root, file)
+            with open(file_path, "r", encoding="utf-8") as f:
+                content = f.read()
+            content = content.replace("_images", "static/pics")
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write(content)
+
+print("Ссылки на изображения успешно обновлены.")
 
 #import os
 #import subprocess
