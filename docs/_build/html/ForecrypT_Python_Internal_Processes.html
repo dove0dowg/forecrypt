@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>forecasting &#8212; forecrypt 0.1.0 documentation</title>
+    <title>ForecrypT Python Internal Processes &#8212; forecrypt 0.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="static/pygments.css?v=d1102ebc" />
     <link rel="stylesheet" type="text/css" href="static/basic.css?v=686e5160" />
     <link rel="stylesheet" type="text/css" href="static/alabaster.css?v=27fed22d" />
@@ -14,8 +14,8 @@
     <script src="static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="get_data" href="get_data.html" />
-    <link rel="prev" title="main" href="main.html" />
+    <link rel="next" title="Systems of ForecrypT" href="Systems_of_ForecrypT.html" />
+    <link rel="prev" title="How to Set Up a Custom Time Series Source?" href="custom_ts_source.html" />
    
   <link rel="stylesheet" href="static/custom.css" type="text/css" />
   
@@ -33,26 +33,9 @@
 
           <div class="body" role="main">
             
-  <section id="module-forecasting">
-<span id="forecasting"></span><h1>forecasting<a class="headerlink" href="#module-forecasting" title="Link to this heading">¶</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="forecasting.create_forecast_dataframe">
-<span class="sig-prename descclassname"><span class="pre">forecasting.</span></span><span class="sig-name descname"><span class="pre">create_forecast_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#forecasting.create_forecast_dataframe" title="Link to this definition">¶</a></dt>
-<dd><p>generate a pandas DataFrame containing a forecast based on the input DataFrame and model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> – Historical cryptocurrency data as a pandas DataFrame with columns [‘date’, ‘price’].</p></li>
-<li><p><strong>model_fit</strong> – A trained forecasting model.</p></li>
-<li><p><strong>steps</strong> – Number of forecast steps (hours) to generate.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A pandas DataFrame with columns [‘date’, ‘price’] containing the forecast data.</p>
-</dd>
-</dl>
-</dd></dl>
-
+  <section id="forecrypt-python-internal-processes">
+<h1>ForecrypT Python Internal Processes<a class="headerlink" href="#forecrypt-python-internal-processes" title="Link to this heading">¶</a></h1>
+<img alt="ForecrypT Python Internal Processes" src="static/pics/ForecrypT_Python_Internal_Processes.PNG" />
 </section>
 
 
@@ -82,14 +65,11 @@
 </search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="db_utils.html">db_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="main.html">main</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">forecasting</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#forecasting.create_forecast_dataframe"><code class="docutils literal notranslate"><span class="pre">create_forecast_dataframe()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="forecasting.html">forecasting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="get_data.html">get_data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="model_fits.html">model_fits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models_processing.html">models_processing</a></li>
@@ -101,8 +81,8 @@
 <li class="toctree-l1"><a class="reference internal" href="custom_ts_source.html">How to Set Up a Custom Time Series Source?</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Schemes</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="ForecrypT_Python_Internal_Processes.html">ForecrypT Python Internal Processes</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ForecrypT Python Internal Processes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Systems_of_ForecrypT.html">Systems of ForecrypT</a></li>
 </ul>
 
@@ -110,8 +90,8 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="main.html" title="previous chapter">main</a></li>
-      <li>Next: <a href="get_data.html" title="next chapter">get_data</a></li>
+      <li>Previous: <a href="custom_ts_source.html" title="previous chapter">How to Set Up a Custom Time Series Source?</a></li>
+      <li>Next: <a href="Systems_of_ForecrypT.html" title="next chapter">Systems of ForecrypT</a></li>
   </ul></li>
 </ul>
 </div>
@@ -135,7 +115,7 @@
       &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
       |
-      <a href="_sources/forecasting.rst.txt"
+      <a href="_sources/ForecrypT_Python_Internal_Processes.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

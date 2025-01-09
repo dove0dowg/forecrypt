@@ -1,24 +1,20 @@
-# Forecrypt: Platform for Cryptocurrency Forecasting
+# ForecrypT: Platform for Cryptocurrency Forecasting
 
-**Forecrypt** is a platform for cryptocurrency forecasting, with its primary advantage being flexibility. After configuring the application, users can tailor the forecasting process to their specific needs.
+**ForecrypT** is a platform for cryptocurrency forecasting, with its primary advantage being flexibility. After configuring the application, users can tailor the forecasting process to their specific needs.
+
+> Docker support is planned for future releases to simplify deployment.
 
 ## Overview
 
-Forecrypt is a set of tools written in Python designed to process time series data and store the results in a PostgreSQL database. The application generates hourly forecasts and saves them as database entries. Historical data sroring as well. It is launched via the `main.py` file, and all configurations are managed through the `config.py` file.
+ForecrypT is a set of tools written in Python designed to process time series data and store the results in a PostgreSQL database. The application generates hourly forecasts and saves them as database entries. Historical data sroring as well. It is launched via the `main.py` file, and all configurations are managed through the `config.py` file.
 
 [How to manage the `config.py` configuration?](https://dove0dowg.github.io/forecrypt/how_to_manage_config.html)
-
-### Requirements
-- Python with required libraries
-- A PostgreSQL database
-
-> Docker support is planned for future releases to simplify deployment.
 
 ---
 
 ## Platform Flexibility
 
-Forecrypt offers the following capabilities, arranged "from simple to advanced":
+ForecrypT offers the following capabilities, arranged "from simple to advanced":
 
 1. **Single forecast for one cryptocurrency using one model.**  
    Example: a Bitcoin price forecast based on the ARIMA model.
@@ -42,32 +38,14 @@ Forecrypt offers the following capabilities, arranged "from simple to advanced":
 
 # **Project Goals**
 
-The **primary goal** of this project is to evaluate the applicability of predictive models, such as **ARIMA** or **XGBoost**, on cryptocurrency time series data. The project emphasizes automating the collection and analysis of diverse combinations of data with the following structure:
+This project automates cryptocurrency forecasting and data collection so you can build a comprehensive knowledge base on the performance of various models (ARIMA, XGBoost, etc.). You decide which datasets to gather and which approaches to test, allowing you to explore and refine forecasts tailored to your specific time series.
 
-- **Cryptocurrency Name**
-- **Prediction Model**
-- **Model Parameters**
-- **Time Interval**
-
----
-
-## **Extended Future Goals**
-
-This project also aspires to achieve **broader objectives**, which would benefit from more contributors:
-
-1. **Discover an Algorithm for Predicting Cryptocurrency Trends** *(ha-haa!)*
-
-2. **Develop a Comprehensive "Custom Crypto Forecasting" Service**:
-   - Allowing users to build **personalized forecasts** based on the above data structure.
-   - Essential steps include:
-     - **API Integration**
-     - **Frontend Development**
-     - **Cloud Migration**
+In its ready-to-use form, this system provides a robust platform for cryptocurrency forecasting (lol). However, with a precise rework of just one Python function, it can be adapted to any time-series data. This flexibility allows you to leverage the entire pipeline — from data ingestion to model training and evaluation — for a broad range of forecasting scenarios, tailored to your specific needs.
 ---
 
 ## Conclusion
 
-Forecrypt is a flexible tool that adapts easily to your needs. Whether you're forecasting cryptocurrency trends, financial markets, or other time series data, the platform provides a simple yet powerful infrastructure for data analysis.
+ForecrypT is a flexible tool that adapts easily to your needs. Whether you're forecasting cryptocurrency trends, financial markets, or other time series data, the platform provides a simple yet powerful infrastructure for data analysis.
 
 ---
 
@@ -82,4 +60,22 @@ Detailed documentation is available [here](https://dove0dowg.github.io/forecrypt
 This project is licensed under the **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Public License (CC BY-NC-SA 4.0)**.  
 For more information, see the [LICENSE](LICENSE) file.
 
+---
+
+## **Extended Future Goals**
+
+This project also aspires to achieve **broader objectives**, which would benefit from more contributors:
+
+1. **Robust the application through Docker.**
+
+2. **Write a logic for multi-multi forecasting, based on using main logic with cycle of dynamic config.py input.**
+
+3. **Discover an Algorithm for Predicting Cryptocurrency Trends** *(ha-haa!)*
+
+4. **Develop a Comprehensive "Custom Forecasting" Service**:
+   - Allowing users to build **personalized forecasts** based on the above data structure.
+   - Essential steps include:
+     - **API Integration**
+     - **Frontend Development**
+     - **Cloud Migration**
 ---
