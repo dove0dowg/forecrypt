@@ -34,7 +34,9 @@ ForecrypT offers the following capabilities, arranged "from simple to advanced":
    [How to add a custom model?](https://dove0dowg.github.io/forecrypt/add_custom_model.html)
 
 Project Schemes:
+
 [External Systems](https://dove0dowg.github.io/forecrypt/Systems_of_ForecrypT.html)
+
 [Internal Python Processes](https://dove0dowg.github.io/forecrypt/ForecrypT_Python_Internal_Processes.html)
 
 > **Note:** This project is in an early stage of development. Even the core functionality, such as automating data collection and prediction, is not yet fully implemented. Contributions and suggestions are welcome!
@@ -43,7 +45,8 @@ Project Schemes:
 
 This project automates cryptocurrency forecasting and data collection so you can build a comprehensive knowledge base on the performance of various models (ARIMA, XGBoost, etc.). You decide which datasets to gather and which approaches to test, allowing you to explore and refine forecasts tailored to your specific time series.
 
-In its ready-to-use form, this system provides a robust platform for cryptocurrency forecasting (lol). However, with a precise rework of just one Python function, it can be adapted to any time-series data. This flexibility allows you to leverage the entire pipeline — from data ingestion to model training and evaluation — for a broad range of forecasting scenarios, tailored to your specific needs.
+In its ready-to-use form, this system provides a robust platform for cryptocurrency forecasting. However, with a precise rework of just one Python function, it can be adapted to any time-series data. This flexibility allows you to leverage the entire pipeline — from data ingestion to model training and evaluation — for a broad range of forecasting scenarios, tailored to your specific needs.
+
 ---
 
 ## Conclusion

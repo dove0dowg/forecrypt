@@ -21,7 +21,7 @@ extensions = [
 
 extensions.append("sphinx_wagtail_theme")
 html_theme = 'sphinx_wagtail_theme'
-
+html_show_sourcelink = False
 
 # These are options specifically for the Wagtail Theme.
 html_theme_options = dict(
@@ -30,7 +30,7 @@ html_theme_options = dict(
 #    favicon = "forecrypt_updated_logo.ico",
     logo_alt = "Wagtail",
     logo_height = 79,
-    logo_url = "https://github.com/dove0dowg/forecrypt",
+    logo_url = "https://dove0dowg.github.io/forecrypt/",
     logo_width = 60,
     github_url = "https://github.com/dove0dowg/forecrypt/tree/master/docs/",
     footer_links = ""
