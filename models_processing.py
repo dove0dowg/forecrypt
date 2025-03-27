@@ -4,7 +4,7 @@ import logging
 import importlib
 from datetime import datetime, timezone
 #
-from db_utils import load_to_db_forecast
+from db_utils_postgres import load_to_db_forecast
 from forecasting import create_forecast_dataframe
 from config import MODELS_DIRECTORY, MODEL_PARAMETERS
 

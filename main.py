@@ -8,7 +8,7 @@ from datetime import datetime, timezone, timedelta
 # ---------------------------------------------------------
 # modules
 # ---------------------------------------------------------
-import db_utils
+import db_utils_postgres
 import models_processing
 import get_data
 from config import CRYPTO_LIST, START_DATE, FINISH_DATE, DB_CONFIG, MODEL_PARAMETERS
@@ -197,13 +197,13 @@ if __name__ == "__main__":
 
     # Connect to DB
 
-    conn = db_utils.init_database_connection()
+    conn = db_utils_postgres.init_database_connection()
 
     try:
         # Initialize database tables
-        db_utils.create_tables(conn)
+        db_utils_postgres.create_tables(conn)
         
-        db_utils.create_combined_view(conn)
+        db_utils_postgres.create_combined_view(conn)
 
         # Calculate fetch intervals
         # start_naive
@@ -228,7 +228,7 @@ if __name__ == "__main__":
             # Load historical data into the database
             #db_utils.load_to_db_historical(extended_df, crypto_id, conn)
 
-            db_utils.load_to_db_train_and_historical(extended_df, crypto_id, conn, max_train_dataset_hours)
+            db_utils_postgres.load_to_db_train_and_historical(extended_df, crypto_id, conn, max_train_dataset_hours)
 
             # Cycle for each model
             for model_name, params in MODEL_PARAMETERS.items():

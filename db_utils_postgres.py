@@ -354,7 +354,7 @@ def load_to_db_forecast(dataframe, crypto_id, model_name, params, conn, created_
 
 def delete_view_and_tables(conn):
     """
-    Delete the view 'combined_data' and the tables 'historical_data' and 'forecast_data' from the database.
+    Delete the view 'combined_data' and the tables 'historical_data' and 'forecast_data' from the database. [DEVELOPMENT MODE]
     """
     queries = [
         "DROP VIEW IF EXISTS combined_data CASCADE;",
