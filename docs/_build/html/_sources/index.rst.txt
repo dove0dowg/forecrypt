@@ -22,6 +22,7 @@ ForecrypT is a powerful cryptocurrency forecasting tool that combines modern alg
    :caption: Modules
 
    db_utils_postgres
+   db_utils_clickhouse
    config
    main
    forecasting
