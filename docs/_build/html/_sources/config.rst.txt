@@ -24,7 +24,7 @@ General Parameters
 Database Configuration
 ~~~~~~~~~~~~~~~~~~~~~~
 
-- ``DB_CONFIG`` (*dict*)  
+- ``PG_DB_CONFIG`` (*dict*)  
   Parameters for connecting to the PostgreSQL database:
 
   - ``dbname``: Name of the database.

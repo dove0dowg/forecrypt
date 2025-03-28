@@ -3,7 +3,7 @@ import pandas as pd
 import logging
 import os
 from uuid import uuid4
-from config import DB_CONFIG
+from config import PG_DB_CONFIG
 from datetime import datetime, timezone, timedelta
 from psycopg2.extras import execute_values
 from dotenv import load_dotenv
@@ -12,26 +12,26 @@ logger = logging.getLogger("forecrypt")
 
 def init_database_connection(**kwargs):
     """
-    Initialize a database connection. Replaces DB_CONFIG from config.py by .env values. 
-    DB_CONFIG from config.py is usable, but .env preferred for security reasons.
+    Initialize a database connection. Replaces PG_DB_CONFIG from config.py by .env values. 
+    PG_DB_CONFIG from config.py is usable, but .env preferred for security reasons.
 
-    :param kwargs: Database connection parameters (overrides defaults in DB_CONFIG).
+    :param kwargs: Database connection parameters (overrides defaults in PG_DB_CONFIG).
     :return: A psycopg2 connection object.
     """
 
     load_dotenv()
 
-    DB_CONFIG.update({
-        'dbname': os.getenv('FORECRYPT_DB_NAME', DB_CONFIG['dbname']),
-        'user': os.getenv('FORECRYPT_DB_USER', DB_CONFIG['user']),
-        'password': os.getenv('FORECRYPT_DB_PASS', DB_CONFIG['password']),
-        'host': os.getenv('FORECRYPT_DB_HOST', DB_CONFIG['host']),
-        'port': int(os.getenv('FORECRYPT_DB_PORT', DB_CONFIG['port']))
+    PG_DB_CONFIG.update({
+        'dbname': os.getenv('FORECRYPT_DB_NAME', PG_DB_CONFIG['dbname']),
+        'user': os.getenv('FORECRYPT_DB_USER', PG_DB_CONFIG['user']),
+        'password': os.getenv('FORECRYPT_DB_PASS', PG_DB_CONFIG['password']),
+        'host': os.getenv('FORECRYPT_DB_HOST', PG_DB_CONFIG['host']),
+        'port': int(os.getenv('FORECRYPT_DB_PORT', PG_DB_CONFIG['port']))
     })
 
     try:
-        # Если не переданы параметры, используем DB_CONFIG
-        conn_params = kwargs if kwargs else DB_CONFIG
+        # Если не переданы параметры, используем PG_DB_CONFIG
+        conn_params = kwargs if kwargs else PG_DB_CONFIG
         conn = psycopg2.connect(**conn_params)
         conn.autocommit = True
         logger.info("database connection established.")
@@ -141,7 +141,7 @@ def get_missing_hours(crypto_id: str, start_date, end_date) -> list:
         ORDER BY ts;
     """
 
-    with psycopg2.connect(**DB_CONFIG) as conn:
+    with psycopg2.connect(**PG_DB_CONFIG) as conn:
         with conn.cursor() as cursor:
             cursor.execute("SET TIME ZONE 'UTC';")  # UTC
             cursor.execute(query, (start_date, end_date, crypto_id))
@@ -153,7 +153,7 @@ def check_consistency(crypto_id: str, start_date: str) -> bool:
     """
     сonsistency check for no spaces between timestamps
     """
-    with psycopg2.connect(**DB_CONFIG) as conn:
+    with psycopg2.connect(**PG_DB_CONFIG) as conn:
         with conn.cursor() as cursor:
             query = """
                 SELECT timestamp FROM historical_data

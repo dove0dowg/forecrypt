@@ -11,7 +11,7 @@ from datetime import datetime, timezone, timedelta
 import db_utils_postgres
 import models_processing
 import get_data
-from config import CRYPTO_LIST, START_DATE, FINISH_DATE, DB_CONFIG, MODEL_PARAMETERS
+from config import CRYPTO_LIST, START_DATE, FINISH_DATE, PG_DB_CONFIG, MODEL_PARAMETERS
 # ---------------------------------------------------------
 # ---------------------------------------------------------
 # 1. configure logging

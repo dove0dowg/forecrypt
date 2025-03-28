@@ -15,7 +15,7 @@
             <link rel="index" title="Index" href="genindex.html" />
             <link rel="search" title="Search" href="search.html" />
             <link rel="top" title="ForecrypT 0.1.0 documentation" href="#" />
-            <link rel="next" title="db_utils" href="db_utils.html" />
+            <link rel="next" title="db_utils_postgres" href="db_utils_postgres.html" />
     </head>
 <body>
     <script type="text/javascript" src="static/dist/blocking.js"></script>
@@ -60,7 +60,7 @@
     <nav class="toc mt-3" aria-label="Main menu">
         <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="db_utils.html">db_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="db_utils_postgres.html">db_utils_postgres</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="main.html">main</a></li>
 <li class="toctree-l1"><a class="reference internal" href="forecasting.html">forecasting</a></li>
@@ -138,17 +138,17 @@
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="db_utils.html">db_utils</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="db_utils.html#db_utils.check_consistency"><code class="docutils literal notranslate"><span class="pre">check_consistency()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="db_utils.html#db_utils.create_combined_view"><code class="docutils literal notranslate"><span class="pre">create_combined_view()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="db_utils.html#db_utils.create_tables"><code class="docutils literal notranslate"><span class="pre">create_tables()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="db_utils.html#db_utils.delete_view_and_tables"><code class="docutils literal notranslate"><span class="pre">delete_view_and_tables()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="db_utils.html#db_utils.get_missing_hours"><code class="docutils literal notranslate"><span class="pre">get_missing_hours()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="db_utils.html#db_utils.init_database_connection"><code class="docutils literal notranslate"><span class="pre">init_database_connection()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="db_utils.html#db_utils.load_to_db_forecast"><code class="docutils literal notranslate"><span class="pre">load_to_db_forecast()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="db_utils.html#db_utils.load_to_db_historical"><code class="docutils literal notranslate"><span class="pre">load_to_db_historical()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="db_utils.html#db_utils.load_to_db_train_and_historical"><code class="docutils literal notranslate"><span class="pre">load_to_db_train_and_historical()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="db_utils.html#db_utils.load_to_db_training"><code class="docutils literal notranslate"><span class="pre">load_to_db_training()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="db_utils_postgres.html">db_utils_postgres</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="db_utils_postgres.html#db_utils_postgres.check_consistency"><code class="docutils literal notranslate"><span class="pre">check_consistency()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_utils_postgres.html#db_utils_postgres.create_combined_view"><code class="docutils literal notranslate"><span class="pre">create_combined_view()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_utils_postgres.html#db_utils_postgres.create_tables"><code class="docutils literal notranslate"><span class="pre">create_tables()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_utils_postgres.html#db_utils_postgres.delete_view_and_tables"><code class="docutils literal notranslate"><span class="pre">delete_view_and_tables()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_utils_postgres.html#db_utils_postgres.get_missing_hours"><code class="docutils literal notranslate"><span class="pre">get_missing_hours()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_utils_postgres.html#db_utils_postgres.init_database_connection"><code class="docutils literal notranslate"><span class="pre">init_database_connection()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_utils_postgres.html#db_utils_postgres.load_to_db_forecast"><code class="docutils literal notranslate"><span class="pre">load_to_db_forecast()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_utils_postgres.html#db_utils_postgres.load_to_db_historical"><code class="docutils literal notranslate"><span class="pre">load_to_db_historical()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_utils_postgres.html#db_utils_postgres.load_to_db_train_and_historical"><code class="docutils literal notranslate"><span class="pre">load_to_db_train_and_historical()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="db_utils_postgres.html#db_utils_postgres.load_to_db_training"><code class="docutils literal notranslate"><span class="pre">load_to_db_training()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">config</a><ul>
@@ -222,8 +222,8 @@
 
 </main>
                         <nav aria-label="Page navigation" class="py-4 my-5 clearfix font-weight-bold border-top">
-    <a class="float-right" href="db_utils.html" title="Next">
-        db_utils <span aria-hidden="true">&nbsp;→</span>
+    <a class="float-right" href="db_utils_postgres.html" title="Next">
+        db_utils_postgres <span aria-hidden="true">&nbsp;→</span>
     </a>
 </nav>
                     </div>

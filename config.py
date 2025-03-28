@@ -17,7 +17,7 @@ MODELS_DIRECTORY = r"C:\forecrypt_models"
 #    You can create your .env file in project's directory. Check README.md.
 #    Or just enter your database config below, if security doesn't matter much:
 # ---------------------------------------------------------
-DB_CONFIG = {
+PG_DB_CONFIG = {
     'dbname': '', 
     'user': '',
     'password': '',

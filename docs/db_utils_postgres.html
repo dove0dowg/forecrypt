@@ -6,7 +6,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-        <title>db_utils &mdash; ForecrypT 0.1.0 documentation</title>
+        <title>db_utils_postgres &mdash; ForecrypT 0.1.0 documentation</title>
     
         <link rel="shortcut icon" href="static/forecrypt_updated_logo.ico" />
     <link rel="stylesheet" type="text/css" href="static/dist/fontawesome.css" />
@@ -61,7 +61,7 @@
     <nav class="toc mt-3" aria-label="Main menu">
         <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">db_utils</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">db_utils_postgres</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="main.html">main</a></li>
 <li class="toctree-l1"><a class="reference internal" href="forecasting.html">forecasting</a></li>
@@ -99,7 +99,7 @@
                         <nav aria-label="breadcrumb">
     <ol class="breadcrumb m-0 p-0 bg-transparent">
         <li class="breadcrumb-item"><a href="index.html">Docs</a></li>
-        <li class="breadcrumb-item active" aria-current="page">db_utils</li>
+        <li class="breadcrumb-item active" aria-current="page">db_utils_postgres</li>
     </ol>
 </nav>
                     </div>
@@ -111,7 +111,7 @@
                             <span class="dark-only"><i class="fas fa-sun"></i> Light mode</span>
                             <span class="light-only"><i class="fas fa-moon"></i> Dark mode</span>
                         </button>
-    <a class="btn btn-sm btn-light text-decoration-none" href="https://github.com/dove0dowg/forecrypt/tree/master/docs/db_utils.rst" rel="nofollow">
+    <a class="btn btn-sm btn-light text-decoration-none" href="https://github.com/dove0dowg/forecrypt/tree/master/docs/db_utils_postgres.rst" rel="nofollow">
         <span class="btn-icon"><span class="fab fa-github"></span></span>
         <span class="btn-text">Edit on GitHub</span>
     </a>
@@ -126,46 +126,46 @@
                 <div class="row">
                     <div class="col-12 col-lg-9 order-last order-lg-first rst-content">
                         <main role="main" id="main">
-    <section id="module-db_utils">
-<span id="db-utils"></span><h1>db_utils<a class="headerlink" href="#module-db_utils" title="Link to this heading">¶</a></h1>
+    <section id="module-db_utils_postgres">
+<span id="db-utils-postgres"></span><h1>db_utils_postgres<a class="headerlink" href="#module-db_utils_postgres" title="Link to this heading">¶</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="db_utils.check_consistency">
-<span class="sig-prename descclassname"><span class="pre">db_utils.</span></span><span class="sig-name descname"><span class="pre">check_consistency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#db_utils.check_consistency" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="db_utils_postgres.check_consistency">
+<span class="sig-prename descclassname"><span class="pre">db_utils_postgres.</span></span><span class="sig-name descname"><span class="pre">check_consistency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#db_utils_postgres.check_consistency" title="Link to this definition">¶</a></dt>
 <dd><p>сonsistency check for no spaces between timestamps</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="db_utils.create_combined_view">
-<span class="sig-prename descclassname"><span class="pre">db_utils.</span></span><span class="sig-name descname"><span class="pre">create_combined_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils.create_combined_view" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="db_utils_postgres.create_combined_view">
+<span class="sig-prename descclassname"><span class="pre">db_utils_postgres.</span></span><span class="sig-name descname"><span class="pre">create_combined_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils_postgres.create_combined_view" title="Link to this definition">¶</a></dt>
 <dd><p>Create or replace the combined view for historical and forecast data.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="db_utils.create_tables">
-<span class="sig-prename descclassname"><span class="pre">db_utils.</span></span><span class="sig-name descname"><span class="pre">create_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils.create_tables" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="db_utils_postgres.create_tables">
+<span class="sig-prename descclassname"><span class="pre">db_utils_postgres.</span></span><span class="sig-name descname"><span class="pre">create_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils_postgres.create_tables" title="Link to this definition">¶</a></dt>
 <dd><p>Create tables historical_data и forecast_data, if there are none in database</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="db_utils.delete_view_and_tables">
-<span class="sig-prename descclassname"><span class="pre">db_utils.</span></span><span class="sig-name descname"><span class="pre">delete_view_and_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils.delete_view_and_tables" title="Link to this definition">¶</a></dt>
-<dd><p>Delete the view ‘combined_data’ and the tables ‘historical_data’ and ‘forecast_data’ from the database.</p>
+<dt class="sig sig-object py" id="db_utils_postgres.delete_view_and_tables">
+<span class="sig-prename descclassname"><span class="pre">db_utils_postgres.</span></span><span class="sig-name descname"><span class="pre">delete_view_and_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils_postgres.delete_view_and_tables" title="Link to this definition">¶</a></dt>
+<dd><p>Delete the view ‘combined_data’ and the tables ‘historical_data’ and ‘forecast_data’ from the database. [DEVELOPMENT MODE]</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="db_utils.get_missing_hours">
-<span class="sig-prename descclassname"><span class="pre">db_utils.</span></span><span class="sig-name descname"><span class="pre">get_missing_hours</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#db_utils.get_missing_hours" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="db_utils_postgres.get_missing_hours">
+<span class="sig-prename descclassname"><span class="pre">db_utils_postgres.</span></span><span class="sig-name descname"><span class="pre">get_missing_hours</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#db_utils_postgres.get_missing_hours" title="Link to this definition">¶</a></dt>
 <dd><p>Get a list of missing hourly timestamps for a given cryptocurrency within a date range.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="db_utils.init_database_connection">
-<span class="sig-prename descclassname"><span class="pre">db_utils.</span></span><span class="sig-name descname"><span class="pre">init_database_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils.init_database_connection" title="Link to this definition">¶</a></dt>
-<dd><p>Initialize a database connection. Replaces DB_CONFIG from config.py by .env values.
-DB_CONFIG from config.py is usable, but .env preferred for security reasons.</p>
+<dt class="sig sig-object py" id="db_utils_postgres.init_database_connection">
+<span class="sig-prename descclassname"><span class="pre">db_utils_postgres.</span></span><span class="sig-name descname"><span class="pre">init_database_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils_postgres.init_database_connection" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize a database connection. Replaces PG_DB_CONFIG from config.py by .env values.
+PG_DB_CONFIG from config.py is usable, but .env preferred for security reasons.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>kwargs</strong> – Database connection parameters (overrides defaults in DB_CONFIG).</p>
+<dd class="field-odd"><p><strong>kwargs</strong> – Database connection parameters (overrides defaults in PG_DB_CONFIG).</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A psycopg2 connection object.</p>
@@ -174,8 +174,8 @@ DB_CONFIG from config.py is usable, but .env preferred for security reasons.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="db_utils.load_to_db_forecast">
-<span class="sig-prename descclassname"><span class="pre">db_utils.</span></span><span class="sig-name descname"><span class="pre">load_to_db_forecast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">created_at</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils.load_to_db_forecast" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="db_utils_postgres.load_to_db_forecast">
+<span class="sig-prename descclassname"><span class="pre">db_utils_postgres.</span></span><span class="sig-name descname"><span class="pre">load_to_db_forecast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">created_at</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils_postgres.load_to_db_forecast" title="Link to this definition">¶</a></dt>
 <dd><p>Save forecast data into the database table <cite>forecast_data</cite>.</p>
 <p>The model name is dynamically generated from key parameters to avoid conflicts.</p>
 <dl class="field-list simple">
@@ -195,15 +195,15 @@ and ‘forecast_hours’.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="db_utils.load_to_db_historical">
-<span class="sig-prename descclassname"><span class="pre">db_utils.</span></span><span class="sig-name descname"><span class="pre">load_to_db_historical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils.load_to_db_historical" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="db_utils_postgres.load_to_db_historical">
+<span class="sig-prename descclassname"><span class="pre">db_utils_postgres.</span></span><span class="sig-name descname"><span class="pre">load_to_db_historical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils_postgres.load_to_db_historical" title="Link to this definition">¶</a></dt>
 <dd><p>save historical data into the database table <cite>historical_data</cite>
 with a ‘historical’ label</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="db_utils.load_to_db_train_and_historical">
-<span class="sig-prename descclassname"><span class="pre">db_utils.</span></span><span class="sig-name descname"><span class="pre">load_to_db_train_and_historical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extended_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_train_dataset_hours</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils.load_to_db_train_and_historical" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="db_utils_postgres.load_to_db_train_and_historical">
+<span class="sig-prename descclassname"><span class="pre">db_utils_postgres.</span></span><span class="sig-name descname"><span class="pre">load_to_db_train_and_historical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extended_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_train_dataset_hours</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils_postgres.load_to_db_train_and_historical" title="Link to this definition">¶</a></dt>
 <dd><p>save both training and historical data into the database table <cite>historical_data</cite>.</p>
 <p>the first <cite>max_train_dataset_hours</cite> rows are marked as ‘training’,
 and the remaining rows are marked as ‘historical’.</p>
@@ -220,8 +220,8 @@ and the remaining rows are marked as ‘historical’.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="db_utils.load_to_db_training">
-<span class="sig-prename descclassname"><span class="pre">db_utils.</span></span><span class="sig-name descname"><span class="pre">load_to_db_training</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils.load_to_db_training" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="db_utils_postgres.load_to_db_training">
+<span class="sig-prename descclassname"><span class="pre">db_utils_postgres.</span></span><span class="sig-name descname"><span class="pre">load_to_db_training</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db_utils_postgres.load_to_db_training" title="Link to this definition">¶</a></dt>
 <dd><p>save training data into the database table <cite>historical_data</cite>
 with a ‘training’ label</p>
 </dd></dl>
@@ -243,17 +243,17 @@ with a ‘training’ label</p>
                         <div class="sticky-top toc page-toc" aria-labelledby="page-toc-heading">
                             <p class="font-weight-bold" id="page-toc-heading">Page contents</p>
                             <ul>
-<li><a class="reference internal" href="#">db_utils</a><ul>
-<li><a class="reference internal" href="#db_utils.check_consistency"><code class="docutils literal notranslate"><span class="pre">check_consistency()</span></code></a></li>
-<li><a class="reference internal" href="#db_utils.create_combined_view"><code class="docutils literal notranslate"><span class="pre">create_combined_view()</span></code></a></li>
-<li><a class="reference internal" href="#db_utils.create_tables"><code class="docutils literal notranslate"><span class="pre">create_tables()</span></code></a></li>
-<li><a class="reference internal" href="#db_utils.delete_view_and_tables"><code class="docutils literal notranslate"><span class="pre">delete_view_and_tables()</span></code></a></li>
-<li><a class="reference internal" href="#db_utils.get_missing_hours"><code class="docutils literal notranslate"><span class="pre">get_missing_hours()</span></code></a></li>
-<li><a class="reference internal" href="#db_utils.init_database_connection"><code class="docutils literal notranslate"><span class="pre">init_database_connection()</span></code></a></li>
-<li><a class="reference internal" href="#db_utils.load_to_db_forecast"><code class="docutils literal notranslate"><span class="pre">load_to_db_forecast()</span></code></a></li>
-<li><a class="reference internal" href="#db_utils.load_to_db_historical"><code class="docutils literal notranslate"><span class="pre">load_to_db_historical()</span></code></a></li>
-<li><a class="reference internal" href="#db_utils.load_to_db_train_and_historical"><code class="docutils literal notranslate"><span class="pre">load_to_db_train_and_historical()</span></code></a></li>
-<li><a class="reference internal" href="#db_utils.load_to_db_training"><code class="docutils literal notranslate"><span class="pre">load_to_db_training()</span></code></a></li>
+<li><a class="reference internal" href="#">db_utils_postgres</a><ul>
+<li><a class="reference internal" href="#db_utils_postgres.check_consistency"><code class="docutils literal notranslate"><span class="pre">check_consistency()</span></code></a></li>
+<li><a class="reference internal" href="#db_utils_postgres.create_combined_view"><code class="docutils literal notranslate"><span class="pre">create_combined_view()</span></code></a></li>
+<li><a class="reference internal" href="#db_utils_postgres.create_tables"><code class="docutils literal notranslate"><span class="pre">create_tables()</span></code></a></li>
+<li><a class="reference internal" href="#db_utils_postgres.delete_view_and_tables"><code class="docutils literal notranslate"><span class="pre">delete_view_and_tables()</span></code></a></li>
+<li><a class="reference internal" href="#db_utils_postgres.get_missing_hours"><code class="docutils literal notranslate"><span class="pre">get_missing_hours()</span></code></a></li>
+<li><a class="reference internal" href="#db_utils_postgres.init_database_connection"><code class="docutils literal notranslate"><span class="pre">init_database_connection()</span></code></a></li>
+<li><a class="reference internal" href="#db_utils_postgres.load_to_db_forecast"><code class="docutils literal notranslate"><span class="pre">load_to_db_forecast()</span></code></a></li>
+<li><a class="reference internal" href="#db_utils_postgres.load_to_db_historical"><code class="docutils literal notranslate"><span class="pre">load_to_db_historical()</span></code></a></li>
+<li><a class="reference internal" href="#db_utils_postgres.load_to_db_train_and_historical"><code class="docutils literal notranslate"><span class="pre">load_to_db_train_and_historical()</span></code></a></li>
+<li><a class="reference internal" href="#db_utils_postgres.load_to_db_training"><code class="docutils literal notranslate"><span class="pre">load_to_db_training()</span></code></a></li>
 </ul>
 </li>
 </ul>
