@@ -7,8 +7,21 @@ from config import PG_DB_CONFIG
 from datetime import datetime, timezone, timedelta
 from psycopg2.extras import execute_values
 from dotenv import load_dotenv
+from typing import Any
 
 logger = logging.getLogger("forecrypt")
+
+def update_pg_config(config: dict [str, Any]) -> dict [str, Any]:
+    """Update Postgres config from ernvironment, if present"""
+    active_config = config.copy()
+    active_config.update({
+        'dbname': os.getenv('FORECRYPT_PG_DB_NAME', active_config['dbname']),
+        'user': os.getenv('FORECRYPT_PG_DB_USER', active_config['user']),
+        'password': os.getenv('FORECRYPT_PG_DB_PASS', active_config['password']),
+        'host': os.getenv('FORECRYPT_PG_DB_HOST', active_config['host']),
+        'port': int(os.getenv('FORECRYPT_PG_DB_PORT', active_config['port']))
+    })
+    return active_config
 
 def init_database_connection(**kwargs):
     """
@@ -22,11 +35,11 @@ def init_database_connection(**kwargs):
     load_dotenv()
 
     PG_DB_CONFIG.update({
-        'dbname': os.getenv('FORECRYPT_DB_NAME', PG_DB_CONFIG['dbname']),
-        'user': os.getenv('FORECRYPT_DB_USER', PG_DB_CONFIG['user']),
-        'password': os.getenv('FORECRYPT_DB_PASS', PG_DB_CONFIG['password']),
-        'host': os.getenv('FORECRYPT_DB_HOST', PG_DB_CONFIG['host']),
-        'port': int(os.getenv('FORECRYPT_DB_PORT', PG_DB_CONFIG['port']))
+        'dbname': os.getenv('FORECRYPT_PG_DB_NAME', PG_DB_CONFIG['dbname']),
+        'user': os.getenv('FORECRYPT_PG_DB_USER', PG_DB_CONFIG['user']),
+        'password': os.getenv('FORECRYPT_PG_DB_PASS', PG_DB_CONFIG['password']),
+        'host': os.getenv('FORECRYPT_PG_DB_HOST', PG_DB_CONFIG['host']),
+        'port': int(os.getenv('FORECRYPT_PG_DB_PORT', PG_DB_CONFIG['port']))
     })
 
     try:
