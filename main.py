@@ -9,9 +9,10 @@ from datetime import datetime, timezone, timedelta
 # modules
 # ---------------------------------------------------------
 import db_utils_postgres
+import db_utils_clickhouse
 import models_processing
 import get_data
-from config import CRYPTO_LIST, START_DATE, FINISH_DATE, PG_DB_CONFIG, MODEL_PARAMETERS
+from config import CRYPTO_LIST, START_DATE, FINISH_DATE, PG_DB_CONFIG, CH_DB_CONFIG, MODEL_PARAMETERS
 # ---------------------------------------------------------
 # ---------------------------------------------------------
 # 1. configure logging
@@ -24,7 +25,7 @@ logging.basicConfig(
         logging.FileHandler("forecrypt.log")
     ]
 )
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("forecrypt")
 # ---------------------------------------------------------
 # 2. combined and helper functions
 # ---------------------------------------------------------
@@ -206,11 +207,6 @@ if __name__ == "__main__":
         db_utils_postgres.create_combined_view(conn)
 
         # Calculate fetch intervals
-        # start_naive
-        # finish_naive
-        # total_hours
-        # extended_start_dt
-        # max_train_dataset_hours
         start_naive, finish_naive, total_hours, extended_start_dt, max_train_dataset_hours = calculate_total_fetch_interval(
             START_DATE, FINISH_DATE, **MODEL_PARAMETERS
         )
@@ -226,8 +222,6 @@ if __name__ == "__main__":
             extended_df = fetch_extended_df(crypto_id, extended_start_dt, FINISH_DATE)
 
             # Load historical data into the database
-            #db_utils.load_to_db_historical(extended_df, crypto_id, conn)
-
             db_utils_postgres.load_to_db_train_and_historical(extended_df, crypto_id, conn, max_train_dataset_hours)
 
             # Cycle for each model
@@ -288,3 +282,13 @@ if __name__ == "__main__":
         if conn:
             conn.close()
             logger.info("Database connection closed.")
+
+# if __name__ == "__main__":
+# 
+#     active_config = db_utils_clickhouse.update_ch_config(CH_DB_CONFIG)
+#     
+#     db_utils_clickhouse.clickhouse_container_forced_install(active_config)
+#     db_utils_clickhouse.configure_clickhouse_user_permissions(active_config)
+#     clickhouse_client = db_utils_clickhouse.clickhouse_connection(active_config)
+#     db_utils_clickhouse.client_reload_clickhouse_config(clickhouse_client)
+    
