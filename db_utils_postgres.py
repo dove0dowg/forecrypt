@@ -384,3 +384,14 @@ def delete_view_and_tables(conn):
         logger.info("View and tables deleted successfully.")
     except Exception as e:
         logger.critical(f"Failed to delete view and tables. Error: {e}")
+
+def init_postgres_and_create_tables():
+        
+    # Connect to DB
+    postgres_client = init_database_connection()
+    # Initialize database tables
+    create_tables(postgres_client)
+
+    create_combined_view(postgres_client)
+
+    return postgres_client

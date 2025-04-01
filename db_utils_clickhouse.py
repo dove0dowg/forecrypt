@@ -815,18 +815,18 @@ def configure_clickhouse_user_permissions(active_config: dict[str, Any]) -> bool
             logger.error("Failed to retrieve users.xml.")
             return False
         
-        time.sleep(2)  # waiting to confirm changes in users.xml and default_user.xml
+        time.sleep(3)  # waiting to confirm changes in users.xml and default_user.xml
 
         # reload configuration through docker
         docker_reload_clickhouse_config(active_config)
-        time.sleep(4)  # waiting for the reload
+        time.sleep(3)  # waiting for the reload
 
         # create admin user
         if not docker_create_admin_user(active_config):
             logger.error("Failed to create admin user.")
             return False
         
-        time.sleep(2)  # waiting for creating user
+        time.sleep(3)  # waiting for creating user
 
         # restore users.xml and default_user.xml files for security
         if not update_default_user_xml(original_default_user_xml, active_config):
@@ -836,7 +836,7 @@ def configure_clickhouse_user_permissions(active_config: dict[str, Any]) -> bool
             logger.error("Failed to restore original users.xml.")
             return False
         
-        time.sleep(2)  # waiting for restoring original users.xml and default_user.xml files
+        time.sleep(3)  # waiting for restoring original users.xml and default_user.xml files
 
         # All steps successful
         logger.info("ClickHouse user permissions configured and security restored successfully.")
@@ -933,12 +933,14 @@ def client_reload_clickhouse_config(client) -> bool:
         logger.error(f"Failed to reload configuration: {e}")
         return False
 # ---------------------------------------------------------
-
-if __name__ == "__main__":
-
+# [Final function] (to call from main)
+def init_clickhouse_with_user():
+    
     active_config = update_ch_config(CH_DB_CONFIG)
-
+     
     clickhouse_container_forced_install(active_config)
     configure_clickhouse_user_permissions(active_config)
     clickhouse_client = clickhouse_connection(active_config)
     client_reload_clickhouse_config(clickhouse_client)
+
+    return clickhouse_client
