@@ -9,12 +9,10 @@ import db_utils_postgres
 import models_processing
 import get_data
 from config import CRYPTO_LIST, START_DATE, FINISH_DATE, PG_DB_CONFIG, CH_DB_CONFIG, MODEL_PARAMETERS
-# ---------------------------------------------------------
-# [Logger]
-# ---------------------------------------------------------
+# logger
 logger = logging.getLogger(__name__)
 # ---------------------------------------------------------
-# [DF and models processing] ()
+# [DF and models processing]
 # ---------------------------------------------------------
 def check_and_save_models_cycle(crypto_list=None, model_names=None):
     """
@@ -273,10 +271,30 @@ def forecast_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id,
             model_last_forecast[model_name] = current_dt
         except Exception as e:
             logger.error(f"[{crypto_id} - {model_name}] Error during forecasting: {e}")
-# ---------------------------------------------------------
-# [Final function] (to call from main)
+# final combined [DF and models processing] function
 def fetch_predict_upload_ts(conn):
+    """
+    Fetches historical cryptocurrency data, calculates forecasts using multiple models, 
+    and uploads both historical and forecasted data to the database.
 
+    This function:
+    1. Determines the data fetching interval based on model parameters.
+    2. Iterates through each cryptocurrency in the predefined list.
+    3. Loads extended historical data for training and analysis.
+    4. Iterates through configured models to:
+        - Retrieve training and forecast input datasets.
+        - Handle model retraining when necessary.
+        - Generate forecasts and store them in the database.
+
+    Args:
+        conn (psycopg2.connection): Active database connection.
+
+    Raises:
+        Logs critical errors if any unexpected issues occur.
+
+    Finally:
+        Closes the database connection after execution.
+    """
     try:
         # Calculate fetch intervals
         start_naive, finish_naive, total_hours, extended_start_dt, max_train_dataset_hours = calculate_total_fetch_interval(
