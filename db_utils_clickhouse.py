@@ -1,16 +1,16 @@
+# libs
 from clickhouse_driver import Client
 import os
 import subprocess
 from dotenv import load_dotenv
-from config import CH_DB_CONFIG
 import xml.etree.ElementTree as ET
 import logging
 import base64
 import time
 from typing import Any
-# ---------------------------------------------------------
-# [Logger]
-# ---------------------------------------------------------
+# modules
+from config import CH_DB_CONFIG
+# logger
 logger = logging.getLogger(__name__)
 # ---------------------------------------------------------
 # [Load ENV] (environment variables from .env)
@@ -300,7 +300,7 @@ def clickhouse_container_forced_install(config: dict[str, Any]):
             logger.error("Coudn't start Clickhouse docker container! Aborting.")
             return False         
 
-        time.sleep(5)  # giving time for ClickHouse to start
+        #time.sleep(5)  # giving time for ClickHouse to start
 
         return True
     
@@ -501,7 +501,8 @@ def update_users_xml(modified_xml, config: dict[str, Any]) -> bool:
             check_result = subprocess.run(check_cmd, shell=True, capture_output=True, text=True)
 
             if check_result.returncode == 0:
-                logger.info(f"File {users_xml_path} created and updated by encoded base64 XML-data : {check_result.stdout}")
+                logger.info(f"File users.xml created and updated by encoded base64 XML-data")
+                logger.debug(f"File {users_xml_path} created and updated by encoded base64 XML-data : {check_result.stdout}")
                 logger.debug(f"File successfully created: {check_result.stdout}")
                 logger.debug("File successfully written using base64 encoding")
                 return True
@@ -648,7 +649,8 @@ def update_default_user_xml(modified_xml, config: dict[str, Any]) -> bool:
             check_result = subprocess.run(check_cmd, shell=True, capture_output=True, text=True)
 
             if check_result.returncode == 0:
-                logger.info(f"File {default_user_xml_path} created and updated by encoded base64 XML-data : {check_result.stdout}")
+                logger.info(f"File default_user.xml created and updated by encoded base64 XML-data")
+                logger.debug(f"File {default_user_xml_path} created and updated by encoded base64 XML-data : {check_result.stdout}")
                 logger.debug(f"File successfully created: {check_result.stdout}")
                 logger.debug("File successfully written using base64 encoding")
                 return True
@@ -663,6 +665,96 @@ def update_default_user_xml(modified_xml, config: dict[str, Any]) -> bool:
         logger.error(f"Critical error: {str(e)}")
         print(f"Exception: {str(e)}")
         return False
+
+def docker_nopassword_check_ch_port(config: dict[str, Any]) -> bool:
+    """
+    Repeatedly checks if ClickHouse is accessible on port 9000 inside the Docker container.
+
+    This function executes a simple SELECT 1 query via clickhouse-client up to 20 times 
+    with a 0.5-second interval, ensuring ClickHouse is running and responding.
+
+    Args:
+        config (dict[str, Any]): A dictionary containing container name and password.
+
+    Returns:
+        bool: True if ClickHouse responds successfully within the attempts, False otherwise.
+
+    Logs:
+        - INFO: Each attempt result (success or failure).
+        - DEBUG: Detailed error messages if a failure occurs.
+        - ERROR: If all attempts fail.
+    """
+    check_cmd = (
+        f"wsl docker exec {config['container_name']} "
+        f"clickhouse-client --user=default "
+        f"-q 'SELECT 1'"
+    )
+    
+    for attempt in range(1, 21):  # 20 попыток
+        try:
+            logger.debug(f"Executing port check attempt {attempt}: {check_cmd}")
+            result = subprocess.run(check_cmd, shell=True, capture_output=True, text=True)
+
+            if result.returncode == 0:
+                logger.info(f"ClickHouse port 9000 is open and responding (attempt {attempt}/20).")
+                return True
+            else:
+                logger.info(f"ClickHouse port check failed (attempt {attempt}/20).")
+                logger.debug(f"Error details: {result.stderr.strip()}")
+
+        except Exception as e:
+            logger.info(f"Unexpected error while checking ClickHouse port (attempt {attempt}/20).")
+            logger.debug(f"Exception details: {e}")
+
+        time.sleep(0.5)
+
+    logger.error("ClickHouse port 9000 did not respond after 20 attempts.")
+    return False
+
+def docker_password_check_ch_port(config: dict[str, Any]) -> bool:
+    """
+    Repeatedly checks if ClickHouse is accessible on port 9000 inside the Docker container.
+
+    This function executes a simple SELECT 1 query via clickhouse-client up to 20 times 
+    with a 0.5-second interval, ensuring ClickHouse is running and responding.
+
+    Args:
+        config (dict[str, Any]): A dictionary containing container name and password.
+
+    Returns:
+        bool: True if ClickHouse responds successfully within the attempts, False otherwise.
+
+    Logs:
+        - INFO: Each attempt result (success or failure).
+        - DEBUG: Detailed error messages if a failure occurs.
+        - ERROR: If all attempts fail.
+    """
+    check_cmd = (
+        f"wsl docker exec {config['container_name']} "
+        f"clickhouse-client --user=default --password={config['password']} "
+        f"-q 'SELECT 1'"
+    )
+    
+    for attempt in range(1, 21):
+        try:
+            logger.debug(f"Executing port check attempt {attempt}: {check_cmd}")
+            result = subprocess.run(check_cmd, shell=True, capture_output=True, text=True)
+
+            if result.returncode == 0:
+                logger.info(f"ClickHouse port 9000 is open and responding (attempt {attempt}/20).")
+                return True
+            else:
+                logger.info(f"ClickHouse port check failed (attempt {attempt}/20).")
+                logger.debug(f"Error details: {result.stderr.strip()}")
+
+        except Exception as e:
+            logger.info(f"Unexpected error while checking ClickHouse port (attempt {attempt}/20).")
+            logger.debug(f"Exception details: {e}")
+
+        time.sleep(0.5)
+
+    logger.error("ClickHouse port 9000 did not respond after 20 attempts.")
+    return False
 
 def docker_reload_clickhouse_config(config: dict[str, Any]) -> bool:
     """
@@ -764,7 +856,7 @@ def docker_create_admin_user(config: dict) -> bool:
     except Exception as e:
         logger.error(f"Failure: {str(e)}")
         return False
-
+# final combined [Add admin] function
 def configure_clickhouse_user_permissions(active_config: dict[str, Any]) -> bool:
     """
     Configures ClickHouse user permissions by modifying the users.xml and default_user.xml files 
@@ -793,6 +885,12 @@ def configure_clickhouse_user_permissions(active_config: dict[str, Any]) -> bool
         - ERROR: If any step fails during the process.
     """
     try:
+
+        # check Clickhouse port availability
+        if not docker_nopassword_check_ch_port(active_config):
+            logger.critical("ClickHouse is not responding. Aborting reload.")
+            return False
+
         # modify default_user.xml
         default_user_xml = get_default_user_xml(active_config)
         if default_user_xml:
@@ -814,19 +912,27 @@ def configure_clickhouse_user_permissions(active_config: dict[str, Any]) -> bool
         else:
             logger.error("Failed to retrieve users.xml.")
             return False
-        
-        time.sleep(3)  # waiting to confirm changes in users.xml and default_user.xml
 
+        # check Clickhouse port availability
+        if not docker_password_check_ch_port(active_config):
+            logger.critical("ClickHouse is not responding after users.xml and default_user.xml update. Aborting reload.")
+            return False
+        
         # reload configuration through docker
         docker_reload_clickhouse_config(active_config)
-        time.sleep(3)  # waiting for the reload
+
+        if not docker_password_check_ch_port(active_config):
+            logger.critical("ClickHouse is not responding after Clickhouse config reload. Aborting reload.")
+            return False        
 
         # create admin user
         if not docker_create_admin_user(active_config):
             logger.error("Failed to create admin user.")
             return False
         
-        time.sleep(3)  # waiting for creating user
+        if not docker_password_check_ch_port(active_config):
+            logger.critical("ClickHouse is not responding after creating admin user. Aborting reload.")
+            return False   
 
         # restore users.xml and default_user.xml files for security
         if not update_default_user_xml(original_default_user_xml, active_config):
@@ -835,8 +941,6 @@ def configure_clickhouse_user_permissions(active_config: dict[str, Any]) -> bool
         if not update_users_xml(original_users_xml, active_config):
             logger.error("Failed to restore original users.xml.")
             return False
-        
-        time.sleep(3)  # waiting for restoring original users.xml and default_user.xml files
 
         # All steps successful
         logger.info("ClickHouse user permissions configured and security restored successfully.")
@@ -845,7 +949,6 @@ def configure_clickhouse_user_permissions(active_config: dict[str, Any]) -> bool
     except Exception as e:
         logger.error(f"Error during ClickHouse user configuration: {e}")
         return False
-
 # ---------------------------------------------------------
 # [Clickhouse client] (create client object for future queries)
 # ---------------------------------------------------------
@@ -853,51 +956,82 @@ def clickhouse_connection(config: dict[str, Any]):
     """
     Establishes a connection to a ClickHouse database using provided configuration.
 
-    This function extracts connection details (host, port, user, password) from the 
-    given configuration dictionary and attempts to establish a connection using the 
-    `Client` from the `clickhouse-driver`. It then sends a simple test query to verify 
-    the connection.
+    This function attempts to establish a connection using the `Client` from `clickhouse-driver`.
+    It retries up to 10 times with 0.3-second intervals if the initial attempts fail.
 
     Args:
-        config (dict[str, Any]): A dictionary containing the configuration parameters 
-                                  for the ClickHouse connection, including:
-                                  - 'host' (str): The hostname or IP address of the ClickHouse server.
-                                  - 'port' (int): The port on which ClickHouse is running.
-                                  - 'user' (str): The username to authenticate with.
-                                  - 'password' (str): The password for the specified user.
+        config (dict[str, Any]): A dictionary containing ClickHouse connection parameters.
 
     Returns:
-        Client | None: The `Client` object for interacting with the ClickHouse database if 
-                       the connection is successful. Returns `None` if an error occurs.
+        Client | None: The `Client` object if the connection is successful, otherwise `None`.
 
     Logs:
-        - INFO: Logs the result of the test query ("SELECT 1") if the connection is successful.
-        - ERROR: Logs any error that occurs during connection setup or execution.
-
-    Example:
-        client = clickhouse_connection(config)
+        - INFO: Successful connection or attempt status.
+        - DEBUG: Error details on failure.
     """
-    try:
-        # extract data from active_config
-        host = config['host']
-        port = config['port']
-        user = config['user']
-        password = config['password']
+    host = config['host']
+    port = config['port']
+    user = config['user']
+    password = config['password']
 
-        # initialize client
-        client = Client(host=host, port=port, user=user, password=password)
+    for attempt in range(1, 11):
+        try:
+            client = Client(host=host, port=port, user=user, password=password)
+            result = client.execute('SELECT 1')
+            logger.info(f'Successful ClickHouse connection on attempt {attempt}. Result: {result}')
+            return client
+        except Exception as e:
+            logger.info(f'ClickHouse connection attempt {attempt} failed.')
+            logger.debug(f'Error details: {e}')
+            time.sleep(0.3)
+    
+    logger.error("Failed to connect to ClickHouse after 10 attempts.")
+    return None
 
-        # send simple test request
-        result = client.execute('SELECT 1')
+def client_check_ch_ready(config: dict[str, Any]) -> bool:
+    """
+    Repeatedly checks if ClickHouse is ready to accept queries via clickhouse-driver.
 
-        logger.info(f'Sent test request "SELECT 1". Result: {result}')
+    This function attempts to establish a connection and execute a simple SELECT 1 query 
+    up to 20 times with a 0.5-second interval, ensuring ClickHouse is operational.
 
-        return client 
-    except Exception as e:
-        logger.info(f"Error: {e}")
-        return None 
+    Args:
+        config (dict[str, Any]): A dictionary containing ClickHouse connection parameters.
 
-def client_reload_clickhouse_config(client) -> bool:
+    Returns:
+        bool: True if ClickHouse responds successfully within the attempts, False otherwise.
+
+    Logs:
+        - INFO: Each attempt result (success or failure).
+        - DEBUG: Detailed error messages if a failure occurs.
+        - ERROR: If all attempts fail.
+    """
+    for attempt in range(1, 21):  # 20 попыток
+        try:
+            client = Client(
+                host=config["host"],
+                port=config["port"],
+                user=config["user"],
+                password=config["password"],
+            )
+            result = client.execute("SELECT 1")
+
+            if result == [(1,)]:
+                logger.info(f"ClickHouse is ready and accepting queries (attempt {attempt}/20).")
+                return True
+            else:
+                logger.info(f"ClickHouse responded unexpectedly (attempt {attempt}/20): {result}")
+
+        except Exception as e:
+            logger.info(f"ClickHouse is not ready yet (attempt {attempt}/20).")
+            logger.debug(f"Exception details: {e}")
+
+        time.sleep(0.5)
+
+    logger.error("ClickHouse did not become ready after 20 attempts.")
+    return False
+
+def client_reload_clickhouse_config(client, active_config) -> bool:
     """
     Reloads the ClickHouse configuration using the SYSTEM RELOAD CONFIG query.
 
@@ -922,6 +1056,11 @@ def client_reload_clickhouse_config(client) -> bool:
             print("Failed to reload configuration.")
     """
     try:
+
+        if not client_check_ch_ready(active_config):
+            logger.critical("ClickHouse is not responding through client. Aborting reload.")
+            return False
+        
         # Send the reload config query
         client.execute('SYSTEM RELOAD CONFIG')
 
@@ -941,6 +1080,6 @@ def init_clickhouse_with_user():
     clickhouse_container_forced_install(active_config)
     configure_clickhouse_user_permissions(active_config)
     clickhouse_client = clickhouse_connection(active_config)
-    client_reload_clickhouse_config(clickhouse_client)
+    client_reload_clickhouse_config(clickhouse_client, active_config)
 
     return clickhouse_client
