@@ -32,15 +32,15 @@ def postgres_connection(**kwargs):
     :return: A psycopg2 connection object.
     """
 
-    load_dotenv()
+    #load_dotenv()
 
-    PG_DB_CONFIG.update({
-        'dbname': os.getenv('FORECRYPT_PG_DB_NAME', PG_DB_CONFIG['dbname']),
-        'user': os.getenv('FORECRYPT_PG_DB_USER', PG_DB_CONFIG['user']),
-        'password': os.getenv('FORECRYPT_PG_DB_PASS', PG_DB_CONFIG['password']),
-        'host': os.getenv('FORECRYPT_PG_DB_HOST', PG_DB_CONFIG['host']),
-        'port': int(os.getenv('FORECRYPT_PG_DB_PORT', PG_DB_CONFIG['port']))
-    })
+    #PG_DB_CONFIG.update({
+    #    'dbname': os.getenv('FORECRYPT_PG_DB_NAME', PG_DB_CONFIG['dbname']),
+    #    'user': os.getenv('FORECRYPT_PG_DB_USER', PG_DB_CONFIG['user']),
+    #    'password': os.getenv('FORECRYPT_PG_DB_PASS', PG_DB_CONFIG['password']),
+    #    'host': os.getenv('FORECRYPT_PG_DB_HOST', PG_DB_CONFIG['host']),
+    #    'port': int(os.getenv('FORECRYPT_PG_DB_PORT', PG_DB_CONFIG['port']))
+    #})
 
     try:
         # Если не переданы параметры, используем PG_DB_CONFIG
@@ -58,21 +58,22 @@ def create_tables(conn):
     Create tables historical_data и forecast_data, if there are none in database
     """
     with conn.cursor() as cursor:
-        # Создание таблицы historical_data
+        # historical_data table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS historical_data (
                 id UUID PRIMARY KEY,
                 timestamp TIMESTAMP NOT NULL,
                 currency VARCHAR(50) NOT NULL,
-                price DECIMAL(18, 8) NOT NULL,
+                value DECIMAL(18, 8) NOT NULL,
                 data_label VARCHAR(20) NOT NULL CHECK (data_label IN ('historical', 'training')),
+                uploaded_at TIMESTAMP DEFAULT NOW(),
                 UNIQUE (timestamp, currency, data_label)
             );
         """)
         cursor.execute("""
             CREATE INDEX IF NOT EXISTS idx_historical_data_timestamp_currency ON historical_data (timestamp, currency);
         """)
-        # Создание таблицы forecast_data
+        # forecast_data table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS forecast_data (
                 id UUID PRIMARY KEY,
@@ -83,6 +84,7 @@ def create_tables(conn):
                 created_at TIMESTAMP NOT NULL,
                 forecast_step INTEGER NOT NULL,
                 forecast_value DECIMAL(18, 8) NOT NULL,
+                uploaded_at TIMESTAMP DEFAULT NOW(), 
                 UNIQUE (timestamp, currency, model, forecast_step)
             );
         """)
@@ -96,6 +98,58 @@ def create_tables(conn):
         
         conn.commit()
 
+def create_materialized_view(conn):
+    """
+    Create a materialized view for combining historical and forecast data in PostgreSQL.
+    
+    :param conn: Active connection to PostgreSQL.
+    """
+    query = """
+    CREATE MATERIALIZED VIEW IF NOT EXISTS backtest_data_mv AS
+    SELECT 
+        f.id,
+        f.timestamp,
+        f.currency,
+        f.model,
+        f.model_name_ext,
+        f.forecast_step,
+        f.forecast_value,
+        f.created_at,
+        h.value AS historical_value
+    FROM forecast_data f
+    LEFT JOIN historical_data h 
+    ON f.timestamp = h.timestamp AND f.currency = h.currency
+    WITH NO DATA;
+    """
+
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(query)
+            conn.commit()
+            logger.info("Materialized view 'backtest_data_mv' created successfully.")
+    except Exception as e:
+        conn.rollback()
+        logger.error(f"Failed to create materialized view: {e}")
+
+def refresh_materialized_view(conn):
+    """
+    Refresh the materialized view backtest_data_mv to include only new data.
+    This will recalculate and update the materialized view with the latest data.
+    
+    :param conn: Active connection to PostgreSQL.
+    """
+    try:
+        with conn.cursor() as cursor:
+            # Refresh materialized view
+            cursor.execute("""
+                REFRESH MATERIALIZED VIEW backtest_data_mv;
+            """)
+            conn.commit()
+            logger.info("Materialized view 'backtest_data_mv' successfully refreshed.")
+    except Exception as e:
+        conn.rollback()
+        logger.error(f"Failed to refresh materialized view: {e}")
+
 def create_combined_view(conn):
     """
     Create or replace the combined view for historical and forecast data.
@@ -107,7 +161,7 @@ def create_combined_view(conn):
         timestamp, 
         currency, 
         data_label AS model,
-        price AS value, 
+        value, 
         0 AS forecast_step, 
         MIN(timestamp) OVER (PARTITION BY data_label) AS created_at,  -- Min timestamp grouped by data_label
         data_label AS model_name_ext 
@@ -220,12 +274,12 @@ def load_to_db_train_and_historical(extended_df, crypto_id, conn, max_train_data
     ]
 
     query = """
-        INSERT INTO historical_data (id, timestamp, currency, price, data_label)
+        INSERT INTO historical_data (id, timestamp, currency, value, data_label)
         VALUES %s
         ON CONFLICT (timestamp, currency, data_label)
         DO UPDATE 
-        SET price = EXCLUDED.price
-        WHERE historical_data.price <> EXCLUDED.price;
+        SET value = EXCLUDED.value
+        WHERE historical_data.value <> EXCLUDED.value;
     """
 
     try:
@@ -255,12 +309,12 @@ def load_to_db_historical(dataframe, crypto_id, conn):
     ]
 
     query = """
-        INSERT INTO historical_data (id, timestamp, currency, price, data_label)
+        INSERT INTO historical_data (id, timestamp, currency, value, data_label)
         VALUES %s
         ON CONFLICT (timestamp, currency, data_label)
         DO UPDATE 
-        SET price = EXCLUDED.price
-        WHERE historical_data.price <> EXCLUDED.price;
+        SET value = EXCLUDED.value
+        WHERE historical_data.value <> EXCLUDED.value;
     """
 
     try:
@@ -290,12 +344,12 @@ def load_to_db_training(dataframe, crypto_id, conn):
     ]
 
     query = """
-        INSERT INTO historical_data (id, timestamp, currency, price, data_label)
+        INSERT INTO historical_data (id, timestamp, currency, value, data_label)
         VALUES %s
         ON CONFLICT (timestamp, currency, data_label)
         DO UPDATE 
-        SET price = EXCLUDED.price
-        WHERE historical_data.price <> EXCLUDED.price;
+        SET value = EXCLUDED.value
+        WHERE historical_data.value <> EXCLUDED.value;
     """
 
     try:
@@ -365,12 +419,12 @@ def load_to_db_forecast(dataframe, crypto_id, model_name, params, conn, created_
         conn.rollback()
         logger.critical(f"Failed to load forecast data for {crypto_id} - {dynamic_model_name}. Error: {e}")
 
-def delete_view_and_tables(conn):
+def delete_mv_and_tables(conn):
     """
     Delete the view 'combined_data' and the tables 'historical_data' and 'forecast_data' from the database. [DEVELOPMENT MODE]
     """
     queries = [
-        "DROP VIEW IF EXISTS combined_data CASCADE;",
+        "DROP MATERIALIZED VIEW IF EXISTS backtest_data_mv;",
         "DROP TABLE IF EXISTS historical_data CASCADE;",
         "DROP TABLE IF EXISTS forecast_data CASCADE;"
     ]
@@ -381,17 +435,18 @@ def delete_view_and_tables(conn):
                 cursor.execute(query)
                 logger.info(f"Executed: {query}")
         conn.commit()
-        logger.info("View and tables deleted successfully.")
+        logger.info("Materialized view and tables deleted successfully.")
     except Exception as e:
         logger.critical(f"Failed to delete view and tables. Error: {e}")
 
 def init_postgres_and_create_tables():
         
-    # Connect to DB
-    postgres_client = postgres_connection()
-    # Initialize database tables
+    # connect to db through config
+    active_config = update_pg_config(PG_DB_CONFIG)
+    postgres_client = postgres_connection(**active_config)
+    # create database tables
     create_tables(postgres_client)
-
-    create_combined_view(postgres_client)
-
+    # create nodata materialized view
+    create_materialized_view(postgres_client)
+    
     return postgres_client
