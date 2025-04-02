@@ -23,7 +23,7 @@ def update_pg_config(config: dict [str, Any]) -> dict [str, Any]:
     })
     return active_config
 
-def init_database_connection(**kwargs):
+def postgres_connection(**kwargs):
     """
     Initialize a database connection. Replaces PG_DB_CONFIG from config.py by .env values. 
     PG_DB_CONFIG from config.py is usable, but .env preferred for security reasons.
@@ -388,7 +388,7 @@ def delete_view_and_tables(conn):
 def init_postgres_and_create_tables():
         
     # Connect to DB
-    postgres_client = init_database_connection()
+    postgres_client = postgres_connection()
     # Initialize database tables
     create_tables(postgres_client)
 
