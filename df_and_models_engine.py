@@ -367,8 +367,3 @@ def fetch_predict_upload_ts(conn):
 
     except Exception as e:
         logger.critical(f"An error occurred: {e}", exc_info=True)
-
-    finally:
-        if conn:
-            conn.close()
-            logger.info("Database connection closed.")
