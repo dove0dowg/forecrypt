@@ -6,6 +6,7 @@ __pycache__/
 tests.py
 .env
 superset_config.py
+forecrypt.log
 
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,windows,jupyternotebooks
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,windows,jupyternotebooks
