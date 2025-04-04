@@ -19,11 +19,12 @@ load_dotenv()
 # ---------------------------------------------------------
 # [Update config] (by environmental variables)
 # ---------------------------------------------------------
-def update_ch_config(config: dict[str, Any]) -> dict[str, Any]:
+def update_ch_config(clickhouse_config: dict[str, Any]) -> dict[str, Any]:
     """Update Clickhouse config from ernvironment, if present"""
-    active_config = config.copy()
+    active_config = clickhouse_config.copy()
     active_config.update({
         'database': os.getenv('FORECRYPT_CH_DB_NAME', active_config['database']),
+        'table': os.getenv('FORECRYPT_CH_DB_TABLE', active_config['table']),
         'user': os.getenv('FORECRYPT_CH_DB_USER', active_config['user']),
         'password': os.getenv('FORECRYPT_CH_DB_PASS', active_config['password']),
         'host': os.getenv('FORECRYPT_CH_DB_HOST', active_config['host']),
@@ -128,7 +129,7 @@ def remove_clickhouse_container(container_name: str):
     except Exception as e:
         logger.warning(f"Error removing container: {str(e)}")
 
-def init_volumes_and_config(config: dict):
+def init_volumes_and_config(clickhouse_config: dict):
     """
     Initializes ClickHouse volumes and copies configuration files with corrected syntax.
 
@@ -137,7 +138,7 @@ def init_volumes_and_config(config: dict):
     It also adjusts ownership to match ClickHouse’s default user (UID 101, GID 101).
 
     Args:
-        config (dict): A dictionary containing configuration paths, including:
+        clickhouse_config (dict): A dictionary containing configuration paths, including:
             - 'config_wsl_dir' (str): The WSL directory where ClickHouse configs will be stored.
 
     Logs:
@@ -150,7 +151,7 @@ def init_volumes_and_config(config: dict):
     try:
         # create config directory inside wsl
         subprocess.run(
-            f"wsl mkdir -p {config['config_wsl_dir']}", 
+            f"wsl mkdir -p {clickhouse_config['config_wsl_dir']}", 
             shell=True, 
             check=True
         )
@@ -158,7 +159,7 @@ def init_volumes_and_config(config: dict):
         # copy default Clickhouse configuration file  
         subprocess.run(
             'wsl docker run --rm '
-            f'-v {config["config_wsl_dir"]}:/target '
+            f'-v {clickhouse_config["config_wsl_dir"]}:/target '
             'clickhouse/clickhouse-server '
             '/bin/sh -c "'
             'cp -r /etc/clickhouse-server/* /target && '
@@ -173,7 +174,7 @@ def init_volumes_and_config(config: dict):
         logger.error(f"FATAL ERROR while copying config from temporary Clickhouse container: {e.stderr}")
         raise SystemExit(1)
 
-def initial_start_clickhouse_container(config: dict[str, Any]) -> bool:
+def initial_start_clickhouse_container(clickhouse_config: dict[str, Any]) -> bool:
     """
     Starts the ClickHouse container with extended logging. Returns True if the container starts successfully, 
     and False if it encounters an error.
@@ -187,7 +188,7 @@ def initial_start_clickhouse_container(config: dict[str, Any]) -> bool:
     - Provides diagnostic information if the container fails to start, including container logs and status.
 
     Args:
-        config (dict): A dictionary containing the configuration for the ClickHouse container.
+        clickhouse_config (dict): A dictionary containing the configuration for the ClickHouse container.
             Required keys include:
             - 'port' (int): The port to map the ClickHouse server's native port.
             - 'http_port' (int): The HTTP port for ClickHouse.
@@ -201,25 +202,25 @@ def initial_start_clickhouse_container(config: dict[str, Any]) -> bool:
     """
     try:
         logger.info("Starting ClickHouse container setup...")
-        logger.debug(f"Using config: {config}")
+        logger.debug(f"Using config: {clickhouse_config}")
 
         # check necessary config dictionary keys
         required_keys = ['port', 'http_port', 'interserver_port', 'container_name',
                        'db_data_wsl_dir', 'config_wsl_dir']
         for key in required_keys:
-            if key not in config:
-                logger.error(f"Missing required config key: {key}")
+            if key not in clickhouse_config:
+                logger.error(f"Missing required clickhouse_config key: {key}")
                 return False
 
         # prepare cmd command with volumes mounting
         run_clickhouse_cmd = (
             f"wsl docker run -d "
-            f"--name {config['container_name']} "
-            f"-v {config['db_data_wsl_dir']}:/var/lib/clickhouse "
-            f"-v {config['config_wsl_dir']}:/etc/clickhouse-server "
-            f"-p {config['port']}:9000 "
-            f"-p {config['http_port']}:8123 "
-            f"-p {config['interserver_port']}:9009 "
+            f"--name {clickhouse_config['container_name']} "
+            f"-v {clickhouse_config['db_data_wsl_dir']}:/var/lib/clickhouse "
+            f"-v {clickhouse_config['config_wsl_dir']}:/etc/clickhouse-server "
+            f"-p {clickhouse_config['port']}:9000 "
+            f"-p {clickhouse_config['http_port']}:8123 "
+            f"-p {clickhouse_config['interserver_port']}:9009 "
             f"--ulimit nofile=262144:262144 "
             f"clickhouse/clickhouse-server"
         )
@@ -237,7 +238,7 @@ def initial_start_clickhouse_container(config: dict[str, Any]) -> bool:
 
         # logging through resuilt 
         if result.returncode == 0:
-            logger.info(f"Container {config['container_name']} started successfully")
+            logger.info(f"Container {clickhouse_config['container_name']} started successfully")
             logger.debug(f"Container ID: {result.stdout.strip()}")
             return True
         else:
@@ -247,7 +248,7 @@ def initial_start_clickhouse_container(config: dict[str, Any]) -> bool:
             # additional diagnostics
             logger.info("Running diagnostic commands...")
             subprocess.run("wsl docker ps -a", shell=True)
-            subprocess.run(f"wsl docker logs {config['container_name']}", shell=True)
+            subprocess.run(f"wsl docker logs {clickhouse_config['container_name']}", shell=True)
             return False
 
     except subprocess.TimeoutExpired:
@@ -258,7 +259,7 @@ def initial_start_clickhouse_container(config: dict[str, Any]) -> bool:
         logger.exception(f"Unexpected error: {str(e)}")
         return False
 # final combined [Run container] function
-def clickhouse_container_forced_install(config: dict[str, Any]):
+def clickhouse_container_forced_install(clickhouse_config: dict[str, Any]):
     """
     Forces the installation and setup of the ClickHouse container. The process includes:
     - Ensuring Docker is running.
@@ -276,7 +277,7 @@ def clickhouse_container_forced_install(config: dict[str, Any]):
     the function logs the error and returns `False`. If all steps are successful, it returns `True`.
 
     Args:
-        config (dict): A dictionary containing the configuration for the ClickHouse container.
+        clickhouse_config (dict): A dictionary containing the configuration for the ClickHouse container.
             Required keys include:
             - 'container_name' (str): The name of the Docker container.
             - Other keys necessary for volume initialization and container setup are expected.
@@ -293,10 +294,10 @@ def clickhouse_container_forced_install(config: dict[str, Any]):
             logger.error("Docker is not running! Aborting.")
             return False    
         
-        remove_clickhouse_container(config["container_name"])
-        init_volumes_and_config(config)
+        remove_clickhouse_container(clickhouse_config["container_name"])
+        init_volumes_and_config(clickhouse_config)
 
-        if not initial_start_clickhouse_container(config):
+        if not initial_start_clickhouse_container(clickhouse_config):
             logger.error("Coudn't start Clickhouse docker container! Aborting.")
             return False         
 
@@ -310,7 +311,7 @@ def clickhouse_container_forced_install(config: dict[str, Any]):
 # ---------------------------------------------------------
 # [Add admin] (functions to add admin user in a secure way)
 # ---------------------------------------------------------
-def get_users_xml(config: dict[str, Any]):
+def get_users_xml(clickhouse_config: dict[str, Any]):
     """
     Retrieves the ClickHouse users.xml file from the running Docker container.
 
@@ -326,8 +327,8 @@ def get_users_xml(config: dict[str, Any]):
     """
     try:
         # get the file path and container name from the configuration
-        container_name = config['container_name']
-        users_xml_path = config['users_xml_path']
+        container_name = clickhouse_config['container_name']
+        users_xml_path = clickhouse_config['users_xml_path']
         # forming a command to get a file from a container
         cmd_command = f"wsl docker exec {container_name} cat {users_xml_path}"
         # executing cmd command
@@ -341,7 +342,7 @@ def get_users_xml(config: dict[str, Any]):
         logger.error(f"Error reading users.xml: {e}")
         return None
     
-def modify_users_xml(xml_data, config: dict[str, Any]):
+def modify_users_xml(xml_data, clickhouse_config: dict[str, Any]):
     """
     Modifies the ClickHouse users.xml file by updating default user settings.
 
@@ -351,7 +352,7 @@ def modify_users_xml(xml_data, config: dict[str, Any]):
 
     Args:
         xml_data (str): The original XML content as a string.
-        config (dict[str, Any]): Configuration containing the new password.
+        clickhouse_config (dict[str, Any]): Configuration containing the new password.
 
     Returns:
         tuple(str, str) | None: A tuple containing the original and modified XML content as strings, 
@@ -363,7 +364,7 @@ def modify_users_xml(xml_data, config: dict[str, Any]):
     try:
         root = ET.fromstring(xml_data)
 
-        new_password_for_default = config['password']
+        new_password_for_default = clickhouse_config['password']
         
         # look for the <default> element and change the necessary settings
         default_user = root.find(".//users/default")
@@ -447,7 +448,7 @@ def unmodify_users_xml(xml_data):
         logger.error(f"Unexpected error modifying xml: {e}")
         return None
     
-def update_users_xml(modified_xml, config: dict[str, Any]) -> bool:
+def update_users_xml(modified_xml, clickhouse_config: dict[str, Any]) -> bool:
     """
     Updates the users.xml file inside a running ClickHouse container.
 
@@ -457,7 +458,7 @@ def update_users_xml(modified_xml, config: dict[str, Any]) -> bool:
 
     Args:
         modified_xml (str): The modified XML content to be written.
-        config (dict[str, Any]): Configuration dictionary containing at least:
+        clickhouse_config (dict[str, Any]): Configuration dictionary containing at least:
             - container_name (str): The name of the ClickHouse container.
 
     Logs:
@@ -468,7 +469,7 @@ def update_users_xml(modified_xml, config: dict[str, Any]) -> bool:
         Exception: Logs critical errors encountered during execution.
     """
     try:
-        container_name = config['container_name']
+        container_name = clickhouse_config['container_name']
         users_xml_path = "/etc/clickhouse-server/users.xml"
 
         # encode xml in base64 to avoid issues with quotes and special characters
@@ -518,7 +519,7 @@ def update_users_xml(modified_xml, config: dict[str, Any]) -> bool:
         print(f"Exception: {str(e)}")
         return False
 
-def get_default_user_xml(config: dict[str, Any]):
+def get_default_user_xml(clickhouse_config: dict[str, Any]):
     """
     Retrieves the default-user.xml file from a running ClickHouse container.
 
@@ -526,7 +527,7 @@ def get_default_user_xml(config: dict[str, Any]):
     of the default-user.xml file and return it as a string.
 
     Args:
-        config (dict[str, Any]): Configuration dictionary containing:
+        clickhouse_config (dict[str, Any]): Configuration dictionary containing:
             - container_name (str): The name of the ClickHouse container.
             - default_user_xml_path (str): The path to the default-user.xml file inside the container.
 
@@ -537,8 +538,8 @@ def get_default_user_xml(config: dict[str, Any]):
         - ERROR: If the file retrieval fails or an exception occurs.
     """
     try:
-        container_name = config['container_name']
-        default_user_xml_path = config['default_user_xml_path']
+        container_name = clickhouse_config['container_name']
+        default_user_xml_path = clickhouse_config['default_user_xml_path']
         
         cmd_command = f"wsl docker exec {container_name} cat {default_user_xml_path}"
         result = subprocess.run(cmd_command, capture_output=True, text=True, shell=True)
@@ -606,7 +607,7 @@ def modify_default_user_xml(xml_data):
         logger.error(f"Unexpected error while modifying XML: {e}")
         return None
 
-def update_default_user_xml(modified_xml, config: dict[str, Any]) -> bool:
+def update_default_user_xml(modified_xml, clickhouse_config: dict[str, Any]) -> bool:
     """
     Updates the default-user.xml file inside the Docker container by decoding and writing the modified XML content.
 
@@ -615,7 +616,7 @@ def update_default_user_xml(modified_xml, config: dict[str, Any]) -> bool:
 
     Args:
         modified_xml (str): The modified XML content as a string.
-        config (dict): The configuration dictionary containing container details and XML path.
+        clickhouse_config (dict): The configuration dictionary containing container details and XML path.
 
     Logs:
         - DEBUG: Command execution details, return codes, and file creation checks.
@@ -623,8 +624,8 @@ def update_default_user_xml(modified_xml, config: dict[str, Any]) -> bool:
         - CRITICAL: For unexpected errors during the update process.
     """
     try:
-        container_name = config['container_name']
-        default_user_xml_path = config['default_user_xml_path']
+        container_name = clickhouse_config['container_name']
+        default_user_xml_path = clickhouse_config['default_user_xml_path']
 
         # encode XML in base64 to handle special characters
         encoded_xml = base64.b64encode(modified_xml.encode("utf-8")).decode("utf-8")
@@ -666,7 +667,7 @@ def update_default_user_xml(modified_xml, config: dict[str, Any]) -> bool:
         print(f"Exception: {str(e)}")
         return False
 
-def docker_nopassword_check_ch_port(config: dict[str, Any]) -> bool:
+def docker_nopassword_check_ch_port(clickhouse_config: dict[str, Any]) -> bool:
     """
     Repeatedly checks if ClickHouse is accessible on port 9000 inside the Docker container.
 
@@ -674,7 +675,7 @@ def docker_nopassword_check_ch_port(config: dict[str, Any]) -> bool:
     with a 0.5-second interval, ensuring ClickHouse is running and responding.
 
     Args:
-        config (dict[str, Any]): A dictionary containing container name and password.
+        clickhouse_config (dict[str, Any]): A dictionary containing container name and password.
 
     Returns:
         bool: True if ClickHouse responds successfully within the attempts, False otherwise.
@@ -685,7 +686,7 @@ def docker_nopassword_check_ch_port(config: dict[str, Any]) -> bool:
         - ERROR: If all attempts fail.
     """
     check_cmd = (
-        f"wsl docker exec {config['container_name']} "
+        f"wsl docker exec {clickhouse_config['container_name']} "
         f"clickhouse-client --user=default "
         f"-q 'SELECT 1'"
     )
@@ -711,7 +712,7 @@ def docker_nopassword_check_ch_port(config: dict[str, Any]) -> bool:
     logger.error("ClickHouse port 9000 did not respond after 20 attempts.")
     return False
 
-def docker_password_check_ch_port(config: dict[str, Any]) -> bool:
+def docker_password_check_ch_port(clickhouse_config: dict[str, Any]) -> bool:
     """
     Repeatedly checks if ClickHouse is accessible on port 9000 inside the Docker container.
 
@@ -719,7 +720,7 @@ def docker_password_check_ch_port(config: dict[str, Any]) -> bool:
     with a 0.5-second interval, ensuring ClickHouse is running and responding.
 
     Args:
-        config (dict[str, Any]): A dictionary containing container name and password.
+        clickhouse_config (dict[str, Any]): A dictionary containing container name and password.
 
     Returns:
         bool: True if ClickHouse responds successfully within the attempts, False otherwise.
@@ -730,8 +731,8 @@ def docker_password_check_ch_port(config: dict[str, Any]) -> bool:
         - ERROR: If all attempts fail.
     """
     check_cmd = (
-        f"wsl docker exec {config['container_name']} "
-        f"clickhouse-client --user=default --password={config['password']} "
+        f"wsl docker exec {clickhouse_config['container_name']} "
+        f"clickhouse-client --user=default --password={clickhouse_config['password']} "
         f"-q 'SELECT 1'"
     )
     
@@ -756,7 +757,7 @@ def docker_password_check_ch_port(config: dict[str, Any]) -> bool:
     logger.error("ClickHouse port 9000 did not respond after 20 attempts.")
     return False
 
-def docker_reload_clickhouse_config(config: dict[str, Any]) -> bool:
+def docker_reload_clickhouse_config(clickhouse_config: dict[str, Any]) -> bool:
     """
     Reloads the ClickHouse configuration and resets the default password if needed.
 
@@ -765,7 +766,7 @@ def docker_reload_clickhouse_config(config: dict[str, Any]) -> bool:
     by removing the default password configuration file.
 
     Args:
-        config (dict[str, Any]): A dictionary containing the container name and password.
+        clickhouse_config (dict[str, Any]): A dictionary containing the container name and password.
 
     Returns:
         bool: True if the configuration is reloaded successfully or the password is reset.
@@ -777,8 +778,8 @@ def docker_reload_clickhouse_config(config: dict[str, Any]) -> bool:
     """
     try:
         reload_cmd = (
-            f"wsl docker exec {config['container_name']} "
-            f"clickhouse-client --user=default --password={config['password']} "
+            f"wsl docker exec {clickhouse_config['container_name']} "
+            f"clickhouse-client --user=default --password={clickhouse_config['password']} "
             f"-q 'SYSTEM RELOAD CONFIG'"
         )
         logger.debug(f'Executing command: {reload_cmd}')
@@ -791,7 +792,7 @@ def docker_reload_clickhouse_config(config: dict[str, Any]) -> bool:
         logger.error(f"Failed to reload config: {e.stderr}")
         # Trying to reset the default password
         reset_cmd = (
-            f"wsl docker exec {config['container_name']} "
+            f"wsl docker exec {clickhouse_config['container_name']} "
             "rm -f /etc/clickhouse-server/users.d/default-password.xml"
         )
         subprocess.run(reset_cmd, shell=True)
@@ -802,7 +803,7 @@ def docker_reload_clickhouse_config(config: dict[str, Any]) -> bool:
         logger.error(f"Unexpected error: {e}")
         return False
 
-def docker_create_admin_user(config: dict) -> bool:
+def docker_create_admin_user(clickhouse_config: dict) -> bool:
     """
     Creates an admin user in the ClickHouse database via Docker exec by executing SQL commands.
 
@@ -810,7 +811,7 @@ def docker_create_admin_user(config: dict) -> bool:
     with special characters, and then executes the commands inside the container using docker exec.
 
     Args:
-        config (dict): The configuration dictionary containing container details, user credentials, and other parameters.
+        clickhouse_config (dict): The configuration dictionary containing container details, user credentials, and other parameters.
 
     Returns:
         bool: True if the admin user was successfully created, False otherwise.
@@ -821,9 +822,9 @@ def docker_create_admin_user(config: dict) -> bool:
         - CRITICAL: If an unexpected exception occurs during the process.
     """
     try:
-        container_name = config['container_name']
-        admin_user = config['user']
-        admin_pass = config['password']
+        container_name = clickhouse_config['container_name']
+        admin_user = clickhouse_config['user']
+        admin_pass = clickhouse_config['password']
         
         # prepare SQL commands
         sql_commands = f"""
@@ -857,7 +858,7 @@ def docker_create_admin_user(config: dict) -> bool:
         logger.error(f"Failure: {str(e)}")
         return False
 # final combined [Add admin] function
-def configure_clickhouse_user_permissions(active_config: dict[str, Any]) -> bool:
+def configure_clickhouse_user_permissions(clickhouse_config: dict[str, Any]) -> bool:
     """
     Configures ClickHouse user permissions by modifying the users.xml and default_user.xml files 
     to allow the default user to create other users, then reloads the ClickHouse configuration 
@@ -875,7 +876,7 @@ def configure_clickhouse_user_permissions(active_config: dict[str, Any]) -> bool
         9. Restores the original `default_user.xml` and `users.xml` files for security.
     
     Args:
-        active_config (dict[str, Any]): Configuration dictionary containing container details.
+        clickhouse_config (dict[str, Any]): Configuration dictionary containing container details.
 
     Returns:
         bool: True if all operations were successful, False otherwise.
@@ -887,15 +888,15 @@ def configure_clickhouse_user_permissions(active_config: dict[str, Any]) -> bool
     try:
 
         # check Clickhouse port availability
-        if not docker_nopassword_check_ch_port(active_config):
+        if not docker_nopassword_check_ch_port(clickhouse_config):
             logger.critical("ClickHouse is not responding. Aborting reload.")
             return False
 
         # modify default_user.xml
-        default_user_xml = get_default_user_xml(active_config)
+        default_user_xml = get_default_user_xml(clickhouse_config)
         if default_user_xml:
             original_default_user_xml, modified_default_user_xml = modify_default_user_xml(default_user_xml)
-            if not update_default_user_xml(modified_default_user_xml, active_config):
+            if not update_default_user_xml(modified_default_user_xml, clickhouse_config):
                 logger.error("Failed to update default_user.xml in the container.")
                 return False
         else:
@@ -903,10 +904,10 @@ def configure_clickhouse_user_permissions(active_config: dict[str, Any]) -> bool
             return False
 
         # modify users.xml
-        users_xml_file = get_users_xml(active_config)
+        users_xml_file = get_users_xml(clickhouse_config)
         if users_xml_file:
-            original_users_xml, modified_users_xml = modify_users_xml(users_xml_file, active_config)
-            if not update_users_xml(modified_users_xml, active_config):
+            original_users_xml, modified_users_xml = modify_users_xml(users_xml_file, clickhouse_config)
+            if not update_users_xml(modified_users_xml, clickhouse_config):
                 logger.error("Failed to update users.xml in the container.")
                 return False
         else:
@@ -914,31 +915,31 @@ def configure_clickhouse_user_permissions(active_config: dict[str, Any]) -> bool
             return False
 
         # check Clickhouse port availability
-        if not docker_password_check_ch_port(active_config):
+        if not docker_password_check_ch_port(clickhouse_config):
             logger.critical("ClickHouse is not responding after users.xml and default_user.xml update. Aborting reload.")
             return False
         
         # reload configuration through docker
-        docker_reload_clickhouse_config(active_config)
+        docker_reload_clickhouse_config(clickhouse_config)
 
-        if not docker_password_check_ch_port(active_config):
+        if not docker_password_check_ch_port(clickhouse_config):
             logger.critical("ClickHouse is not responding after Clickhouse config reload. Aborting reload.")
             return False        
 
         # create admin user
-        if not docker_create_admin_user(active_config):
+        if not docker_create_admin_user(clickhouse_config):
             logger.error("Failed to create admin user.")
             return False
         
-        if not docker_password_check_ch_port(active_config):
+        if not docker_password_check_ch_port(clickhouse_config):
             logger.critical("ClickHouse is not responding after creating admin user. Aborting reload.")
             return False   
 
         # restore users.xml and default_user.xml files for security
-        if not update_default_user_xml(original_default_user_xml, active_config):
+        if not update_default_user_xml(original_default_user_xml, clickhouse_config):
             logger.error("Failed to restore original default_user.xml.")
             return False
-        if not update_users_xml(original_users_xml, active_config):
+        if not update_users_xml(original_users_xml, clickhouse_config):
             logger.error("Failed to restore original users.xml.")
             return False
 
@@ -952,7 +953,7 @@ def configure_clickhouse_user_permissions(active_config: dict[str, Any]) -> bool
 # ---------------------------------------------------------
 # [Clickhouse client] (create client object for future queries)
 # ---------------------------------------------------------
-def clickhouse_connection(config: dict[str, Any]):
+def clickhouse_connection(clickhouse_config: dict[str, Any]):
     """
     Establishes a connection to a ClickHouse database using provided configuration.
 
@@ -960,7 +961,7 @@ def clickhouse_connection(config: dict[str, Any]):
     It retries up to 10 times with 0.3-second intervals if the initial attempts fail.
 
     Args:
-        config (dict[str, Any]): A dictionary containing ClickHouse connection parameters.
+        clickhouse_config (dict[str, Any]): A dictionary containing ClickHouse connection parameters.
 
     Returns:
         Client | None: The `Client` object if the connection is successful, otherwise `None`.
@@ -969,10 +970,10 @@ def clickhouse_connection(config: dict[str, Any]):
         - INFO: Successful connection or attempt status.
         - DEBUG: Error details on failure.
     """
-    host = config['host']
-    port = config['port']
-    user = config['user']
-    password = config['password']
+    host = clickhouse_config['host']
+    port = clickhouse_config['port']
+    user = clickhouse_config['user']
+    password = clickhouse_config['password']
 
     for attempt in range(1, 11):
         try:
@@ -988,7 +989,7 @@ def clickhouse_connection(config: dict[str, Any]):
     logger.error("Failed to connect to ClickHouse after 10 attempts.")
     return None
 
-def client_check_ch_ready(config: dict[str, Any]) -> bool:
+def client_check_ch_ready(clickhouse_config: dict[str, Any]) -> bool:
     """
     Repeatedly checks if ClickHouse is ready to accept queries via clickhouse-driver.
 
@@ -996,7 +997,7 @@ def client_check_ch_ready(config: dict[str, Any]) -> bool:
     up to 20 times with a 0.5-second interval, ensuring ClickHouse is operational.
 
     Args:
-        config (dict[str, Any]): A dictionary containing ClickHouse connection parameters.
+        clickhouse_config (dict[str, Any]): A dictionary containing ClickHouse connection parameters.
 
     Returns:
         bool: True if ClickHouse responds successfully within the attempts, False otherwise.
@@ -1009,10 +1010,10 @@ def client_check_ch_ready(config: dict[str, Any]) -> bool:
     for attempt in range(1, 21):  # 20 попыток
         try:
             client = Client(
-                host=config["host"],
-                port=config["port"],
-                user=config["user"],
-                password=config["password"],
+                host=clickhouse_config["host"],
+                port=clickhouse_config["port"],
+                user=clickhouse_config["user"],
+                password=clickhouse_config["password"],
             )
             result = client.execute("SELECT 1")
 
@@ -1031,7 +1032,7 @@ def client_check_ch_ready(config: dict[str, Any]) -> bool:
     logger.error("ClickHouse did not become ready after 20 attempts.")
     return False
 
-def client_reload_clickhouse_config(client, active_config) -> bool:
+def client_reload_clickhouse_config(clickhouse_client: Client, clickhouse_config: dict[str, Any]) -> bool:
     """
     Reloads the ClickHouse configuration using the SYSTEM RELOAD CONFIG query.
 
@@ -1039,7 +1040,7 @@ def client_reload_clickhouse_config(client, active_config) -> bool:
     It uses the established connection to execute the query and check for success.
 
     Args:
-        client (Client): The ClickHouse client object to execute the query with.
+        clickhouse_client (Client): The ClickHouse client object to execute the query with.
 
     Returns:
         bool: Returns `True` if the configuration reload was successful, `False` otherwise.
@@ -1057,12 +1058,12 @@ def client_reload_clickhouse_config(client, active_config) -> bool:
     """
     try:
 
-        if not client_check_ch_ready(active_config):
+        if not client_check_ch_ready(clickhouse_config):
             logger.critical("ClickHouse is not responding through client. Aborting reload.")
             return False
         
         # Send the reload config query
-        client.execute('SYSTEM RELOAD CONFIG')
+        clickhouse_client.execute('SYSTEM RELOAD CONFIG')
 
         # If we reach here, it means the query was successful
         logger.info("ClickHouse configuration reloaded successfully (through client).")
@@ -1075,11 +1076,12 @@ def client_reload_clickhouse_config(client, active_config) -> bool:
 # [Final function] (to call from main)
 def init_clickhouse_with_user():
     
-    active_config = update_ch_config(CH_DB_CONFIG)
+    clickhouse_config = update_ch_config(CH_DB_CONFIG)
      
-    clickhouse_container_forced_install(active_config)
-    configure_clickhouse_user_permissions(active_config)
-    clickhouse_client = clickhouse_connection(active_config)
-    client_reload_clickhouse_config(clickhouse_client, active_config)
+    clickhouse_container_forced_install(clickhouse_config)
+    configure_clickhouse_user_permissions(clickhouse_config)
+    clickhouse_client = clickhouse_connection(clickhouse_config)
+    client_reload_clickhouse_config(clickhouse_client, clickhouse_config)
 
     return clickhouse_client
+
