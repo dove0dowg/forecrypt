@@ -17,11 +17,12 @@ MODELS_DIRECTORY = r"C:\forecrypt_models"
 #    Or just enter your database config below, if security doesn't matter much:
 # ---------------------------------------------------------
 PG_DB_CONFIG = {
-    'dbname': '', 
+    'dbname': '',  # database name
     'user': '',
     'password': '',
     'host': 'localhost',
-    'port': 5432
+    'port': 5433,
+    'container_name': 'postgres_container',
 }
 # ---------------------------------------------------------
 #   Clickhouse database configuration.
@@ -36,6 +37,7 @@ PG_DB_CONFIG = {
 # ---------------------------------------------------------
 CH_DB_CONFIG = {
     'database': '', 
+    'table': '',
     'user': '',
     'password': '',
     'host': 'localhost',
