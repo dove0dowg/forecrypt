@@ -10,7 +10,9 @@ from dotenv import load_dotenv
 from typing import Any
 
 logger = logging.getLogger("forecrypt")
-
+# ---------------------------------------------------------
+# [Init Postgres and create tables]
+# ---------------------------------------------------------
 def update_pg_config(config: dict [str, Any]) -> dict [str, Any]:
     """Update Postgres config from ernvironment, if present"""
     active_config = config.copy()
@@ -89,7 +91,7 @@ def create_tables(conn):
             );
         """)
         cursor.execute("""
-            CREATE INDEX IF NOT EXISTS idx_forecast_data_timestamp ON forecast_data (timestamp);
+            CREATE INDEX IF NOT EXISTS idx_forecast_data_timestamp ON forecast_data (timestamp, currency);
         """)
         cursor.execute("""
             CREATE INDEX IF NOT EXISTS idx_forecast_data_timestamp_currency_model ON forecast_data (timestamp, currency, model);
@@ -189,6 +191,40 @@ def create_combined_view(conn):
         logger.error(f"Failed to create combined view: {e}")
         conn.rollback()
 
+def delete_mv_and_tables(conn):
+    """
+    Delete the view 'combined_data' and the tables 'historical_data' and 'forecast_data' from the database. [DEVELOPMENT MODE]
+    """
+    queries = [
+        "DROP MATERIALIZED VIEW IF EXISTS backtest_data_mv;",
+        "DROP TABLE IF EXISTS historical_data CASCADE;",
+        "DROP TABLE IF EXISTS forecast_data CASCADE;"
+    ]
+
+    try:
+        with conn.cursor() as cursor:
+            for query in queries:
+                cursor.execute(query)
+                logger.info(f"Executed: {query}")
+        conn.commit()
+        logger.info("Materialized view and tables deleted successfully.")
+    except Exception as e:
+        logger.critical(f"Failed to delete view and tables. Error: {e}")
+# final [Init Postgres and create tables] function to call from main.py
+def init_postgres_and_create_tables():
+        
+    # connect to db through config
+    active_config = update_pg_config(PG_DB_CONFIG)
+    postgres_client = postgres_connection(**active_config)
+    # create database tables
+    create_tables(postgres_client)
+    # create nodata materialized view
+    create_materialized_view(postgres_client)
+    
+    return postgres_client
+# ---------------------------------------------------------
+# [Postgres Queries] (selects, loadings, checks)
+# ---------------------------------------------------------
 def get_missing_hours(crypto_id: str, start_date, end_date) -> list:
     """
     Get a list of missing hourly timestamps for a given cryptocurrency within a date range.
@@ -419,34 +455,3 @@ def load_to_db_forecast(dataframe, crypto_id, model_name, params, conn, created_
         conn.rollback()
         logger.critical(f"Failed to load forecast data for {crypto_id} - {dynamic_model_name}. Error: {e}")
 
-def delete_mv_and_tables(conn):
-    """
-    Delete the view 'combined_data' and the tables 'historical_data' and 'forecast_data' from the database. [DEVELOPMENT MODE]
-    """
-    queries = [
-        "DROP MATERIALIZED VIEW IF EXISTS backtest_data_mv;",
-        "DROP TABLE IF EXISTS historical_data CASCADE;",
-        "DROP TABLE IF EXISTS forecast_data CASCADE;"
-    ]
-
-    try:
-        with conn.cursor() as cursor:
-            for query in queries:
-                cursor.execute(query)
-                logger.info(f"Executed: {query}")
-        conn.commit()
-        logger.info("Materialized view and tables deleted successfully.")
-    except Exception as e:
-        logger.critical(f"Failed to delete view and tables. Error: {e}")
-
-def init_postgres_and_create_tables():
-        
-    # connect to db through config
-    active_config = update_pg_config(PG_DB_CONFIG)
-    postgres_client = postgres_connection(**active_config)
-    # create database tables
-    create_tables(postgres_client)
-    # create nodata materialized view
-    create_materialized_view(postgres_client)
-    
-    return postgres_client
