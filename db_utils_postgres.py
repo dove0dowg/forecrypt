@@ -2,6 +2,7 @@ import psycopg2
 import pandas as pd
 import logging
 import os
+import subprocess
 from uuid import uuid4
 from config import PG_DB_CONFIG
 from datetime import datetime, timezone, timedelta
@@ -9,7 +10,170 @@ from psycopg2.extras import execute_values
 from dotenv import load_dotenv
 from typing import Any
 
+load_dotenv()
+
 logger = logging.getLogger("forecrypt")
+# ---------------------------------------------------------
+# [Postgres container]
+# ---------------------------------------------------------
+
+def ensure_docker_running() -> bool:
+    """
+    Ensures the Docker daemon is running in WSL.
+
+    This function checks if the Docker daemon is active by running `docker ps`.
+    If the daemon is not running, it attempts to start it using `service docker start`.
+    First, it tries starting without root privileges, then retries with `wsl -u root`
+    if the initial attempt fails.
+
+    Returns:
+        bool: True if Docker is running or successfully started, False otherwise.
+    """
+    try:
+        check_cmd = "wsl docker ps"
+        result = subprocess.run(check_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        
+        if result.returncode == 0:
+            logger.info("Docker daemon is already running")
+            return True
+            
+        logger.warning("Docker daemon not running, attempting to start...")
+        
+        start_cmd = "wsl service docker start"
+        result = subprocess.run(start_cmd, shell=True, capture_output=True, text=True, timeout=10)
+        
+        if result.returncode != 0:
+            start_cmd = "wsl -u root service docker start"
+            result = subprocess.run(start_cmd, shell=True, capture_output=True, text=True, timeout=10)
+        
+        if result.returncode == 0:
+            logger.info("Docker daemon started successfully")
+            return True
+            
+        logger.error(f"Failed to start Docker: {result.stderr}")
+        return False
+        
+    except Exception as e:
+        logger.exception(f"Error starting Docker: {str(e)}")
+        return False
+
+def remove_postgres_container(container_name: str):
+    """
+    Forcefully removes a PostgreSQL Docker container if it exists.
+
+    This function attempts to remove the specified PostgreSQL container using `docker rm -f`.
+    If the container does not exist, it logs a debug message instead of raising an error.
+
+    Args:
+        container_name (str): The name of the PostgreSQL container to remove.
+    """
+    try:
+        logger.debug(f"Attempting to remove container: {container_name}")
+        result = subprocess.run(f"wsl docker rm -f {container_name}", shell=True, capture_output=True, text=True)
+        if result.returncode == 0:
+            logger.info(f"Removed existing container: {container_name}")
+        else:
+            logger.debug(f"No container to remove: {container_name}")
+    except Exception as e:
+        logger.warning(f"Error removing container: {str(e)}")
+
+def start_postgres_with_volume(pg_config: dict[str, Any]) -> bool:
+    """
+    Creates a named Docker volume (pg_data) and runs a PostgreSQL container
+    with the specified config.
+
+    Args:
+        pg_config (dict): A dictionary containing:
+            - 'container_name' (str): Desired name for the container.
+            - 'port' (int): Host port to expose PostgreSQL on (maps to 5432 in container).
+            - 'user' (str, optional): PostgreSQL user. Defaults to 'postgres' if not set.
+            - 'password' (str, optional): PostgreSQL password. Defaults to 'secret' if not set.
+
+    Returns:
+        bool: True if the container starts successfully, False otherwise.
+    """
+    try:
+        volume_name = "pg_data"
+        container_name = pg_config.get('container_name', 'postgres_container')
+        port = pg_config.get('port', 5432)
+        user = pg_config.get('user') or 'postgres'
+        password = pg_config.get('password') or 'secret'
+
+        # 1) Create named volume
+        create_vol_cmd = f"wsl docker volume create {volume_name}"
+        logger.info(f"Creating named volume with command: {create_vol_cmd}")
+        subprocess.run(create_vol_cmd, shell=True, check=True)
+
+        # 2) Run PostgreSQL container with this volume
+        run_cmd = (
+            "wsl docker run -d "
+            f"--name {container_name} "
+            f"-p {port}:5432 "
+            f"-e POSTGRES_USER={user} "
+            f"-e POSTGRES_PASSWORD={password} "
+            f"-v {volume_name}:/var/lib/postgresql/data "
+            "postgres"
+        )
+
+        logger.info(f"Starting PostgreSQL container with command: {run_cmd}")
+        result = subprocess.run(
+            run_cmd,
+            shell=True,
+            capture_output=True,
+            text=True,
+            timeout=300
+        )
+
+        if result.returncode == 0:
+            logger.info(f"Container '{container_name}' started successfully. Volume: {volume_name}")
+            logger.debug(f"docker run output: {result.stdout.strip()}")
+            return True
+        else:
+            logger.error(f"Failed to start container. Exit code: {result.returncode}")
+            logger.error(f"Error output: {result.stderr.strip()}")
+            return False
+
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Error creating volume or running container: {e.stderr}")
+        return False
+    except subprocess.TimeoutExpired:
+        logger.error("Command timed out after 300 seconds.")
+        return False
+    except Exception as e:
+        logger.exception(f"Unexpected error: {str(e)}")
+        return False
+# final [Postgres container] function
+def postgres_container_forced_install(postgres_config: dict[str, Any]):
+    """
+    Forces the installation and setup of the PostgreSQL container.
+
+    This function performs the following steps:
+    1. Verifies if Docker is running by invoking the `ensure_docker_running()` function.
+    2. Removes any pre-existing PostgreSQL container using the `remove_postgres_container()` function.
+    3. Initializes volumes and configuration files by calling the `init_postgres_volumes_and_config()` function.
+    4. Attempts to start the PostgreSQL container with the `initial_start_postgres_container()` function.
+
+    Returns:
+        bool: `True` if PostgreSQL container was successfully installed and started, `False` otherwise.
+    """
+    try:
+        logger.info("=== Starting PostgreSQL Install and Deploy ===")
+        
+        if not ensure_docker_running():
+            logger.error("Docker is not running! Aborting.")
+            return False    
+        
+        remove_postgres_container(postgres_config["container_name"])
+        
+        if not start_postgres_with_volume(postgres_config):
+            logger.error("Couldn't start PostgreSQL docker container! Aborting.")
+            return False         
+
+        return True
+    
+    except Exception as e:
+        logger.exception(f"Unexpected error: {str(e)}")
+        return False
 # ---------------------------------------------------------
 # [Init Postgres and create tables]
 # ---------------------------------------------------------
@@ -21,38 +185,63 @@ def update_pg_config(config: dict [str, Any]) -> dict [str, Any]:
         'user': os.getenv('FORECRYPT_PG_DB_USER', active_config['user']),
         'password': os.getenv('FORECRYPT_PG_DB_PASS', active_config['password']),
         'host': os.getenv('FORECRYPT_PG_DB_HOST', active_config['host']),
-        'port': int(os.getenv('FORECRYPT_PG_DB_PORT', active_config['port']))
+        'port': int(os.getenv('FORECRYPT_PG_DB_PORT', active_config['port'])),
+        'container_name': os.getenv('FORECRYPT_PG_DB_CONTAINER', active_config['container_name']),
     })
     return active_config
 
 def postgres_connection(**kwargs):
     """
-    Initialize a database connection. Replaces PG_DB_CONFIG from config.py by .env values. 
-    PG_DB_CONFIG from config.py is usable, but .env preferred for security reasons.
+    Initialize a psycopg2 connection using only valid parameters.
 
-    :param kwargs: Database connection parameters (overrides defaults in PG_DB_CONFIG).
-    :return: A psycopg2 connection object.
+    :param kwargs: Connection parameters (must include dbname, user, etc.).
+    :return: psycopg2 connection object.
     """
-
-    #load_dotenv()
-
-    #PG_DB_CONFIG.update({
-    #    'dbname': os.getenv('FORECRYPT_PG_DB_NAME', PG_DB_CONFIG['dbname']),
-    #    'user': os.getenv('FORECRYPT_PG_DB_USER', PG_DB_CONFIG['user']),
-    #    'password': os.getenv('FORECRYPT_PG_DB_PASS', PG_DB_CONFIG['password']),
-    #    'host': os.getenv('FORECRYPT_PG_DB_HOST', PG_DB_CONFIG['host']),
-    #    'port': int(os.getenv('FORECRYPT_PG_DB_PORT', PG_DB_CONFIG['port']))
-    #})
-
     try:
-        # Если не переданы параметры, используем PG_DB_CONFIG
-        conn_params = kwargs if kwargs else PG_DB_CONFIG
+        # only keep valid psycopg2 params
+        valid_keys = {'dbname', 'user', 'password', 'host', 'port'}
+        conn_params = {k: v for k, v in kwargs.items() if k in valid_keys}
+
         conn = psycopg2.connect(**conn_params)
         conn.autocommit = True
         logger.info("database connection established.")
         return conn
+
     except psycopg2.Error as e:
         logger.error(f"failed to connect to the database: {e}")
+        exit()
+
+def create_database(config: dict):
+    """
+    Creates a PostgreSQL database from config['dbname'], if it does not exist.
+    Uses a direct connection with autocommit mode (CREATE DATABASE not allowed in transactions).
+
+    :param config: Dictionary with at least 'dbname', 'user', 'password', 'host', 'port'.
+    """
+    import psycopg2
+    from psycopg2 import sql
+
+    dbname = config['dbname']
+    base_conn_params = {k: v for k, v in config.items() if k in {'user', 'password', 'host', 'port'}}
+
+    try:
+        conn = psycopg2.connect(dbname="postgres", **base_conn_params)
+        conn.autocommit = True
+
+        cursor = conn.cursor()
+        cursor.execute("SELECT 1 FROM pg_database WHERE datname = %s", (dbname,))
+        exists = cursor.fetchone()
+        if not exists:
+            cursor.execute(sql.SQL("CREATE DATABASE {}").format(sql.Identifier(dbname)))
+            logger.info(f"database '{dbname}' created.")
+        else:
+            logger.info(f"database '{dbname}' already exists.")
+
+        cursor.close()
+        conn.close()
+
+    except psycopg2.Error as e:
+        logger.error(f"failed to create database '{dbname}': {e}")
         exit()
 
 def create_tables(conn):
@@ -210,18 +399,51 @@ def delete_mv_and_tables(conn):
         logger.info("Materialized view and tables deleted successfully.")
     except Exception as e:
         logger.critical(f"Failed to delete view and tables. Error: {e}")
-# final [Init Postgres and create tables] function to call from main.py
-def init_postgres_and_create_tables():
+# final [Init Postgres and create tables] function
+def init_postgres_and_create_tables(postgres_client, postgres_config: dict [str, Any]):
         
     # connect to db through config
-    active_config = update_pg_config(PG_DB_CONFIG)
-    postgres_client = postgres_connection(**active_config)
+    postgres_client = postgres_connection(**postgres_config)
+
     # create database tables
     create_tables(postgres_client)
     # create nodata materialized view
     create_materialized_view(postgres_client)
     
     return postgres_client
+# ---------------------------------------------------------
+# [Prepare Postgres] (final function to call)
+
+def prepare_postgres() -> bool:
+    """
+    Full PostgreSQL setup routine.
+
+    Loads environment config, starts the container, creates the target database
+    if missing, establishes a connection, and initializes required tables.
+    """
+    try:
+        load_dotenv(override=True)
+
+        # update config from environment
+        postgres_config = update_pg_config(PG_DB_CONFIG)
+
+        # start container if not running
+        postgres_container_forced_install(postgres_config)
+
+        # create database if missing
+        create_database(postgres_config)
+
+        # connect to target database
+        postgres_client = postgres_connection(**postgres_config)
+
+        # create required tables and indexes
+        init_postgres_and_create_tables(postgres_client, postgres_config)
+
+        return True
+
+    except Exception as e:
+        logger.critical(f"Failed to prepare Postgres. Error: {e}")
+        return False
 # ---------------------------------------------------------
 # [Postgres Queries] (selects, loadings, checks)
 # ---------------------------------------------------------
