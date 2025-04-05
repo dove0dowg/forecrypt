@@ -47,7 +47,7 @@ def fetch_historical_data(crypto_id, start_date, end_date, api_key=None):
 
             params['toTs'] = last_timestamp  # Set the new 'toTs' for the next request
         else:
-            print(f"Failed to fetch data for {crypto_id}. Status code: {response.status_code}")
+            logger.error(f"Failed to fetch data for {crypto_id}. Status code: {response.status_code}")
             break
 
     if not all_data:
@@ -102,6 +102,6 @@ def fetch_specific_historical_hours(crypto_id, hours_list, api_key=None):
                     "price": price_data['close']
                 })
         else:
-            print(f"Failed to fetch data for {crypto_id} at {hour}. Status code: {response.status_code}")
-    print(results)
+            logger.error(f"Failed to fetch data for {crypto_id} at {hour}. Status code: {response.status_code}")
+    logger.error(results)
     return pd.DataFrame(results)
