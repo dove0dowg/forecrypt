@@ -250,6 +250,9 @@ def forecast_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id,
     """
     forecast_freq = params.get('forecast_frequency')
     forecast_hours = params.get('forecast_hours')
+    config_start = START_DATE
+    config_end = FINISH_DATE
+    zero_step_ts = current_dt
 
     do_forecast = False
     if model_last_forecast[model_name] is None:
@@ -266,7 +269,7 @@ def forecast_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id,
             logger.debug(f"[{crypto_id} - {model_name}] Model loaded successfully.")
 
             df_forecast = models_processing.create_forecast_dataframe(sub_df, model_fit, steps=forecast_hours)
-            models_processing.load_to_db_forecast(df_forecast, crypto_id, model_name, params, conn, created_at=current_dt)
+            models_processing.load_to_db_forecast(df_forecast, crypto_id, model_name, params, conn, zero_step_ts, config_start, config_end) #created_at=current_dt)
             logger.debug(f"[{crypto_id} - {model_name}] Forecast saved for {current_dt}.")
             model_last_forecast[model_name] = current_dt
         except Exception as e:
