@@ -13,8 +13,6 @@ from config import CH_DB_CONFIG
 # logger
 logger = logging.getLogger(__name__)
 # ---------------------------------------------------------
-# [Load ENV] (environment variables from .env)
-# ---------------------------------------------------------
 load_dotenv()
 # ---------------------------------------------------------
 # [Update config] (by environmental variables)
@@ -516,7 +514,7 @@ def update_users_xml(modified_xml, clickhouse_config: dict[str, Any]) -> bool:
 
     except Exception as e:
         logger.error(f"Critical error: {str(e)}")
-        print(f"Exception: {str(e)}")
+        logger.error(f"Exception: {str(e)}")
         return False
 
 def get_default_user_xml(clickhouse_config: dict[str, Any]):
@@ -664,7 +662,7 @@ def update_default_user_xml(modified_xml, clickhouse_config: dict[str, Any]) -> 
 
     except Exception as e:
         logger.error(f"Critical error: {str(e)}")
-        print(f"Exception: {str(e)}")
+        logger.error(f"Exception: {str(e)}")
         return False
 
 def docker_nopassword_check_ch_port(clickhouse_config: dict[str, Any]) -> bool:
@@ -1052,9 +1050,9 @@ def client_reload_clickhouse_config(clickhouse_client: Client, clickhouse_config
     Example:
         success = client_reload_clickhouse_config(client)
         if success:
-            print("Configuration reloaded successfully.")
+            logger.info("Configuration reloaded successfully.")
         else:
-            print("Failed to reload configuration.")
+            logger.error("Failed to reload configuration.")
     """
     try:
 
@@ -1072,16 +1070,74 @@ def client_reload_clickhouse_config(clickhouse_client: Client, clickhouse_config
         # In case of any error, log it and return False
         logger.error(f"Failed to reload configuration: {e}")
         return False
+
+def create_database(clickhouse_client: Client, clickhouse_config: dict[str, Any]) -> bool:
+    """
+    Creates a database in ClickHouse using the name from config.
+    
+    :param clickhouse_client: The ClickHouse client object used for connecting to the database.
+    :param clickhouse_config: A dictionary containing the configuration, including the 'database' key.
+    :return: True if the database was successfully created or already exists, False if there was an error.
+    """
+    try:
+        database_name = clickhouse_config['database']
+
+        # Create database if not exists
+        clickhouse_client.execute(f"CREATE DATABASE IF NOT EXISTS {database_name}")
+
+        logger.info("Database created successfully.")
+        return True
+
+    except Exception as e:
+        logger.info(f"Failed to create database: {e}")
+        return False
+
+def drop_clickhouse_database(clickhouse_client: Client, clickhouse_config: dict[str, Any]) -> bool:
+    """
+    Drops a specified database in ClickHouse along with all its contents.
+
+    This function first deletes all tables in the database and then removes the database itself.
+
+    :param clickhouse_client: The ClickHouse client object used for connecting to the database.
+    :param clickhouse_config: Configuration dictionary containing connection parameters and database name.
+    :return: True if the database and its contents were successfully dropped, False otherwise.
+    """
+    try:
+        database_name = clickhouse_config['database']
+
+        # Check if the database exists by listing databases and checking for the target one
+        result = clickhouse_client.execute(f"SHOW DATABASES")
+        if database_name not in [db[0] for db in result]:
+            logger.info(f"Database '{database_name}' does not exist.")
+            return False
+
+        # Drop all tables in the database
+        tables = clickhouse_client.execute(f"SHOW TABLES FROM {database_name}")
+
+        for table in tables:
+            clickhouse_client.execute(f"DROP TABLE IF EXISTS {database_name}.{table[0]}")
+
+        # Now drop the database
+        clickhouse_client.execute(f"DROP DATABASE IF EXISTS {database_name}")
+        logger.info(f"Database '{database_name}' and all its contents have been successfully dropped.")
+        return True
+
+    except Exception as e:
+        logger.error(f"Error while dropping the database: {e}")
+        return False
 # ---------------------------------------------------------
 # [Final function] (to call from main)
-def init_clickhouse_with_user():
+def prepare_clickhouse():
     
+    load_dotenv(override=True)
     clickhouse_config = update_ch_config(CH_DB_CONFIG)
      
     clickhouse_container_forced_install(clickhouse_config)
     configure_clickhouse_user_permissions(clickhouse_config)
     clickhouse_client = clickhouse_connection(clickhouse_config)
     client_reload_clickhouse_config(clickhouse_client, clickhouse_config)
+    drop_clickhouse_database(clickhouse_client, clickhouse_config)
+    create_database(clickhouse_client, clickhouse_config)
 
     return clickhouse_client
 
