@@ -3,6 +3,7 @@ import pandas as pd
 import logging
 import os
 import subprocess
+import time
 from uuid import uuid4
 from config import PG_DB_CONFIG
 from datetime import datetime, timezone, timedelta
@@ -142,6 +143,54 @@ def start_postgres_with_volume(pg_config: dict[str, Any]) -> bool:
     except Exception as e:
         logger.exception(f"Unexpected error: {str(e)}")
         return False
+
+def client_check_postgres_ready(pg_config: dict[str, str]) -> bool:
+    """
+    Repeatedly checks if PostgreSQL is ready to accept connections via psycopg2.
+
+    This function attempts to establish a connection and execute a simple SELECT 1 query
+    up to 20 times with a 0.5-second interval, ensuring PostgreSQL is operational.
+
+    Args:
+        pg_config (dict[str, str]): A dictionary containing PostgreSQL connection parameters.
+
+    Returns:
+        bool: True if PostgreSQL responds successfully within the attempts, False otherwise.
+
+    Logs:
+        - INFO: Each attempt result (success or failure).
+        - DEBUG: Detailed error messages if a failure occurs.
+        - ERROR: If all attempts fail.
+    """
+    for attempt in range(1, 21):  # 20 attempts
+        try:
+            conn = psycopg2.connect(
+                host=pg_config["host"],
+                port=pg_config["port"],
+                user=pg_config["user"],
+                password=pg_config["password"],
+                dbname=pg_config.get("dbname", "postgres")
+            )
+            with conn.cursor() as cursor:
+                cursor.execute("SELECT 1")
+                result = cursor.fetchone()
+                if result == (1,):
+                    logger.info(f"PostgreSQL is ready and accepting queries (attempt {attempt}/20).")
+                    conn.close()
+                    return True
+                else:
+                    logger.info(f"PostgreSQL responded unexpectedly (attempt {attempt}/20): {result}")
+            conn.close()
+
+        except Exception as e:
+            logger.info(f"PostgreSQL is not ready yet (attempt {attempt}/20).")
+            logger.debug(f"Exception details: {e}")
+
+        time.sleep(0.5)
+
+    logger.error("PostgreSQL did not become ready after 20 attempts.")
+    return False
+
 # final [Postgres container] function
 def postgres_container_forced_install(postgres_config: dict[str, Any]):
     """
@@ -168,6 +217,10 @@ def postgres_container_forced_install(postgres_config: dict[str, Any]):
         if not start_postgres_with_volume(postgres_config):
             logger.error("Couldn't start PostgreSQL docker container! Aborting.")
             return False         
+
+        if not client_check_postgres_ready(postgres_config):
+            logger.error("PostgreSQL doesn't answer requests! Aborting.")
+            return False   
 
         return True
     
@@ -270,11 +323,15 @@ def create_tables(conn):
                 id UUID PRIMARY KEY,
                 timestamp TIMESTAMP NOT NULL,
                 currency VARCHAR(50) NOT NULL,
-                model VARCHAR(100) NOT NULL,
-                model_name_ext VARCHAR(100) NOT NULL,
-                created_at TIMESTAMP NOT NULL,
                 forecast_step INTEGER NOT NULL,
                 forecast_value DECIMAL(18, 8) NOT NULL,
+                model VARCHAR(100) NOT NULL,
+                model_name_ext VARCHAR(100) NOT NULL,
+                external_model_params VARCHAR(100) NOT NULL,
+                inner_model_params VARCHAR(100) NOT NULL, 
+                zero_step_ts TIMESTAMP NOT NULL,
+                config_start TIMESTAMP NOT NULL,
+                config_end TIMESTAMP NOT NULL,
                 uploaded_at TIMESTAMP DEFAULT NOW(), 
                 UNIQUE (timestamp, currency, model, forecast_step)
             );
@@ -301,12 +358,17 @@ def create_materialized_view(conn):
         f.id,
         f.timestamp,
         f.currency,
-        f.model,
-        f.model_name_ext,
         f.forecast_step,
         f.forecast_value,
-        f.created_at,
-        h.value AS historical_value
+        h.value AS historical_value,
+        f.model,
+        f.model_name_ext,
+        f.external_model_params,
+        f.inner_model_params,
+        f.uploaded_at,
+        f.zero_step_ts,
+        f.config_start,
+        f.config_end
     FROM forecast_data f
     LEFT JOIN historical_data h 
     ON f.timestamp = h.timestamp AND f.currency = h.currency
@@ -341,45 +403,6 @@ def refresh_materialized_view(conn):
         conn.rollback()
         logger.error(f"Failed to refresh materialized view: {e}")
 
-def create_combined_view(conn):
-    """
-    Create or replace the combined view for historical and forecast data.
-    """
-    query = """
-    CREATE OR REPLACE VIEW combined_data AS
-    SELECT 
-        id, 
-        timestamp, 
-        currency, 
-        data_label AS model,
-        value, 
-        0 AS forecast_step, 
-        MIN(timestamp) OVER (PARTITION BY data_label) AS created_at,  -- Min timestamp grouped by data_label
-        data_label AS model_name_ext 
-    FROM 
-        historical_data
-    UNION ALL
-    SELECT 
-        id, 
-        timestamp, 
-        currency, 
-        model, 
-        forecast_value AS value, 
-        forecast_step, 
-        created_at,
-        model_name_ext 
-    FROM 
-        forecast_data;
-    """
-    try:
-        with conn.cursor() as cursor:
-            cursor.execute(query)
-            conn.commit()
-            logger.info("Combined view 'combined_data' created or replaced successfully.")
-    except Exception as e:
-        logger.error(f"Failed to create combined view: {e}")
-        conn.rollback()
-
 def delete_mv_and_tables(conn):
     """
     Delete the view 'combined_data' and the tables 'historical_data' and 'forecast_data' from the database. [DEVELOPMENT MODE]
@@ -400,10 +423,11 @@ def delete_mv_and_tables(conn):
     except Exception as e:
         logger.critical(f"Failed to delete view and tables. Error: {e}")
 # final [Init Postgres and create tables] function
-def init_postgres_and_create_tables(postgres_client, postgres_config: dict [str, Any]):
-        
-    # connect to db through config
-    postgres_client = postgres_connection(**postgres_config)
+def init_postgres_and_create_tables(postgres_client):
+
+    client_check_postgres_ready
+    # remove existing tables if present
+    delete_mv_and_tables(postgres_client)
 
     # create database tables
     create_tables(postgres_client)
@@ -437,7 +461,7 @@ def prepare_postgres() -> bool:
         postgres_client = postgres_connection(**postgres_config)
 
         # create required tables and indexes
-        init_postgres_and_create_tables(postgres_client, postgres_config)
+        init_postgres_and_create_tables(postgres_client)
 
         return True
 
@@ -619,7 +643,7 @@ def load_to_db_training(dataframe, crypto_id, conn):
         conn.rollback()
         logger.critical(f"Failed to load training data for {crypto_id}. Error: {e}")
 
-def load_to_db_forecast(dataframe, crypto_id, model_name, params, conn, created_at):
+def load_to_db_forecast(dataframe, crypto_id, model_name, params, conn, zero_step_ts, config_start, config_end):
     """
     Save forecast data into the database table `forecast_data`.
 
@@ -648,23 +672,48 @@ def load_to_db_forecast(dataframe, crypto_id, model_name, params, conn, created_
         f"FH{params['forecast_hours']}"
     )
 
+    external_model_params = (
+    f"[TD={params['training_dataset_size']}]_"
+    f"[MU={params['model_update_interval']}]_"
+    f"[FD={params['forecast_dataset_size']}]_"
+    f"[FF={params['forecast_frequency']}]_"
+    f"[FH={params['forecast_hours']}]"
+)
+
+    specific_params = params.get('specific_parameters', {})
+
+    inner_model_params = "_".join(f"[{k}={v}]" for k, v in specific_params.items())
+
     # Round price to 8 decimal places and create forecast steps
     dataframe['price'] = dataframe['price'].round(8)
     dataframe['step'] = range(0, len(dataframe))
 
     # Prepare records for insertion
     records = [
-        (str(uuid4()), row['date'], crypto_id, model_name, dynamic_model_name, row['step'], row['price'], created_at)
+        (
+            str(uuid4()),          # id
+            row['date'],           # timestamp
+            crypto_id,             # currency
+            row['step'],           # forecast_step
+            row['price'],          # forecast_value
+            model_name,            # model
+            dynamic_model_name,    # model_name_ext
+            external_model_params, # external_model_params
+            inner_model_params,    # inner_model_params
+            zero_step_ts,          # zero_step_ts
+            config_start,          # config_start
+            config_end             # config_end
+        )
         for _, row in dataframe.iterrows()
     ]
 
     query = """
-        INSERT INTO forecast_data (id, timestamp, currency, model, model_name_ext, forecast_step, forecast_value, created_at)
+        INSERT INTO forecast_data (id, timestamp, currency, forecast_step, forecast_value, model, model_name_ext, external_model_params, inner_model_params, zero_step_ts, config_start, config_end)
         VALUES %s
         ON CONFLICT (timestamp, currency, model, forecast_step)
         DO UPDATE 
         SET forecast_value = EXCLUDED.forecast_value,
-            created_at = EXCLUDED.created_at
+            zero_step_ts = EXCLUDED.zero_step_ts
         WHERE forecast_data.forecast_value <> EXCLUDED.forecast_value;
     """
 
