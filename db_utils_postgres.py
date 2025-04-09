@@ -438,7 +438,6 @@ def init_postgres_and_create_tables(postgres_client):
     return postgres_client
 # ---------------------------------------------------------
 # [Prepare Postgres] (final function to call)
-
 def prepare_postgres() -> bool:
     """
     Full PostgreSQL setup routine.
@@ -577,78 +576,6 @@ def load_to_db_train_and_historical(extended_df, crypto_id, conn, max_train_data
     except Exception as e:
         conn.rollback()
         logger.critical(f"Failed to load data for {crypto_id}. Error: {e}")
-
-#def load_to_db_historical(dataframe, crypto_id, conn):
-#    """
-#    save historical data into the database table `historical_data`
-#    with a 'historical' label
-#    """
-#    if dataframe.empty:
-#        logger.critical(f"No data to load for {crypto_id}.")
-#        return
-#
-#    dataframe['price'] = dataframe['price'].round(8)
-#
-#    uploaded_at = datetime.now(timezone.utc)
-#
-#    # prepare records with 'historical' label
-#    records = [
-#        (str(uuid4()), row['date'], crypto_id, row['price'], 'historical', uploaded_at)
-#        for _, row in dataframe.iterrows()
-#    ]
-#
-#    query = """
-#        INSERT INTO historical_data (id, timestamp, currency, value, data_label, uploaded_at)
-#        VALUES %s
-#        ON CONFLICT (timestamp, currency, data_label)
-#        DO UPDATE 
-#        SET value = EXCLUDED.value
-#        WHERE historical_data.value <> EXCLUDED.value;
-#    """
-#
-#    try:
-#        with conn.cursor() as cursor:
-#            execute_values(cursor, query, records)
-#            conn.commit()
-#            logger.info(f"Historical data for {crypto_id} successfully loaded.")
-#    except Exception as e:
-#        conn.rollback()
-#        logger.critical(f"Failed to load data for {crypto_id}. Error: {e}")
-
-#def load_to_db_training(dataframe, crypto_id, conn):
-#    """
-#    save training data into the database table `historical_data`
-#    with a 'training' label
-#    """
-#    if dataframe.empty:
-#        logger.critical(f"No training data to load for {crypto_id}.")
-#        return
-#
-#    dataframe['price'] = dataframe['price'].round(8)
-#
-#    # prepare records with 'training' label
-#    records = [
-#        (str(uuid4()), row['date'], crypto_id, row['price'], 'training')
-#        for _, row in dataframe.iterrows()
-#    ]
-#
-#    query = """
-#        INSERT INTO historical_data (id, timestamp, currency, value, data_label)
-#        VALUES %s
-#        ON CONFLICT (timestamp, currency, data_label)
-#        DO UPDATE 
-#        SET value = EXCLUDED.value
-#        WHERE historical_data.value <> EXCLUDED.value;
-#    """
-#
-#    try:
-#        with conn.cursor() as cursor:
-#            execute_values(cursor, query, records)
-#            conn.commit()
-#            logger.info(f"Training data for {crypto_id} successfully loaded.")
-#    except Exception as e:
-#        conn.rollback()
-#        logger.critical(f"Failed to load training data for {crypto_id}. Error: {e}")
 
 def load_to_db_forecast(dataframe, crypto_id, model_name, params, conn, zero_step_ts, config_start, config_end):
     """
