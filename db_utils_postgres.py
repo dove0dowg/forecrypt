@@ -310,7 +310,7 @@ def create_tables(conn):
                 currency VARCHAR(50) NOT NULL,
                 value DECIMAL(18, 8) NOT NULL,
                 data_label VARCHAR(20) NOT NULL CHECK (data_label IN ('historical', 'training')),
-                uploaded_at TIMESTAMP DEFAULT NOW(),
+                uploaded_at TIMESTAMP NOT NULL,
                 UNIQUE (timestamp, currency, data_label)
             );
         """)
@@ -332,7 +332,7 @@ def create_tables(conn):
                 zero_step_ts TIMESTAMP NOT NULL,
                 config_start TIMESTAMP NOT NULL,
                 config_end TIMESTAMP NOT NULL,
-                uploaded_at TIMESTAMP DEFAULT NOW(), 
+                uploaded_at TIMESTAMP NOT NULL, 
                 UNIQUE (timestamp, currency, model, forecast_step)
             );
         """)
@@ -365,7 +365,8 @@ def create_materialized_view(conn):
         f.model_name_ext,
         f.external_model_params,
         f.inner_model_params,
-        f.uploaded_at,
+        h.uploaded_at AS h_uploaded_at,
+        f.uploaded_at AS f_uploaded_at,
         f.zero_step_ts,
         f.config_start,
         f.config_end
@@ -550,18 +551,22 @@ def load_to_db_train_and_historical(extended_df, crypto_id, conn, max_train_data
     # concatenate training and historical data
     combined_df = pd.concat([train_df, historical_df])
 
+    uploaded_at = datetime.now(timezone.utc)
+
     records = [
-        (str(uuid4()), row['date'], crypto_id, row['price'], row['data_label'])
+        (str(uuid4()), row['date'], crypto_id, row['price'], row['data_label'], uploaded_at)
         for _, row in combined_df.iterrows()
     ]
 
     query = """
-        INSERT INTO historical_data (id, timestamp, currency, value, data_label)
+        INSERT INTO historical_data (id, timestamp, currency, value, data_label, uploaded_at)
         VALUES %s
         ON CONFLICT (timestamp, currency, data_label)
         DO UPDATE 
-        SET value = EXCLUDED.value
+        SET value = EXCLUDED.value,
+        uploaded_at = EXCLUDED.uploaded_at
         WHERE historical_data.value <> EXCLUDED.value;
+        
     """
 
     try:
@@ -573,75 +578,77 @@ def load_to_db_train_and_historical(extended_df, crypto_id, conn, max_train_data
         conn.rollback()
         logger.critical(f"Failed to load data for {crypto_id}. Error: {e}")
 
-def load_to_db_historical(dataframe, crypto_id, conn):
-    """
-    save historical data into the database table `historical_data`
-    with a 'historical' label
-    """
-    if dataframe.empty:
-        logger.critical(f"No data to load for {crypto_id}.")
-        return
+#def load_to_db_historical(dataframe, crypto_id, conn):
+#    """
+#    save historical data into the database table `historical_data`
+#    with a 'historical' label
+#    """
+#    if dataframe.empty:
+#        logger.critical(f"No data to load for {crypto_id}.")
+#        return
+#
+#    dataframe['price'] = dataframe['price'].round(8)
+#
+#    uploaded_at = datetime.now(timezone.utc)
+#
+#    # prepare records with 'historical' label
+#    records = [
+#        (str(uuid4()), row['date'], crypto_id, row['price'], 'historical', uploaded_at)
+#        for _, row in dataframe.iterrows()
+#    ]
+#
+#    query = """
+#        INSERT INTO historical_data (id, timestamp, currency, value, data_label, uploaded_at)
+#        VALUES %s
+#        ON CONFLICT (timestamp, currency, data_label)
+#        DO UPDATE 
+#        SET value = EXCLUDED.value
+#        WHERE historical_data.value <> EXCLUDED.value;
+#    """
+#
+#    try:
+#        with conn.cursor() as cursor:
+#            execute_values(cursor, query, records)
+#            conn.commit()
+#            logger.info(f"Historical data for {crypto_id} successfully loaded.")
+#    except Exception as e:
+#        conn.rollback()
+#        logger.critical(f"Failed to load data for {crypto_id}. Error: {e}")
 
-    dataframe['price'] = dataframe['price'].round(8)
-
-    # prepare records with 'historical' label
-    records = [
-        (str(uuid4()), row['date'], crypto_id, row['price'], 'historical')
-        for _, row in dataframe.iterrows()
-    ]
-
-    query = """
-        INSERT INTO historical_data (id, timestamp, currency, value, data_label)
-        VALUES %s
-        ON CONFLICT (timestamp, currency, data_label)
-        DO UPDATE 
-        SET value = EXCLUDED.value
-        WHERE historical_data.value <> EXCLUDED.value;
-    """
-
-    try:
-        with conn.cursor() as cursor:
-            execute_values(cursor, query, records)
-            conn.commit()
-            logger.info(f"Historical data for {crypto_id} successfully loaded.")
-    except Exception as e:
-        conn.rollback()
-        logger.critical(f"Failed to load data for {crypto_id}. Error: {e}")
-
-def load_to_db_training(dataframe, crypto_id, conn):
-    """
-    save training data into the database table `historical_data`
-    with a 'training' label
-    """
-    if dataframe.empty:
-        logger.critical(f"No training data to load for {crypto_id}.")
-        return
-
-    dataframe['price'] = dataframe['price'].round(8)
-
-    # prepare records with 'training' label
-    records = [
-        (str(uuid4()), row['date'], crypto_id, row['price'], 'training')
-        for _, row in dataframe.iterrows()
-    ]
-
-    query = """
-        INSERT INTO historical_data (id, timestamp, currency, value, data_label)
-        VALUES %s
-        ON CONFLICT (timestamp, currency, data_label)
-        DO UPDATE 
-        SET value = EXCLUDED.value
-        WHERE historical_data.value <> EXCLUDED.value;
-    """
-
-    try:
-        with conn.cursor() as cursor:
-            execute_values(cursor, query, records)
-            conn.commit()
-            logger.info(f"Training data for {crypto_id} successfully loaded.")
-    except Exception as e:
-        conn.rollback()
-        logger.critical(f"Failed to load training data for {crypto_id}. Error: {e}")
+#def load_to_db_training(dataframe, crypto_id, conn):
+#    """
+#    save training data into the database table `historical_data`
+#    with a 'training' label
+#    """
+#    if dataframe.empty:
+#        logger.critical(f"No training data to load for {crypto_id}.")
+#        return
+#
+#    dataframe['price'] = dataframe['price'].round(8)
+#
+#    # prepare records with 'training' label
+#    records = [
+#        (str(uuid4()), row['date'], crypto_id, row['price'], 'training')
+#        for _, row in dataframe.iterrows()
+#    ]
+#
+#    query = """
+#        INSERT INTO historical_data (id, timestamp, currency, value, data_label)
+#        VALUES %s
+#        ON CONFLICT (timestamp, currency, data_label)
+#        DO UPDATE 
+#        SET value = EXCLUDED.value
+#        WHERE historical_data.value <> EXCLUDED.value;
+#    """
+#
+#    try:
+#        with conn.cursor() as cursor:
+#            execute_values(cursor, query, records)
+#            conn.commit()
+#            logger.info(f"Training data for {crypto_id} successfully loaded.")
+#    except Exception as e:
+#        conn.rollback()
+#        logger.critical(f"Failed to load training data for {crypto_id}. Error: {e}")
 
 def load_to_db_forecast(dataframe, crypto_id, model_name, params, conn, zero_step_ts, config_start, config_end):
     """
@@ -688,6 +695,8 @@ def load_to_db_forecast(dataframe, crypto_id, model_name, params, conn, zero_ste
     dataframe['price'] = dataframe['price'].round(8)
     dataframe['step'] = range(0, len(dataframe))
 
+    uploaded_at = datetime.now(timezone.utc)
+
     # Prepare records for insertion
     records = [
         (
@@ -702,18 +711,20 @@ def load_to_db_forecast(dataframe, crypto_id, model_name, params, conn, zero_ste
             inner_model_params,    # inner_model_params
             zero_step_ts,          # zero_step_ts
             config_start,          # config_start
-            config_end             # config_end
+            config_end,            # config_end
+            uploaded_at
         )
         for _, row in dataframe.iterrows()
     ]
 
     query = """
-        INSERT INTO forecast_data (id, timestamp, currency, forecast_step, forecast_value, model, model_name_ext, external_model_params, inner_model_params, zero_step_ts, config_start, config_end)
+        INSERT INTO forecast_data (id, timestamp, currency, forecast_step, forecast_value, model, model_name_ext, external_model_params, inner_model_params, zero_step_ts, config_start, config_end, uploaded_at)
         VALUES %s
         ON CONFLICT (timestamp, currency, model, forecast_step)
         DO UPDATE 
         SET forecast_value = EXCLUDED.forecast_value,
-            zero_step_ts = EXCLUDED.zero_step_ts
+            zero_step_ts = EXCLUDED.zero_step_ts,
+            uploaded_at = EXCLUDED.uploaded_at
         WHERE forecast_data.forecast_value <> EXCLUDED.forecast_value;
     """
 
