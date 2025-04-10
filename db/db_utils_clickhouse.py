@@ -9,7 +9,7 @@ import base64
 import time
 from typing import Any
 # modules
-from config import CH_DB_CONFIG
+from config.config_system import CH_DB_CONFIG
 # logger
 logger = logging.getLogger(__name__)
 # ---------------------------------------------------------
@@ -698,7 +698,7 @@ def docker_nopassword_check_ch_port(clickhouse_config: dict[str, Any]) -> bool:
                 logger.info(f"ClickHouse port 9000 is open and responding (attempt {attempt}/20).")
                 return True
             else:
-                logger.info(f"ClickHouse port check failed (attempt {attempt}/20).")
+                logger.debug(f"ClickHouse port check failed (attempt {attempt}/20).")
                 logger.debug(f"Error details: {result.stderr.strip()}")
 
         except Exception as e:
@@ -743,7 +743,7 @@ def docker_password_check_ch_port(clickhouse_config: dict[str, Any]) -> bool:
                 logger.info(f"ClickHouse port 9000 is open and responding (attempt {attempt}/20).")
                 return True
             else:
-                logger.info(f"ClickHouse port check failed (attempt {attempt}/20).")
+                logger.debug(f"ClickHouse port check failed (attempt {attempt}/20).")
                 logger.debug(f"Error details: {result.stderr.strip()}")
 
         except Exception as e:
@@ -977,7 +977,7 @@ def clickhouse_connection(clickhouse_config: dict[str, Any]):
         try:
             client = Client(host=host, port=port, user=user, password=password)
             result = client.execute('SELECT 1')
-            logger.info(f'Successful ClickHouse connection on attempt {attempt}. Result: {result}')
+            logger.debug(f'Successful ClickHouse connection on attempt {attempt}. Result: {result}')
             return client
         except Exception as e:
             logger.info(f'ClickHouse connection attempt {attempt} failed.')

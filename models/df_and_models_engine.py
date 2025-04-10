@@ -5,10 +5,13 @@ import importlib
 import logging
 from datetime import datetime, timezone, timedelta
 # modules
-import db_utils_postgres
-import models_processing
+import db.db_utils_postgres as db_utils_postgres
+from . import models_processing
+from .forecasting import create_forecast_dataframe
 import get_data
-from config import CRYPTO_LIST, START_DATE, FINISH_DATE, PG_DB_CONFIG, CH_DB_CONFIG, MODEL_PARAMETERS
+from config.config_system import PG_DB_CONFIG, CH_DB_CONFIG, CRYPTO_LIST, START_DATE, FINISH_DATE
+from config.config_models import MODEL_PARAMETERS
+
 # logger
 logger = logging.getLogger(__name__)
 # ---------------------------------------------------------
@@ -268,7 +271,7 @@ def forecast_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id,
             model_fit = models_processing.load_model(crypto_id, model_name)
             logger.debug(f"[{crypto_id} - {model_name}] Model loaded successfully.")
 
-            df_forecast = models_processing.create_forecast_dataframe(sub_df, model_fit, steps=forecast_hours)
+            df_forecast = create_forecast_dataframe(sub_df, model_fit, steps=forecast_hours)
             models_processing.load_to_db_forecast(df_forecast, crypto_id, model_name, params, conn, zero_step_ts, config_start, config_end) #created_at=current_dt)
             logger.debug(f"[{crypto_id} - {model_name}] Forecast saved for {current_dt}.")
             model_last_forecast[model_name] = current_dt

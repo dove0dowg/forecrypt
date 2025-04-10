@@ -5,7 +5,7 @@ import os
 import subprocess
 import time
 from uuid import uuid4
-from config import PG_DB_CONFIG
+from config.config_system import PG_DB_CONFIG
 from datetime import datetime, timezone, timedelta
 from psycopg2.extras import execute_values
 from dotenv import load_dotenv

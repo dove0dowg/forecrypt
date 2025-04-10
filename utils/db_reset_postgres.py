@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-import db_utils_postgres
+import db.db_utils_postgres as db_utils_postgres
 from config import PG_DB_CONFIG
 
 # configure logging
