@@ -5,19 +5,29 @@ import os
 import subprocess
 import time
 from uuid import uuid4
-from config.config_system import PG_DB_CONFIG
 from datetime import datetime, timezone, timedelta
 from psycopg2.extras import execute_values
 from dotenv import load_dotenv
 from typing import Any
+from config.config_system import PG_DB_CONFIG
 
+from .core_columns_generators import (
+    gen_sql_pg_create_historical_table,
+    gen_sql_pg_create_historical_idx,
+    gen_sql_pg_create_forecast_table, 
+    gen_sql_pg_create_forecast_idx,
+    gen_sql_pg_create_mv, 
+    gen_records_pg_train_and_historical,
+    gen_sql_pg_load_train_and_historical, 
+    gen_records_pg_forecast,
+    gen_sql_pg_load_forecast,
+)
 load_dotenv()
 
 logger = logging.getLogger("forecrypt")
 # ---------------------------------------------------------
 # [Postgres container]
 # ---------------------------------------------------------
-
 def ensure_docker_running() -> bool:
     """
     Ensures the Docker daemon is running in WSL.
@@ -303,46 +313,18 @@ def create_tables(conn):
     """
     with conn.cursor() as cursor:
         # historical_data table
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS historical_data (
-                id UUID PRIMARY KEY,
-                timestamp TIMESTAMP NOT NULL,
-                currency VARCHAR(50) NOT NULL,
-                value DECIMAL(18, 8) NOT NULL,
-                data_label VARCHAR(20) NOT NULL CHECK (data_label IN ('historical', 'training')),
-                uploaded_at TIMESTAMP NOT NULL,
-                UNIQUE (timestamp, currency, data_label)
-            );
-        """)
-        cursor.execute("""
-            CREATE INDEX IF NOT EXISTS idx_historical_data_timestamp_currency ON historical_data (timestamp, currency);
-        """)
-        # forecast_data table
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS forecast_data (
-                id UUID PRIMARY KEY,
-                timestamp TIMESTAMP NOT NULL,
-                currency VARCHAR(50) NOT NULL,
-                forecast_step INTEGER NOT NULL,
-                forecast_value DECIMAL(18, 8) NOT NULL,
-                model VARCHAR(100) NOT NULL,
-                model_name_ext VARCHAR(100) NOT NULL,
-                external_model_params VARCHAR(100) NOT NULL,
-                inner_model_params VARCHAR(100) NOT NULL, 
-                zero_step_ts TIMESTAMP NOT NULL,
-                config_start TIMESTAMP NOT NULL,
-                config_end TIMESTAMP NOT NULL,
-                uploaded_at TIMESTAMP NOT NULL, 
-                UNIQUE (timestamp, currency, model, forecast_step)
-            );
-        """)
-        cursor.execute("""
-            CREATE INDEX IF NOT EXISTS idx_forecast_data_timestamp ON forecast_data (timestamp, currency);
-        """)
-        cursor.execute("""
-            CREATE INDEX IF NOT EXISTS idx_forecast_data_timestamp_currency_model ON forecast_data (timestamp, currency, model);
-        """)
-        logger.info("database tables initialized.")
+
+        sql_pg_create_historical = gen_sql_pg_create_historical_table()
+        cursor.execute(sql_pg_create_historical)
+
+        sql_pg_create_historical_idx = gen_sql_pg_create_historical_idx()
+        cursor.execute(sql_pg_create_historical_idx)
+
+        sql_pg_create_forecast = gen_sql_pg_create_forecast_table()
+        cursor.execute(sql_pg_create_forecast)
+
+        sql_pg_create_forecast_idx = gen_sql_pg_create_forecast_idx()
+        cursor.execute(sql_pg_create_forecast_idx)
         
         conn.commit()
 
@@ -352,33 +334,12 @@ def create_materialized_view(conn):
     
     :param conn: Active connection to PostgreSQL.
     """
-    query = """
-    CREATE MATERIALIZED VIEW IF NOT EXISTS backtest_data_mv AS
-    SELECT 
-        f.id,
-        f.timestamp,
-        f.currency,
-        f.forecast_step,
-        f.forecast_value,
-        h.value AS historical_value,
-        f.model,
-        f.model_name_ext,
-        f.external_model_params,
-        f.inner_model_params,
-        h.uploaded_at AS h_uploaded_at,
-        f.uploaded_at AS f_uploaded_at,
-        f.zero_step_ts,
-        f.config_start,
-        f.config_end
-    FROM forecast_data f
-    LEFT JOIN historical_data h 
-    ON f.timestamp = h.timestamp AND f.currency = h.currency
-    WITH NO DATA;
-    """
+
+    sql_pg_create_mv = gen_sql_pg_create_mv()
 
     try:
         with conn.cursor() as cursor:
-            cursor.execute(query)
+            cursor.execute(sql_pg_create_mv)
             conn.commit()
             logger.info("Materialized view 'backtest_data_mv' created successfully.")
     except Exception as e:
@@ -552,25 +513,13 @@ def load_to_db_train_and_historical(extended_df, crypto_id, conn, max_train_data
 
     uploaded_at = datetime.now(timezone.utc)
 
-    records = [
-        (str(uuid4()), row['date'], crypto_id, row['price'], row['data_label'], uploaded_at)
-        for _, row in combined_df.iterrows()
-    ]
+    records_pg_train_and_historical = [gen_records_pg_train_and_historical(row, crypto_id, uploaded_at) for _, row in combined_df.iterrows()]
 
-    query = """
-        INSERT INTO historical_data (id, timestamp, currency, value, data_label, uploaded_at)
-        VALUES %s
-        ON CONFLICT (timestamp, currency, data_label)
-        DO UPDATE 
-        SET value = EXCLUDED.value,
-        uploaded_at = EXCLUDED.uploaded_at
-        WHERE historical_data.value <> EXCLUDED.value;
-        
-    """
+    sql_pg_load_train_and_historical = gen_sql_pg_load_train_and_historical()
 
     try:
         with conn.cursor() as cursor:
-            execute_values(cursor, query, records)
+            execute_values(cursor, sql_pg_load_train_and_historical, records_pg_train_and_historical)
             conn.commit()
             logger.info(f"Training and historical data for {crypto_id} successfully loaded.")
     except Exception as e:
@@ -624,40 +573,16 @@ def load_to_db_forecast(dataframe, crypto_id, model_name, params, conn, zero_ste
 
     uploaded_at = datetime.now(timezone.utc)
 
-    # Prepare records for insertion
-    records = [
-        (
-            str(uuid4()),          # id
-            row['date'],           # timestamp
-            crypto_id,             # currency
-            row['step'],           # forecast_step
-            row['price'],          # forecast_value
-            model_name,            # model
-            dynamic_model_name,    # model_name_ext
-            external_model_params, # external_model_params
-            inner_model_params,    # inner_model_params
-            zero_step_ts,          # zero_step_ts
-            config_start,          # config_start
-            config_end,            # config_end
-            uploaded_at
-        )
-        for _, row in dataframe.iterrows()
+    records_pg_forecast = [
+    gen_records_pg_forecast(row, crypto_id, model_name, dynamic_model_name, external_model_params, inner_model_params, zero_step_ts, config_start, config_end, uploaded_at)
+    for _, row in dataframe.iterrows()
     ]
 
-    query = """
-        INSERT INTO forecast_data (id, timestamp, currency, forecast_step, forecast_value, model, model_name_ext, external_model_params, inner_model_params, zero_step_ts, config_start, config_end, uploaded_at)
-        VALUES %s
-        ON CONFLICT (timestamp, currency, model, forecast_step)
-        DO UPDATE 
-        SET forecast_value = EXCLUDED.forecast_value,
-            zero_step_ts = EXCLUDED.zero_step_ts,
-            uploaded_at = EXCLUDED.uploaded_at
-        WHERE forecast_data.forecast_value <> EXCLUDED.forecast_value;
-    """
+    sql_pg_load_forecast = gen_sql_pg_load_forecast()
 
     try:
         with conn.cursor() as cursor:
-            execute_values(cursor, query, records)
+            execute_values(cursor, sql_pg_load_forecast, records_pg_forecast)
             conn.commit()
             logger.debug(f"Forecast data for {crypto_id} - {dynamic_model_name} successfully loaded.")
     except Exception as e:
