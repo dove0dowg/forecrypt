@@ -1,7 +1,7 @@
 #  Project config
 CRYPTO_LIST = ['BTC', 'ETH'] #, 'DOGE', 'ADA', 'SOL']
-START_DATE = "2025-03-01T00:00:00" # first day and hour of historical data in naive.
-FINISH_DATE = "2025-03-10T00:00:00" # last day and hour of historical data in naive, "yyyy-mm-ddThh:mm:ss" format.
+START_DATE = "2025-04-01T00:00:00" # first day and hour of historical data in naive.
+FINISH_DATE = "2025-04-03T00:00:00" # last day and hour of historical data in naive, "yyyy-mm-ddThh:mm:ss" format.
 # ---------------------------------------------------------
 # Directory for check, save and load models. Mostly used in models_processing.py
 MODELS_DIRECTORY = r"C:\forecrypt_models"
@@ -53,3 +53,22 @@ CH_DB_CONFIG = {
 # ---------------------------------------------------------
 # CryptoCompare API key. Not hidden, cause it is not nessesarry for free requests. Implemented for the case of future changes.
 API_KEY = "YOUR_API_KEY" 
+# ---------------------------------------------------------
+# 
+CORE_COLUMNS = {
+    "id": ("UUID", "String"),
+    "timestamp": ("TIMESTAMP", "DateTime"),
+    "currency": ("VARCHAR(50)", "String"),
+    "forecast_step": ("INTEGER", "Int32"),
+    "forecast_value": ("DECIMAL(18, 8)", "Float64"),
+    "historical_value": ("DECIMAL(18, 8)", "Float64"),
+    "model": ("VARCHAR(100)", "String"),
+    "model_name_ext": ("VARCHAR(100)", "String"),
+    "external_model_params": ("VARCHAR(200)", "String"),
+    "inner_model_params": ("VARCHAR(200)", "String"),
+    "zero_step_ts": ("TIMESTAMP", "DateTime"),
+    "config_start": ("TIMESTAMP", "DateTime"),
+    "config_end": ("TIMESTAMP", "DateTime"),
+    "data_label": ("VARCHAR(20)", "String"),
+    "uploaded_at": ("TIMESTAMP", "DateTime")
+}
