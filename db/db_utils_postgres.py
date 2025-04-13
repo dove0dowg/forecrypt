@@ -68,23 +68,59 @@ def ensure_docker_running() -> bool:
         logger.exception(f"Error starting Docker: {str(e)}")
         return False
 
+#def remove_postgres_container(container_name: str):
+#    """
+#    Forcefully removes a PostgreSQL Docker container if it exists.
+#
+#    This function attempts to remove the specified PostgreSQL container using `docker rm -f`.
+#    If the container does not exist, it logs a debug message instead of raising an error.
+#
+#    Args:
+#        container_name (str): The name of the PostgreSQL container to remove.
+#    """
+#    try:
+#        logger.debug(f"Attempting to remove container: {container_name}")
+#        result = subprocess.run(f"wsl docker rm -f {container_name}", shell=True, capture_output=True, text=True)
+#        if result.returncode == 0:
+#            logger.info(f"Removed existing container: {container_name}")
+#        else:
+#            logger.debug(f"No container to remove: {container_name}")
+#    except Exception as e:
+#        logger.warning(f"Error removing container: {str(e)}")
+
+
 def remove_postgres_container(container_name: str):
     """
-    Forcefully removes a PostgreSQL Docker container if it exists.
-
-    This function attempts to remove the specified PostgreSQL container using `docker rm -f`.
-    If the container does not exist, it logs a debug message instead of raising an error.
-
-    Args:
-        container_name (str): The name of the PostgreSQL container to remove.
+    Forcefully removes a PostgreSQL Docker container if it exists and waits until it's gone.
     """
     try:
         logger.debug(f"Attempting to remove container: {container_name}")
-        result = subprocess.run(f"wsl docker rm -f {container_name}", shell=True, capture_output=True, text=True)
+        result = subprocess.run(
+            f"wsl docker rm -f {container_name}",
+            shell=True,
+            capture_output=True,
+            text=True
+        )
+
         if result.returncode == 0:
             logger.info(f"Removed existing container: {container_name}")
+        elif "No such container" in result.stderr:
+            logger.debug(f"Container '{container_name}' does not exist.")
         else:
-            logger.debug(f"No container to remove: {container_name}")
+            logger.error(f"Failed to remove container '{container_name}': {result.stderr.strip()}")
+
+        # wait until it's really gone
+        for _ in range(10):
+            ps_result = subprocess.run(
+                "wsl docker ps -a",
+                shell=True,
+                capture_output=True,
+                text=True
+            )
+            if container_name not in ps_result.stdout:
+                break
+            time.sleep(0.5)
+
     except Exception as e:
         logger.warning(f"Error removing container: {str(e)}")
 
