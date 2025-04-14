@@ -1,5 +1,6 @@
 from collections import namedtuple
 from config.config_system import CORE_COLUMNS
+from config.config_metrics import EPSILON
 from uuid import uuid4
 import logging
 
@@ -272,5 +273,233 @@ def gen_sql_ch_insert_from_external(ch_database):
         f"    {select_clause}\n"
         f"FROM {ch_database}.external_pg_forecast_data;"
     )
+
+    return gen_sql_string
+
+def gen_sql_ch_create_pointwise_metrics_table(ch_database_name: str) -> str:
+    """
+    Генерирует SQL-строку для создания таблицы pointwise_metrics,
+    проверяя наличие колонок в CORE_COLUMNS и добавляя расчётные метрики.
+    """
+
+    core_columns = name_core_columns_tuple()
+
+    base_cols = [
+        "id",
+        "timestamp",
+        "currency",
+        "forecast_step",
+        "model_name_ext",
+        "external_model_params",
+        "inner_model_params"
+    ]
+
+    lines = []
+    for col in base_cols:
+        if col not in core_columns:
+            raise ValueError(f"missing column: {col}")
+        ch_type = core_columns[col].ch_type
+        lines.append(f"{col} {ch_type}")
+
+    # добавляем метрики (фиксированный список)
+    lines += [
+        "abs_error Float64",
+        "bias_value Float64",
+        "squared_error Float64",
+        "ape Float64",
+        "perc_error Float64",
+        "log_error Float64",
+        "rel_error Float64",
+        "overprediction UInt8",
+        "underprediction UInt8",
+        "zero_crossed UInt8",
+        "pm_insert_time DateTime"
+    ]
+
+    gen_sql_string = (
+        f"CREATE TABLE IF NOT EXISTS {ch_database_name}.pointwise_metrics (\n    "
+        + ",\n    ".join(lines)
+        + "\n) ENGINE = MergeTree\n"
+        "ORDER BY (timestamp, currency, model_name_ext, forecast_step);"
+    )
+
+    return gen_sql_string
+
+def gen_sql_ch_insert_pointwise_metrics(ch_database: str) -> str:
+    """
+    Generates SQL for inserting calculated pointwise metrics into ClickHouse
+    from the forecast_data table using only new data (f_uploaded_at > last pm_insert_time).
+    """
+
+    core_columns = name_core_columns_tuple()
+
+    base_cols = [
+        "id",
+        "timestamp",
+        "currency",
+        "forecast_step",
+        "model_name_ext",
+        "external_model_params",
+        "inner_model_params"
+    ]
+
+    for col in base_cols:
+        if col not in core_columns:
+            raise ValueError(f"missing column: {col}")
+
+    insert_cols = base_cols + [
+        "abs_error",
+        "bias_value",
+        "squared_error",
+        "ape",
+        "perc_error",
+        "log_error",
+        "rel_error",
+        "overprediction",
+        "underprediction",
+        "zero_crossed",
+        "pm_insert_time"
+    ]
+
+    metric_exprs = [
+        "abs(forecast_value - historical_value) AS abs_error",
+        "(forecast_value - historical_value) AS bias_value",
+        "pow(forecast_value - historical_value, 2) AS squared_error",
+        f"abs(forecast_value - historical_value) / (abs(historical_value) + {EPSILON}) AS ape",
+        f"forecast_value / (historical_value + {EPSILON}) AS perc_error",
+        f"log(forecast_value + {EPSILON}) - log(historical_value + {EPSILON}) AS log_error",
+        f"abs(forecast_value - historical_value) / greatest(abs(forecast_value), abs(historical_value), {EPSILON}) AS rel_error",
+        "if(forecast_value > historical_value, 1, 0) AS overprediction",
+        "if(forecast_value < historical_value, 1, 0) AS underprediction",
+        "if(forecast_value * historical_value < 0, 1, 0) AS zero_crossed",
+        "now() AS pm_insert_time"
+    ]
+
+    select_clause = ",\n    ".join(base_cols + metric_exprs)
+
+    gen_sql_string = f"""
+    INSERT INTO {ch_database}.pointwise_metrics
+    (
+        {", ".join(insert_cols)}
+    )
+    SELECT
+        {select_clause}
+    FROM {ch_database}.forecast_data
+    WHERE f_uploaded_at > (
+        SELECT coalesce(MAX(pm_insert_time), toDateTime('1970-01-01 00:00:00'))
+        FROM {ch_database}.pointwise_metrics
+    )
+    """.strip()
+
+    return gen_sql_string
+
+def gen_sql_ch_create_aggregated_metrics_table(ch_database_name: str) -> str:
+    """
+    Generates SQL to create the aggregated_metrics table in ClickHouse,
+    validating core fields via CORE_COLUMNS and adding fixed aggregated metrics.
+    """
+
+    core_columns = name_core_columns_tuple()
+
+    base_cols = [
+        "currency",
+        "model_name_ext",
+        "external_model_params",
+        "inner_model_params"
+    ]
+
+    lines = []
+    for col in base_cols:
+        if col not in core_columns:
+            raise ValueError(f"missing column: {col}")
+        ch_type = core_columns[col].ch_type
+        lines.append(f"{col} {ch_type}")
+
+    # aggregated metric fields
+    lines += [
+        "mae Float64",
+        "mse Float64",
+        "rmse Float64",
+        "mape Float64",
+        "bias_value_mean Float64",
+        "stddev_bias_value Float64",
+
+        "overprediction_rate Float64",
+        "underprediction_rate Float64",
+
+        "max_abs_error Float64",
+        "max_ape Float64",
+
+        "row_count UInt32",
+        "am_insert_time DateTime"
+    ]
+
+    gen_sql_string = (
+        f"CREATE TABLE IF NOT EXISTS {ch_database_name}.aggregated_metrics (\n    "
+        + ",\n    ".join(lines)
+        + "\n) ENGINE = MergeTree\n"
+        "ORDER BY (currency, model_name_ext);"
+    )
+
+    return gen_sql_string
+
+def gen_sql_ch_insert_aggregated_metrics(ch_database: str) -> str:
+    """
+    Generates flat SQL to insert aggregated metrics from pointwise_metrics
+    into aggregated_metrics, grouped by (currency, model_name_ext).
+    """
+
+    gen_sql_string = f"""
+    INSERT INTO {ch_database}.aggregated_metrics
+    (
+        currency,
+        model_name_ext,
+        external_model_params,
+        inner_model_params,
+
+        mae,
+        mse,
+        rmse,
+        mape,
+        bias_value_mean,
+        stddev_bias_value,
+
+        overprediction_rate,
+        underprediction_rate,
+
+        max_abs_error,
+        max_ape,
+
+        row_count,
+        am_insert_time
+    )
+    SELECT
+        currency,
+        model_name_ext,
+        any(external_model_params) AS external_model_params,
+        any(inner_model_params) AS inner_model_params,
+
+        avg(abs_error) AS mae,
+        avg(squared_error) AS mse,
+        sqrt(avg(squared_error)) AS rmse,
+        avg(ape) AS mape,
+        avg(bias_value) AS bias_value_mean,
+        stddevPop(bias_value) AS stddev_bias_value,
+
+        avg(overprediction) AS overprediction_rate,
+        avg(underprediction) AS underprediction_rate,
+
+        max(abs_error) AS max_abs_error,
+        max(ape) AS max_ape,
+
+        count() AS row_count,
+        now() AS am_insert_time
+    FROM {ch_database}.pointwise_metrics
+    WHERE pm_insert_time > (
+        SELECT coalesce(MAX(am_insert_time), toDateTime('1970-01-01 00:00:00'))
+        FROM {ch_database}.aggregated_metrics
+    )
+    GROUP BY currency, model_name_ext
+    """.strip()
 
     return gen_sql_string
