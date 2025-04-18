@@ -196,6 +196,7 @@ def gen_sql_ch_create_external_pg_table(pg_container_ip, pg_database, pg_user, p
         "model_name_ext",
         "external_model_params",
         "inner_model_params",
+        "zero_step_ts",
         "h_uploaded_at",
         "f_uploaded_at",
         "config_start",
@@ -230,6 +231,7 @@ def gen_sql_ch_create_forecast_data_table(ch_database_name):
         "model_name_ext",
         "external_model_params",
         "inner_model_params",
+        "zero_step_ts",
         "h_uploaded_at",
         "f_uploaded_at"
     ]
@@ -261,6 +263,7 @@ def gen_sql_ch_insert_from_external(ch_database):
         "model_name_ext",
         "external_model_params",
         "inner_model_params",
+        "zero_step_ts",
         "h_uploaded_at",
         "f_uploaded_at"
     ]
@@ -277,10 +280,6 @@ def gen_sql_ch_insert_from_external(ch_database):
     return gen_sql_string
 
 def gen_sql_ch_create_pointwise_metrics_table(ch_database_name: str) -> str:
-    """
-    Генерирует SQL-строку для создания таблицы pointwise_metrics,
-    проверяя наличие колонок в CORE_COLUMNS и добавляя расчётные метрики.
-    """
 
     core_columns = name_core_columns_tuple()
 
@@ -291,7 +290,8 @@ def gen_sql_ch_create_pointwise_metrics_table(ch_database_name: str) -> str:
         "forecast_step",
         "model_name_ext",
         "external_model_params",
-        "inner_model_params"
+        "inner_model_params",
+        "zero_step_ts"
     ]
 
     lines = []
@@ -301,7 +301,6 @@ def gen_sql_ch_create_pointwise_metrics_table(ch_database_name: str) -> str:
         ch_type = core_columns[col].ch_type
         lines.append(f"{col} {ch_type}")
 
-    # добавляем метрики (фиксированный список)
     lines += [
         "abs_error Float64",
         "bias_value Float64",
@@ -326,10 +325,6 @@ def gen_sql_ch_create_pointwise_metrics_table(ch_database_name: str) -> str:
     return gen_sql_string
 
 def gen_sql_ch_insert_pointwise_metrics(ch_database: str) -> str:
-    """
-    Generates SQL for inserting calculated pointwise metrics into ClickHouse
-    from the forecast_data table using only new data (f_uploaded_at > last pm_insert_time).
-    """
 
     core_columns = name_core_columns_tuple()
 
@@ -340,7 +335,8 @@ def gen_sql_ch_insert_pointwise_metrics(ch_database: str) -> str:
         "forecast_step",
         "model_name_ext",
         "external_model_params",
-        "inner_model_params"
+        "inner_model_params",
+        "zero_step_ts"
     ]
 
     for col in base_cols:
@@ -394,10 +390,6 @@ def gen_sql_ch_insert_pointwise_metrics(ch_database: str) -> str:
     return gen_sql_string
 
 def gen_sql_ch_create_aggregated_metrics_table(ch_database_name: str) -> str:
-    """
-    Generates SQL to create the aggregated_metrics table in ClickHouse,
-    validating core fields via CORE_COLUMNS and adding fixed aggregated metrics.
-    """
 
     core_columns = name_core_columns_tuple()
 
@@ -415,7 +407,6 @@ def gen_sql_ch_create_aggregated_metrics_table(ch_database_name: str) -> str:
         ch_type = core_columns[col].ch_type
         lines.append(f"{col} {ch_type}")
 
-    # aggregated metric fields
     lines += [
         "mae Float64",
         "mse Float64",
@@ -444,10 +435,6 @@ def gen_sql_ch_create_aggregated_metrics_table(ch_database_name: str) -> str:
     return gen_sql_string
 
 def gen_sql_ch_insert_aggregated_metrics(ch_database: str) -> str:
-    """
-    Generates flat SQL to insert aggregated metrics from pointwise_metrics
-    into aggregated_metrics, grouped by (currency, model_name_ext).
-    """
 
     gen_sql_string = f"""
     INSERT INTO {ch_database}.aggregated_metrics
@@ -500,6 +487,109 @@ def gen_sql_ch_insert_aggregated_metrics(ch_database: str) -> str:
         FROM {ch_database}.aggregated_metrics
     )
     GROUP BY currency, model_name_ext
+    """.strip()
+
+    return gen_sql_string
+
+def gen_sql_ch_create_forecast_w_metrics_table(ch_database_name: str) -> str:
+
+    core_columns = name_core_columns_tuple()
+
+    base_cols = [
+        "currency",
+        "model_name_ext",
+        "external_model_params",
+        "inner_model_params",
+        "zero_step_ts",
+        "forecast_step"
+    ]
+
+    lines = []
+    for col in base_cols:
+        if col not in core_columns:
+            raise ValueError(f"missing column: {col}")
+        ch_type = core_columns[col].ch_type
+        lines.append(f"{col} {ch_type}")
+
+    lines += [
+        "cumulative_mae Float64",
+        "cumulative_rmse Float64",
+        "mean_bias_value Float64",
+        "error_growth_rate Float64",
+        "relative_step_error Float64",
+        "is_reversal UInt8",
+        "step_stddev Float64",
+        "step_rank UInt32",
+        "fwmv_insert_time DateTime"
+    ]
+
+    gen_sql_string = (
+        f"CREATE TABLE IF NOT EXISTS {ch_database_name}.forecast_window_metrics (\n    "
+        + ",\n    ".join(lines)
+        + "\n) ENGINE = MergeTree\n"
+        "ORDER BY (currency, model_name_ext, zero_step_ts, forecast_step);"
+    )
+
+    return gen_sql_string
+
+def gen_sql_ch_insert_forecast_w_metrics(ch_database: str) -> str:
+
+    gen_sql_string = f"""
+        INSERT INTO {ch_database}.forecast_window_metrics
+        SELECT
+            currency,
+            model_name_ext,
+            external_model_params,
+            inner_model_params,
+            zero_step_ts,
+            forecast_step,
+
+            avg(abs_error) OVER (
+                PARTITION BY currency, model_name_ext, zero_step_ts
+                ORDER BY forecast_step
+                ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+            ) AS cumulative_mae,
+
+            sqrt(avg(squared_error) OVER (
+                PARTITION BY currency, model_name_ext, zero_step_ts
+                ORDER BY forecast_step
+                ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+            )) AS cumulative_rmse,
+
+            avg(bias_value) OVER (
+                PARTITION BY currency, model_name_ext, zero_step_ts
+                ORDER BY forecast_step
+                ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+            ) AS mean_bias_value,
+
+            bias_value / greatest(forecast_step, 1) AS error_growth_rate,
+            abs_error / greatest(forecast_step, 1) AS relative_step_error,
+
+            if(
+                bias_value * leadInFrame(bias_value) OVER (
+                    PARTITION BY currency, model_name_ext, zero_step_ts
+                    ORDER BY forecast_step
+                    ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+                ) < 0,
+                1, 0
+            ) AS is_reversal,
+
+            stddevPop(bias_value) OVER (
+                PARTITION BY currency, model_name_ext, zero_step_ts
+                ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+            ) AS step_stddev,
+
+            row_number() OVER (
+                PARTITION BY currency, model_name_ext, zero_step_ts
+                ORDER BY forecast_step
+            ) AS step_rank,
+
+            now() AS fwmv_insert_time
+        FROM {ch_database}.pointwise_metrics
+        WHERE pm_insert_time > (
+            SELECT coalesce(MAX(fwmv_insert_time), toDateTime('1970-01-01 00:00:00'))
+            FROM {ch_database}.forecast_window_metrics
+        )
     """.strip()
 
     return gen_sql_string
