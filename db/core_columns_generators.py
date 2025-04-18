@@ -103,6 +103,7 @@ def gen_sql_pg_create_forecast_idx():
     )
     return gen_sql_string
 
+
 def gen_sql_pg_create_mv():
 
     gen_sql_string = (
@@ -118,17 +119,41 @@ def gen_sql_pg_create_mv():
         "    f.model_name_ext,\n"
         "    f.external_model_params,\n"
         "    f.inner_model_params,\n"
-        "    h.uploaded_at AS h_uploaded_at,\n"
-        "    f.uploaded_at AS f_uploaded_at,\n"
+        "    h.uploaded_at    AS h_uploaded_at,\n"
+        "    f.uploaded_at    AS f_uploaded_at,\n"
         "    f.zero_step_ts,\n"
         "    f.config_start,\n"
         "    f.config_end\n"
         "FROM forecast_data f\n"
-        "LEFT JOIN historical_data h ON f.timestamp = h.timestamp AND f.currency = h.currency\n"
+        "LEFT JOIN historical_data h\n"
+        "  ON f.timestamp = h.timestamp\n"
+        " AND f.currency  = h.currency\n"
+        "\n"
+        "UNION ALL\n"
+        "SELECT\n"
+        "    h.id,\n"
+        "    h.timestamp,\n"
+        "    h.currency,\n"
+        "    -- разница в часах от самого раннего timestamp\n"
+        "    ((EXTRACT(EPOCH FROM (h.timestamp - zero.zero_ts)) / 3600)::INT) AS forecast_step,\n"
+        "    h.historical_value           AS forecast_value,\n"
+        "    h.historical_value,\n"
+        "    'historical'                AS model,\n"
+        "    'historical'                AS model_name_ext,\n"
+        "    'historical'                AS external_model_params,\n"
+        "    'historical'                AS inner_model_params,\n"
+        "    h.uploaded_at                AS h_uploaded_at,\n"
+        "    h.uploaded_at                AS f_uploaded_at,\n"
+        "    zero.zero_ts                 AS zero_step_ts,\n"
+        "    NULL::TIMESTAMP              AS config_start,\n"
+        "    NULL::TIMESTAMP              AS config_end\n"
+        "FROM historical_data h,\n"
+        "     (SELECT MIN(timestamp) AS zero_ts FROM historical_data) AS zero\n"
+        "\n"
         "WITH NO DATA;"
     )
-
     return gen_sql_string
+
 
 def gen_records_pg_train_and_historical(row, crypto_id, uploaded_at):
     return (
