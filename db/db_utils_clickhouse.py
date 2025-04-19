@@ -1109,7 +1109,7 @@ def drop_clickhouse_database(clickhouse_client: Client, clickhouse_config: dict[
         result = clickhouse_client.execute(f"SHOW DATABASES")
         if database_name not in [db[0] for db in result]:
             logger.info(f"Database '{database_name}' does not exist.")
-            return False
+            return True
 
         # Drop all tables in the database
         tables = clickhouse_client.execute(f"SHOW TABLES FROM {database_name}")
@@ -1127,17 +1127,57 @@ def drop_clickhouse_database(clickhouse_client: Client, clickhouse_config: dict[
         return False
 # ---------------------------------------------------------
 # [Final function] (to call from main)
-def prepare_clickhouse():
+
+def prepare_clickhouse() -> bool:
+    """
+    Perform full ClickHouse setup:
+    - load environment variables
+    - update configuration
+    - install and start container
+    - configure user permissions
+    - establish client connection
+    - reload configuration
+    - drop existing database
+    - create new database
+
+    Returns:
+        bool: True if setup completed successfully, False otherwise.
+    """
+    try:
+        load_dotenv(override=True)
+        clickhouse_config = update_ch_config(CH_DB_CONFIG)
+
+        logger.info("Starting ClickHouse preparation")
+        if not clickhouse_container_forced_install(clickhouse_config):
+            logger.error("ClickHouse container installation failed")
+            return False
+
+        if not configure_clickhouse_user_permissions(clickhouse_config):
+            logger.error("Setting user permissions failed")
+            return False
+
+        client = clickhouse_connection(clickhouse_config)
+        if client is None:
+            logger.error("Failed to connect to ClickHouse")
+            return False
+
+        if not client_reload_clickhouse_config(client, clickhouse_config):
+            logger.error("Reloading ClickHouse config failed")
+            return False
+
+        if not drop_clickhouse_database(client, clickhouse_config):
+            logger.error("Dropping ClickHouse database failed")
+            return False
+
+        if not create_database(client, clickhouse_config):
+            logger.error("Creating ClickHouse database failed")
+            return False
+
+        logger.info("ClickHouse preparation completed successfully")
+        return True
+
+    except Exception as e:
+        logger.exception(f"Unexpected error in prepare_clickhouse: {e}")
+        return False
     
-    load_dotenv(override=True)
-    clickhouse_config = update_ch_config(CH_DB_CONFIG)
-     
-    clickhouse_container_forced_install(clickhouse_config)
-    configure_clickhouse_user_permissions(clickhouse_config)
-    clickhouse_client = clickhouse_connection(clickhouse_config)
-    client_reload_clickhouse_config(clickhouse_client, clickhouse_config)
-    drop_clickhouse_database(clickhouse_client, clickhouse_config)
-    create_database(clickhouse_client, clickhouse_config)
-
-    return clickhouse_client
-
+    
