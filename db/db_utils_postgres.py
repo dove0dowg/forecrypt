@@ -380,9 +380,15 @@ def refresh_materialized_view(conn):
         conn.rollback()
         logger.error(f"Failed to refresh materialized view: {e}")
 
-def delete_mv_and_tables(conn):
+def delete_mv_and_tables(conn) -> bool:
     """
-    Delete the view 'combined_data' and the tables 'historical_data' and 'forecast_data' from the database. [DEVELOPMENT MODE]
+    Remove the development materialized view and tables to reset database state.
+
+    Args:
+        conn: psycopg2 connection object to the target database.
+
+    Returns:
+        bool: True if the view and tables were dropped successfully, False otherwise.
     """
     queries = [
         "DROP MATERIALIZED VIEW IF EXISTS backtest_data_mv;",
@@ -392,13 +398,17 @@ def delete_mv_and_tables(conn):
 
     try:
         with conn.cursor() as cursor:
-            for query in queries:
-                cursor.execute(query)
-                logger.info(f"Executed: {query}")
+            for sql in queries:
+                cursor.execute(sql)
+                logger.info(f"Executed: {sql}")
         conn.commit()
         logger.info("Materialized view and tables deleted successfully.")
+        return True
     except Exception as e:
+        conn.rollback()
         logger.critical(f"Failed to delete view and tables. Error: {e}")
+        return False
+
 # final [Init Postgres and create tables] function
 def init_postgres_and_create_tables(postgres_client):
 
