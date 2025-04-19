@@ -277,72 +277,54 @@ def forecast_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id,
             model_last_forecast[model_name] = current_dt
         except Exception as e:
             logger.error(f"[{crypto_id} - {model_name}] Error during forecasting: {e}")
-# final combined [DF and models processing] function
-def fetch_predict_upload_ts(conn):
+
+def fetch_predict_upload_ts(conn) -> bool:
     """
-    Fetches historical cryptocurrency data, calculates forecasts using multiple models, 
-    and uploads both historical and forecasted data to the database.
+    Execute the full data pipeline: fetch historical data, retrain models, generate forecasts, and upload results.
 
     This function:
-    1. Determines the data fetching interval based on model parameters.
-    2. Iterates through each cryptocurrency in the predefined list.
-    3. Loads extended historical data for training and analysis.
-    4. Iterates through configured models to:
-        - Retrieve training and forecast input datasets.
-        - Handle model retraining when necessary.
-        - Generate forecasts and store them in the database.
+      1. Calculates required data intervals.
+      2. Iterates over each cryptocurrency.
+      3. Loads extended historical data.
+      4. Uploads training and historical data.
+      5. For each model:
+         - Retrieves training and forecast input windows.
+         - Handles retraining when due.
+         - Generates and saves forecasts as needed.
 
     Args:
         conn (psycopg2.connection): Active database connection.
 
-    Raises:
-        Logs critical errors if any unexpected issues occur.
-
-    Finally:
-        Closes the database connection after execution.
+    Returns:
+        bool: True if the pipeline completes without errors, False otherwise.
     """
+    logger.info("Starting data fetch-predict-upload cycle.")
     try:
         # Calculate fetch intervals
-        start_naive, finish_naive, total_hours, extended_start_dt, max_train_dataset_hours = calculate_total_fetch_interval(
-            START_DATE, FINISH_DATE, **MODEL_PARAMETERS
+        start_naive, finish_naive, total_hours, extended_start_dt, max_train_dataset_hours = (
+            calculate_total_fetch_interval(START_DATE, FINISH_DATE, **MODEL_PARAMETERS)
         )
 
-        # Cycle for each cryptocurrency
         for crypto_id in CRYPTO_LIST:
             logger.info(f"Processing cryptocurrency: {crypto_id}")
-
-            # Initialize tracking for retrain and forecast. 
             model_last_retrain, model_last_forecast = initialize_model_tracking()
 
-            # Fetch extended historical dataset (max hours for training dataset + historical dataset from START_DATE to FINISH_DATE)
             extended_df = fetch_extended_df(crypto_id, extended_start_dt, FINISH_DATE)
+            db_utils_postgres.load_to_db_train_and_historical(
+                extended_df, crypto_id, conn, max_train_dataset_hours
+            )
 
-            # Load historical data into the database
-            db_utils_postgres.load_to_db_train_and_historical(extended_df, crypto_id, conn, max_train_dataset_hours)
-
-            # Cycle for each model
             for model_name, params in MODEL_PARAMETERS.items():
                 logger.debug(f"Processing model: {model_name} at {datetime.now()}")
-
-                # Process hourly data
                 current_dt = start_naive
-                while current_dt <= finish_naive:    
+                while current_dt <= finish_naive:
+                    train_df = get_train_df(
+                        extended_df, current_dt, params["training_dataset_size"], crypto_id, model_name
+                    )
+                    forecast_input_df = get_forecast_input_df(
+                        extended_df, current_dt, params["forecast_dataset_size"], crypto_id, model_name
+                    )
 
-                    # Get training dataset
-                    training_dataset_size = params["training_dataset_size"]
-                    train_df = get_train_df(extended_df, current_dt, training_dataset_size, crypto_id, model_name)
-                    
-                    logger.debug(train_df.head())
-                    logger.debug(f"Index type: {type(train_df.index)}, Is DatetimeIndex: {isinstance(train_df.index, pd.DatetimeIndex)}")
-                    logger.debug(f"Missing values: {train_df.isnull().sum()}")
-
-                    # Get forecast input datasetl
-                    forecast_dataset_size = params["forecast_dataset_size"]
-                    forecast_input_df = get_forecast_input_df(extended_df, current_dt, forecast_dataset_size, crypto_id, model_name)
-                    
-                    # Handle retraining. Check if retrain required.
-                    # If required - retrain and save model.
-                    # Dictionary model_last_retrain affected by this function.
                     retrain_in_hour_cycle(
                         model_name=model_name,
                         params=params,
@@ -352,10 +334,6 @@ def fetch_predict_upload_ts(conn):
                         model_last_retrain=model_last_retrain,
                     )
 
-                    # Handle forecasting. Checking config.py if forecast required at this timestamp.
-                    # If yes - load model, create forecast, and load to db.
-                    # If no - skip.
-                    # Dictionary model_last_forecast affected by this function.
                     forecast_in_hour_cycle(
                         model_name=model_name,
                         params=params,
@@ -366,10 +344,13 @@ def fetch_predict_upload_ts(conn):
                         model_last_forecast=model_last_forecast,
                     )
 
-                    # continue to next hour
                     current_dt += timedelta(hours=1)
 
-                logger.info(f"{model_name} model processing completed successfully at {datetime.now()}")
+                logger.info(f"Completed model: {model_name}")
+
+        logger.info("Data fetch-predict-upload cycle completed successfully.")
+        return True
 
     except Exception as e:
-        logger.critical(f"An error occurred: {e}", exc_info=True)
+        logger.critical("Data pipeline failed.", exc_info=True)
+        return False
