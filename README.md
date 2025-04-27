@@ -66,11 +66,11 @@ First-time execution will start containers, mount volumes, apply schema, and ini
 
 Each forecasted value is evaluated against real historical values using multiple metric sets. These metrics aim to capture accuracy, directional bias, error scaling, and structural deviations.
 
-- **pointwise_metrics**: 'id', 'timestamp', 'currency', 'forecast_step', 'model_name_ext', 'external_model_params', 'inner_model_params', 'zero_step_ts', 'abs_error', 'bias_value', 'squared_error', 'ape', 'perc_error', 'log_error', 'rel_error', 'overprediction', 'underprediction', 'zero_crossed', 'pm_insert_time' 
+- **pointwise_metrics**: `id`, `timestamp`, `currency`, `forecast_step`, `model_name_ext`, `external_model_params`, `inner_model_params`, `zero_step_ts`, `abs_error`, `bias_value`, `squared_error`, `ape`, `perc_error`, `log_error`, `rel_error`, `overprediction`, `underprediction`, `zero_crossed`, `pm_insert_time` 
 
-- **aggregated_metrics**: 'currency', 'model_name_ext', 'external_model_params', 'inner_model_params', 'mae', 'mse', 'rmse', 'mape', 'bias_value_mean', 'stddev_bias_value', 'overprediction_rate', 'underprediction_rate', 'max_abs_error', 'max_ape', 'row_count', 'am_insert_time' 
+- **aggregated_metrics**: `currency`, `model_name_ext`, `external_model_params`, `inner_model_params`, `mae`, `mse`, `rmse`, `mape`, `bias_value_mean`, `stddev_bias_value`, `overprediction_rate`, `underprediction_rate`, `max_abs_error`, `max_ape`, `row_count`, `am_insert_time` 
 
-- **forecast_window_metrics**: 'currency', 'model_name_ext', 'external_model_params', 'inner_model_params', 'zero_step_ts', 'forecast_step', 'cumulative_mae', 'cumulative_rmse', 'mean_bias_value', 'error_growth_rate', 'relative_step_error', 'is_reversal', 'step_stddev', 'step_rank', 'fwmv_insert_time'
+- **forecast_window_metrics**: `currency`, `model_name_ext`, `external_model_params`, `inner_model_params`, `zero_step_ts`, `forecast_step`, `cumulative_mae`, `cumulative_rmse`, `mean_bias_value`, `error_growth_rate`, `relative_step_error`, `is_reversal`, `step_stddev`, `step_rank`, `fwmv_insert_time`
 
 All ratio-based metrics use **EPSILON** as a regularization constant to avoid division by zero.
 
