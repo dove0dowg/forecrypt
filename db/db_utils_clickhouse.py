@@ -689,7 +689,7 @@ def docker_nopassword_check_ch_port(clickhouse_config: dict[str, Any]) -> bool:
         f"-q 'SELECT 1'"
     )
     
-    for attempt in range(1, 21):  # 20 попыток
+    for attempt in range(1, 21): 
         try:
             logger.debug(f"Executing port check attempt {attempt}: {check_cmd}")
             result = subprocess.run(check_cmd, shell=True, capture_output=True, text=True)
@@ -1005,7 +1005,7 @@ def client_check_ch_ready(clickhouse_config: dict[str, Any]) -> bool:
         - DEBUG: Detailed error messages if a failure occurs.
         - ERROR: If all attempts fail.
     """
-    for attempt in range(1, 21):  # 20 попыток
+    for attempt in range(1, 21):  
         try:
             client = Client(
                 host=clickhouse_config["host"],
