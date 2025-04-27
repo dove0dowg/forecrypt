@@ -44,6 +44,8 @@ First-time execution will start containers, mount volumes, apply schema, and ini
 
 ### PostgreSQL:
 
+PostgreSQL is used to ingest and store datasets and model forecasts in small batches from Python. It also provides a materialized view that joins historical and forecast tables (allowing to avoid join operations inside ClickHouse).
+
 - **historical_data**: stores raw price history per cryptocurrency, labeled as 'training' or 'historical'
 
 - **forecast_data**: model predictions including step number, forecast value, model metadata, and timestamps
@@ -51,6 +53,10 @@ First-time execution will start containers, mount volumes, apply schema, and ini
 - **backtest_data_mv**: materialized view aligning historical and forecasted rows by timestamp and cryptocurrency
 
 ### ClickHouse:
+
+ClickHouse is used to compute and store mass-scale forecast evaluation metrics. Its performance is leveraged for fast input, aggregation, filtering, and ranking of model configurations.
+
+- **external_pg_forecast_data** (PostgreSQL engine): a live connector table that maps directly to the backtest materialized view in PostgreSQL.
 
 - **forecast_data** (ReplacingMergeTree): deduplicated forecast entries, partitioned by month, ordered by timestamp and model
 
@@ -64,11 +70,11 @@ First-time execution will start containers, mount volumes, apply schema, and ini
 
 Each forecasted value is evaluated against real historical values using multiple metric sets. These metrics aim to capture accuracy, directional bias, error scaling, and structural deviations.
 
-- **pointwise_metrics**: `id`, `timestamp`, `currency`, `forecast_step`, `model_name_ext`, `external_model_params`, `inner_model_params`, `zero_step_ts`, `abs_error`, `bias_value`, `squared_error`, `ape`, `perc_error`, `log_error`, `rel_error`, `overprediction`, `underprediction`, `zero_crossed`, `pm_insert_time` 
+- **pointwise_metrics**: `abs_error`, `bias_value`, `squared_error`, `ape`, `perc_error`, `log_error`, `rel_error`, `overprediction`, `underprediction`, `zero_crossed`
 
-- **aggregated_metrics**: `currency`, `model_name_ext`, `external_model_params`, `inner_model_params`, `mae`, `mse`, `rmse`, `mape`, `bias_value_mean`, `stddev_bias_value`, `overprediction_rate`, `underprediction_rate`, `max_abs_error`, `max_ape`, `row_count`, `am_insert_time` 
+- **aggregated_metrics**: `mae`, `mse`, `rmse`, `mape`, `bias_value_mean`, `stddev_bias_value`, `overprediction_rate`, `underprediction_rate`, `max_abs_error`, `max_ape`
 
-- **forecast_window_metrics**: `currency`, `model_name_ext`, `external_model_params`, `inner_model_params`, `zero_step_ts`, `forecast_step`, `cumulative_mae`, `cumulative_rmse`, `mean_bias_value`, `error_growth_rate`, `relative_step_error`, `is_reversal`, `step_stddev`, `step_rank`, `fwmv_insert_time`
+- **forecast_window_metrics**: `cumulative_mae`, `cumulative_rmse`, `mean_bias_value`, `error_growth_rate`, `relative_step_error`, `is_reversal`, `step_stddev`, `step_rank`
 
 All ratio-based metrics use **EPSILON** as a regularization constant to avoid division by zero.
 
