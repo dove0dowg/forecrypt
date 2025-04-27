@@ -18,38 +18,41 @@
 #                             These parameters vary between models (e.g., ARIMA orders, ETS seasonal periods, etc.).
 # ---------------------------------------------------------
 MODEL_PARAMETERS = {
-    'arima': {
-        'training_dataset_size': 240,
-        'model_update_interval': 2880,
-        'forecast_dataset_size': 48,
-        'forecast_frequency': 120,
-        'forecast_hours': 120,
-        'fit_func_name': 'models.model_fits.fit_arima_model',
-        'specific_parameters': {
-            'order': (24, 3, 8),
-            'seasonal_order': (0, 0, 0, 0)
-        }
-    },
+#    'arima': {
+#        'training_dataset_size': 240,
+#        'model_update_interval': 2880,
+#        'forecast_dataset_size': 48,
+#        'forecast_frequency': 120,
+#        'forecast_hours': 120,
+#        'fit_func_name': 'models.model_fits.fit_arima_model',
+#        'specific_parameters': {
+#            'order': (24, 3, 8),
+#            'seasonal_order': (0, 0, 0, 0)
+#        },
+#        'model_alg_name': 'arima'
+#    },
     'ets': {
-        'training_dataset_size': 240,
-        'model_update_interval': 4800,
+        'training_dataset_size': 480,
+        'model_update_interval': 24,
         'forecast_dataset_size': 48,
-        'forecast_frequency': 8760,
-        'forecast_hours': 720,
+        'forecast_frequency': 24,
+        'forecast_hours': 96,
         'fit_func_name': 'models.model_fits.fit_ets_model',
         'specific_parameters': {
             'trend': 'add',
             'seasonal': 'mul',
             'seasonal_periods': 24
-        }
+        },
+        'model_alg_name': 'ets'
     },
     'theta': {
-        'training_dataset_size': 240,
+        'training_dataset_size': 480,
         'model_update_interval': 24,
         'forecast_dataset_size': 48,
-        'forecast_frequency': 120,
-        'forecast_hours': 120,
+        'forecast_frequency': 24,
+        'forecast_hours': 96,
         'fit_func_name': 'models.model_fits.fit_theta_model',
-        'specific_parameters': {}
+        'specific_parameters': {},
+        'model_alg_name': 'theta'
     }
 }
