@@ -278,7 +278,7 @@ def forecast_in_hour_cycle(*, model_name, params, sub_df, current_dt, crypto_id,
         except Exception as e:
             logger.error(f"[{crypto_id} - {model_name}] Error during forecasting: {e}")
 
-def fetch_predict_upload_ts(conn) -> bool:
+def fetch_predict_upload_ts(conn, model_params_dict, start_date, finish_date, crypto_list) -> bool:
     """
     Execute the full data pipeline: fetch historical data, retrain models, generate forecasts, and upload results.
 
@@ -302,19 +302,19 @@ def fetch_predict_upload_ts(conn) -> bool:
     try:
         # Calculate fetch intervals
         start_naive, finish_naive, total_hours, extended_start_dt, max_train_dataset_hours = (
-            calculate_total_fetch_interval(START_DATE, FINISH_DATE, **MODEL_PARAMETERS)
+            calculate_total_fetch_interval(start_date, finish_date, **model_params_dict)
         )
 
-        for crypto_id in CRYPTO_LIST:
+        for crypto_id in crypto_list:
             logger.info(f"Processing cryptocurrency: {crypto_id}")
             model_last_retrain, model_last_forecast = initialize_model_tracking()
 
-            extended_df = fetch_extended_df(crypto_id, extended_start_dt, FINISH_DATE)
+            extended_df = fetch_extended_df(crypto_id, extended_start_dt, finish_date)
             db_utils_postgres.load_to_db_train_and_historical(
                 extended_df, crypto_id, conn, max_train_dataset_hours
             )
 
-            for model_name, params in MODEL_PARAMETERS.items():
+            for model_name, params in model_params_dict.items():
                 logger.debug(f"Processing model: {model_name} at {datetime.now()}")
                 current_dt = start_naive
                 while current_dt <= finish_naive:
