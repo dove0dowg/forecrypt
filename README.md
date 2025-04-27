@@ -1,96 +1,106 @@
-# ForecrypT: Platform for Cryptocurrency Forecasting
+# FORECRYPT. 
 
-**ForecrypT** is a platform for cryptocurrency forecasting, with its primary advantage being flexibility. After configuring the application, users can tailor the forecasting process to their specific needs.
+Forecrypt is a system for large-scale backtesting of forecasting models on cryptocurrency time series. With this application, you can generate predictions for:
 
-## Overview
+- hundreds of cryptocurrencies
 
-ForecrypT is a set of tools written in Python designed to process time series data and store the results in a PostgreSQL database. The application generates hourly forecasts and saves them as database entries. Historical and training data storing as well. It is launched via the `main.py` file, and all configurations are managed through the `config.py` file.
+- a dozen models
 
+- dozens of configurations per model
 
-To run the project at its current development stage, follow these steps:
+As a result of statistical model processing, all forecasts are stored in ClickHouse, where for every hour, every model configuration, and every prediction branch, a set of analytical metrics is computed. These metrics can be used to build hypotheses about the applicability of different model configurations to cryptocurrency series.
 
-1. Download the source code.
-2. Install the required Python libraries from requirements.txt.
-3. Set up and configure a PostgreSQL database.
-4. Configure the runtime parameters in the configuration file.
-5. Run main.py.
+## INSTALLATION REQUIREMENTS AND SETUP
 
-> Docker support is planned to simplify deployment.
+### Requirements 
 
-[How to manage the `config.py` configuration?](https://dove0dowg.github.io/forecrypt/how_to_manage_config.html)
+Python 3.11+
 
----
+Docker Desktop with WSL2 backend (used for PostgreSQL and ClickHouse containers)
 
-## Platform Flexibility
+pip (Python package installer)
 
-ForecrypT offers the following capabilities, arranged "from simple to advanced":
+### Installation steps:
 
-1. **Single forecast for one cryptocurrency using one model.**  
-   Example: a Bitcoin price forecast based on the ARIMA model.
+Clone the repository
 
-2. **Forecasts for multiple cryptocurrencies and models.**  
-   You can generate forecasts for one or several cryptocurrencies using one or multiple models. Models can be fundamentally different (e.g., ARIMA and ETS) or represent different versions of the same model with varying parameters. All results are saved to a unified database table.
+Create and activate a virtual environment
 
-3. **Adjustable forecasting and retraining frequency.**  
-   Users can specify how often forecasts should be updated and how frequently models should be retrained on new data. This ensures forecasts remain highly accurate and relevant.
+Run: pip install -r requirements.txt
 
-4. **Custom time series.**  
-   If necessary, you can modify the `fetch_historical_data` function to process any hourly time series, such as data for metals or stock markets. The application logic remains unchanged in this case.  
-   [How to set up a custom time series source?](https://dove0dowg.github.io/forecrypt/custom_ts_source.html)
+Create a .env file with PostgreSQL and ClickHouse credentials (optional if hardcoded)
 
-5. **Adding your own model.**  
-   If you have a model not included in the platform, you can integrate it for use or comparison with other models.  
-   [How to add a custom model?](https://dove0dowg.github.io/forecrypt/add_custom_model.html)
+Run: python main.py (command line) or python nicegui_ui.py (web dashboard)
 
-Project Schemes:
+First-time execution will start containers, mount volumes, apply schema, and initialize user roles.
 
-[External Systems](https://dove0dowg.github.io/forecrypt/Systems_of_ForecrypT.html)
+## ARCHITECTURE OVERVIEW
 
-[Internal Python Processes](https://dove0dowg.github.io/forecrypt/ForecrypT_Python_Internal_Processes.html)
+**Python**: data fetch, preprocessing, training, forecast generation, evaluation, logging
 
-# **Project Goals**
+**PostgreSQL**: stores historical prices and forecast outputs, including a materialized backtesting view
 
-This project automates cryptocurrency forecasting and data collection so you can build a comprehensive knowledge base on the performance of various models (ARIMA, XGBoost, etc.). You decide which datasets to gather and which approaches to test, allowing you to explore and refine forecasts tailored to your specific time series.
+**ClickHouse**: stores deduplicated forecast data and multiple metric tables for fast querying and slicing
 
-In its ready-to-use form, this system provides a robust platform for cryptocurrency forecasting. However, with a precise rework of just one Python function, it can be adapted to any time-series data. This flexibility allows you to leverage the entire pipeline — from data ingestion to model training and evaluation — for a broad range of forecasting scenarios, tailored to your specific needs.
+## DATABASE STRUCTURE
 
----
+### PostgreSQL:
 
-## Conclusion
+**historical_data**: stores raw price history per cryptocurrency, labeled as 'training' or 'historical'
 
-ForecrypT is a flexible tool that adapts easily to your needs. Whether you're forecasting cryptocurrency trends, financial markets, or other time series data, the platform provides a simple yet powerful infrastructure for data analysis.
+**forecast_data**: model predictions including step number, forecast value, model metadata, and timestamps
 
----
+**backtest_data_mv**: materialized view aligning historical and forecasted rows by timestamp and cryptocurrency
 
-## Documentation
+### ClickHouse:
 
-Detailed documentation is available [here](https://dove0dowg.github.io/forecrypt/).
+**forecast_data** (ReplacingMergeTree): deduplicated forecast entries, partitioned by month, ordered by timestamp and model
 
----
+**pointwise_metrics** (MergeTree): stores per-step metrics for every forecast row
 
-## License
+**aggregated_metrics** (MergeTree): stores grouped metrics per cryptocurrency and model configuration
 
-This project is licensed under the **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Public License (CC BY-NC-SA 4.0)**.  
-For more information, see the [LICENSE](LICENSE) file.
+**forecast_window_metrics** (MergeTree): rolling window summaries over each prediction horizon
 
----
+## FORECAST EVALUATION METRICS
 
-## **Extended Future Goals**
+Each forecasted value is evaluated against real historical values using multiple metric sets. These metrics aim to capture accuracy, directional bias, error scaling, and structural deviations.
 
-This project also aspires to achieve **broader objectives**, which would benefit from more contributors:
+**pointwise_metrics**: id, timestamp, currency, forecast_step, model_name_ext, external_model_params, inner_model_params, zero_step_ts, abs_error, bias_value, squared_error, ape, perc_error, log_error, rel_error, overprediction, underprediction, zero_crossed, pm_insert_time
 
-1. **Robust the application through Docker.**
+**aggregated_metrics**: currency, model_name_ext, external_model_params, inner_model_params, mae, mse, rmse, mape, bias_value_mean, stddev_bias_value, overprediction_rate, underprediction_rate, max_abs_error, max_ape, row_count, am_insert_time
 
-2. **Write a logic for multi-multi forecasting, based on using main logic with cycle of dynamic config.py input.**
+**forecast_window_metrics**: currency, model_name_ext, external_model_params, inner_model_params, zero_step_ts, forecast_step, cumulative_mae, cumulative_rmse, mean_bias_value, error_growth_rate, relative_step_error, is_reversal, step_stddev, step_rank, fwmv_insert_time
 
-3. **Discover an Algorithm for Predicting Cryptocurrency Trends** *(ha-haa!)*
+All ratio-based metrics use **EPSILON** as a regularization constant to avoid division by zero.
 
-4. **Develop a Comprehensive "Custom Forecasting" Service**:
-   - Allowing users to build **personalized forecasts** based on the above data structure.
-   - Essential steps include:
-     - **API Integration**
-     - **Frontend Development**
-     - **Cloud Migration**
----
+## SYSTEM OUTPUT AND USAGE
 
-> **Note:** This project is in the development stage. The core functionality, such as automating data collection and prediction, is not yet fully tested. Contributions and suggestions are welcome.
+After execution, the system produces a wide matrix of forecast branches, each associated with full error metadata. These can be used for inspection, ranking, and graphing:
+
+- Query ClickHouse metric tables to sort forecasts by quality criteria
+
+- Use Plotly to visualize and compare results across configurations (through nicegui)
+
+- Analyze model sensitivity to parameter changes
+
+This dataset serves as a base for building automated configuration selection logic.
+
+## FUTURE EXTENSIONS
+
+### 7.1. Model Expansion
+
+Add models such as Prophet, LightGBM, Temporal Fusion Transformers, CatBoost, XGBoost, and Ridge Regression
+
+### 7.2. Configuration Search
+
+Develop correlation maps between input model parameters and output metric scores
+
+Automate discovery of promising configurations using historical performance statistics
+
+### 7.3. Averaging and Ensembles
+
+Combine forecast paths from multiple models for robustness and variance reduction
+
+## LICENSE
+Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
