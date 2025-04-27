@@ -324,7 +324,7 @@ def create_database(config: dict):
 
 def create_tables(conn):
     """
-    Create tables historical_data и forecast_data, if there are none in database
+    Create tables historical_data and forecast_data, if there are none in database
     """
     with conn.cursor() as cursor:
         # historical_data table
@@ -361,24 +361,26 @@ def create_materialized_view(conn):
         conn.rollback()
         logger.error(f"Failed to create materialized view: {e}")
 
-def refresh_materialized_view(conn):
+def refresh_materialized_view(conn) -> bool:
     """
     Refresh the materialized view backtest_data_mv to include only new data.
     This will recalculate and update the materialized view with the latest data.
-    
+
     :param conn: Active connection to PostgreSQL.
+    :return: True if refresh succeeded, False otherwise.
     """
     try:
         with conn.cursor() as cursor:
-            # Refresh materialized view
             cursor.execute("""
                 REFRESH MATERIALIZED VIEW backtest_data_mv;
             """)
             conn.commit()
             logger.info("Materialized view 'backtest_data_mv' successfully refreshed.")
+            return True
     except Exception as e:
         conn.rollback()
         logger.error(f"Failed to refresh materialized view: {e}")
+        return False
 
 def delete_mv_and_tables(conn) -> bool:
     """
@@ -410,9 +412,9 @@ def delete_mv_and_tables(conn) -> bool:
         return False
 
 # final [Init Postgres and create tables] function
-def init_postgres_and_create_tables(postgres_client):
+def init_postgres_and_create_tables(pg_config: dict[str, str], postgres_client):
 
-    client_check_postgres_ready
+    client_check_postgres_ready(pg_config)
     # remove existing tables if present
     delete_mv_and_tables(postgres_client)
 
@@ -447,7 +449,7 @@ def prepare_postgres() -> bool:
         postgres_client = postgres_connection(**postgres_config)
 
         # create required tables and indexes
-        init_postgres_and_create_tables(postgres_client)
+        init_postgres_and_create_tables(postgres_config, postgres_client)
 
         return True
 
