@@ -14,23 +14,23 @@ As a result of statistical model processing, all forecasts are stored in ClickHo
 
 ### Requirements 
 
-Python 3.11+
+- Python 3.11+
 
-Docker Desktop with WSL2 backend (used for PostgreSQL and ClickHouse containers)
+- Docker Desktop with WSL2 backend (used for PostgreSQL and ClickHouse containers)
 
-pip (Python package installer)
+- pip (Python package installer)
 
 ### Installation steps:
 
-Clone the repository
+- Clone the repository
 
-Create and activate a virtual environment
+- Create and activate a virtual environment
 
-Run: pip install -r requirements.txt
+- Run: pip install -r requirements.txt
 
-Create a .env file with PostgreSQL and ClickHouse credentials (optional if hardcoded)
+-Create a .env file with PostgreSQL and ClickHouse credentials (optional if hardcoded)
 
-Run: python main.py (command line) or python nicegui_ui.py (web dashboard)
+-Run: python main.py (command line) or python nicegui_ui.py (web dashboard)
 
 First-time execution will start containers, mount volumes, apply schema, and initialize user roles.
 
@@ -66,11 +66,11 @@ First-time execution will start containers, mount volumes, apply schema, and ini
 
 Each forecasted value is evaluated against real historical values using multiple metric sets. These metrics aim to capture accuracy, directional bias, error scaling, and structural deviations.
 
-**pointwise_metrics**: id, timestamp, currency, forecast_step, model_name_ext, external_model_params, inner_model_params, zero_step_ts, abs_error, bias_value, squared_error, ape, perc_error, log_error, rel_error, overprediction, underprediction, zero_crossed, pm_insert_time
+- **pointwise_metrics**: 'id', 'timestamp', 'currency', 'forecast_step', 'model_name_ext', 'external_model_params', 'inner_model_params', 'zero_step_ts', 'abs_error', 'bias_value', 'squared_error', 'ape', 'perc_error', 'log_error', 'rel_error', 'overprediction', 'underprediction', 'zero_crossed', 'pm_insert_time' 
 
-**aggregated_metrics**: currency, model_name_ext, external_model_params, inner_model_params, mae, mse, rmse, mape, bias_value_mean, stddev_bias_value, overprediction_rate, underprediction_rate, max_abs_error, max_ape, row_count, am_insert_time
+- **aggregated_metrics**: 'currency', 'model_name_ext', 'external_model_params', 'inner_model_params', 'mae', 'mse', 'rmse', 'mape', 'bias_value_mean', 'stddev_bias_value', 'overprediction_rate', 'underprediction_rate', 'max_abs_error', 'max_ape', 'row_count', 'am_insert_time' 
 
-**forecast_window_metrics**: currency, model_name_ext, external_model_params, inner_model_params, zero_step_ts, forecast_step, cumulative_mae, cumulative_rmse, mean_bias_value, error_growth_rate, relative_step_error, is_reversal, step_stddev, step_rank, fwmv_insert_time
+- **forecast_window_metrics**: 'currency', 'model_name_ext', 'external_model_params', 'inner_model_params', 'zero_step_ts', 'forecast_step', 'cumulative_mae', 'cumulative_rmse', 'mean_bias_value', 'error_growth_rate', 'relative_step_error', 'is_reversal', 'step_stddev', 'step_rank', 'fwmv_insert_time'
 
 All ratio-based metrics use **EPSILON** as a regularization constant to avoid division by zero.
 
@@ -90,17 +90,17 @@ This dataset serves as a base for building automated configuration selection log
 
 ### 7.1. Model Expansion
 
-Add models such as Prophet, LightGBM, Temporal Fusion Transformers, CatBoost, XGBoost, and Ridge Regression
+	Add models such as Prophet, LightGBM, Temporal Fusion Transformers, CatBoost, XGBoost, and Ridge Regression
 
 ### 7.2. Configuration Search
 
-Develop correlation maps between input model parameters and output metric scores
+- Develop correlation maps between input model parameters and output metric scores
 
-Automate discovery of promising configurations using historical performance statistics
+- Automate discovery of promising configurations using historical performance statistics
 
 ### 7.3. Averaging and Ensembles
 
-Combine forecast paths from multiple models for robustness and variance reduction
+	Combine forecast paths from multiple models for robustness and variance reduction
 
 ## LICENSE
 Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
