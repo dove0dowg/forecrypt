@@ -1,4 +1,4 @@
-# FORECRYPT. 
+# ForecrypT : Omni-Back-Test
 
 Forecrypt is a system for large-scale backtesting of forecasting models on cryptocurrency time series. With this application, you can generate predictions for:
 
@@ -10,9 +10,7 @@ Forecrypt is a system for large-scale backtesting of forecasting models on crypt
 
 As a result of statistical model processing, all forecasts are stored in ClickHouse, where for every hour, every model configuration, and every prediction branch, a set of analytical metrics is computed. These metrics can be used to build hypotheses about the applicability of different model configurations to cryptocurrency series.
 
-## INSTALLATION REQUIREMENTS AND SETUP
-
-### Requirements 
+## Requirements 
 
 - Python 3.11+
 
@@ -20,7 +18,7 @@ As a result of statistical model processing, all forecasts are stored in ClickHo
 
 - pip (Python package installer)
 
-### Installation steps:
+## Setup:
 
 - Clone the repository
 
@@ -34,7 +32,7 @@ As a result of statistical model processing, all forecasts are stored in ClickHo
 
 First-time execution will start containers, mount volumes, apply schema, and initialize user roles.
 
-## ARCHITECTURE OVERVIEW
+## Architecture
 
 **Python**: data fetch, preprocessing, training, forecast generation, evaluation, logging
 
@@ -42,7 +40,7 @@ First-time execution will start containers, mount volumes, apply schema, and ini
 
 **ClickHouse**: stores deduplicated forecast data and multiple metric tables for fast querying and slicing
 
-## DATABASE STRUCTURE
+## Database Structures
 
 ### PostgreSQL:
 
@@ -88,19 +86,13 @@ This dataset serves as a base for building automated configuration selection log
 
 ## FUTURE EXTENSIONS
 
-### 7.1. Model Expansion
-
-	Add models such as Prophet, LightGBM, Temporal Fusion Transformers, CatBoost, XGBoost, and Ridge Regression
-
-### 7.2. Configuration Search
+- Add models such as Prophet, LightGBM, Temporal Fusion Transformers, CatBoost, XGBoost, and Ridge Regression
 
 - Develop correlation maps between input model parameters and output metric scores
 
 - Automate discovery of promising configurations using historical performance statistics
 
-### 7.3. Averaging and Ensembles
-
-	Combine forecast paths from multiple models for robustness and variance reduction
+- Combine forecast paths from multiple models for robustness and variance reduction
 
 ## LICENSE
 Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
