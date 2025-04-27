@@ -18,7 +18,7 @@ As a result of statistical model processing, all forecasts are stored in ClickHo
 
 - pip (Python package installer)
 
-## Setup:
+## Setup
 
 - Clone the repository
 
@@ -26,41 +26,41 @@ As a result of statistical model processing, all forecasts are stored in ClickHo
 
 - Run: pip install -r requirements.txt
 
--Create a .env file with PostgreSQL and ClickHouse credentials (optional if hardcoded)
+- Create a .env file with PostgreSQL and ClickHouse credentials (optional if hardcoded)
 
--Run: python main.py (command line) or python nicegui_ui.py (web dashboard)
+- Run: python main.py (command line) or python nicegui_ui.py (web dashboard)
 
 First-time execution will start containers, mount volumes, apply schema, and initialize user roles.
 
 ## Architecture
 
-**Python**: data fetch, preprocessing, training, forecast generation, evaluation, logging
+- **Python**: data fetch, preprocessing, training, forecast generation, evaluation, logging
 
-**PostgreSQL**: stores historical prices and forecast outputs, including a materialized backtesting view
+- **PostgreSQL**: stores historical prices and forecast outputs, including a materialized backtesting view
 
-**ClickHouse**: stores deduplicated forecast data and multiple metric tables for fast querying and slicing
+- **ClickHouse**: stores deduplicated forecast data and multiple metric tables for fast querying and slicing
 
 ## Database Structures
 
 ### PostgreSQL:
 
-**historical_data**: stores raw price history per cryptocurrency, labeled as 'training' or 'historical'
+- **historical_data**: stores raw price history per cryptocurrency, labeled as 'training' or 'historical'
 
-**forecast_data**: model predictions including step number, forecast value, model metadata, and timestamps
+- **forecast_data**: model predictions including step number, forecast value, model metadata, and timestamps
 
-**backtest_data_mv**: materialized view aligning historical and forecasted rows by timestamp and cryptocurrency
+- **backtest_data_mv**: materialized view aligning historical and forecasted rows by timestamp and cryptocurrency
 
 ### ClickHouse:
 
-**forecast_data** (ReplacingMergeTree): deduplicated forecast entries, partitioned by month, ordered by timestamp and model
+- **forecast_data** (ReplacingMergeTree): deduplicated forecast entries, partitioned by month, ordered by timestamp and model
 
-**pointwise_metrics** (MergeTree): stores per-step metrics for every forecast row
+- **pointwise_metrics** (MergeTree): stores per-step metrics for every forecast row
 
-**aggregated_metrics** (MergeTree): stores grouped metrics per cryptocurrency and model configuration
+- **aggregated_metrics** (MergeTree): stores grouped metrics per cryptocurrency and model configuration
 
-**forecast_window_metrics** (MergeTree): rolling window summaries over each prediction horizon
+- **forecast_window_metrics** (MergeTree): rolling window summaries over each prediction horizon
 
-## FORECAST EVALUATION METRICS
+## Forecast Evaluation Metrics
 
 Each forecasted value is evaluated against real historical values using multiple metric sets. These metrics aim to capture accuracy, directional bias, error scaling, and structural deviations.
 
@@ -72,7 +72,7 @@ Each forecasted value is evaluated against real historical values using multiple
 
 All ratio-based metrics use **EPSILON** as a regularization constant to avoid division by zero.
 
-## SYSTEM OUTPUT AND USAGE
+## System Output and Usage
 
 After execution, the system produces a wide matrix of forecast branches, each associated with full error metadata. These can be used for inspection, ranking, and graphing:
 
@@ -84,7 +84,7 @@ After execution, the system produces a wide matrix of forecast branches, each as
 
 This dataset serves as a base for building automated configuration selection logic.
 
-## FUTURE EXTENSIONS
+## Future Extensions
 
 - Add models such as Prophet, LightGBM, Temporal Fusion Transformers, CatBoost, XGBoost, and Ridge Regression
 
@@ -94,5 +94,5 @@ This dataset serves as a base for building automated configuration selection log
 
 - Combine forecast paths from multiple models for robustness and variance reduction
 
-## LICENSE
+## License
 Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
